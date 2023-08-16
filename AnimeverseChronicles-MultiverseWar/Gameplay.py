@@ -3,7 +3,7 @@ from pygame.locals import *
 
 class gameplay():
     def __init__(self):
-        self.bg = pygame.image.load('GameplaySprites\\bg1.jpg')
+        self.bg = pygame.image.load('GameplaySprites\\bg0.jpg')
     
     def update(self):
         info = pygame.display.Info()
