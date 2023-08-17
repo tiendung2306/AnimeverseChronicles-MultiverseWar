@@ -2,6 +2,7 @@ import pygame
 import time
 from pygame.locals import *
 from color import *
+from archer import *
 
 class gameplay():
     def __init__(self):
@@ -27,9 +28,17 @@ class gameplay():
         self.play_button = pygame.image.load('GameplayAssets\\play_button.png')
         self.pause_button = pygame.image.load('GameplayAssets\\pause_button.png')
         self.isPlay = True
-    
+
+        self.straw_doll = pygame.image.load("GameplayAssets\\straw_doll.png")
+        self.enemy = self.straw_doll.get_rect(topleft = (900,560))
+        self.enemy_list = []
+        self.enemy_list.append(self.enemy)
+        self.archer = archerclass(100, 560, (100, 170), 2)
+        self.archer.gameplay = self
+
     def SetScreen(self, screen):
         self.screen = screen
+
 
     def SwitchPlayPauseState(self):
         if self.isPlay == True:
@@ -80,7 +89,9 @@ class gameplay():
         self.gold_text_rect = self.gold_text.get_rect()
         self.gold_text_rect.center = (self.board.get_rect().width // 2, self.board.get_rect().height // 3)
 
-        
+
+
+
 
 
         
