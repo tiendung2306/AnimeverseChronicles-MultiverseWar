@@ -4,17 +4,18 @@ from Gameplay import *
 from states import *
 
 if __name__ == '__main__':
-    Gameplay = gameplay()
     pygame.init()
     screen = pygame.display.set_mode((1366, 768), RESIZABLE)
     pygame.display.set_caption('AnimeverseChronicles-MultiverseWar')
 
+    Gameplay = gameplay()
     Gameplay.SetScreen(screen)
     Gameplay.update()
 
     play_pause_pos = (screen.get_rect().width - Gameplay.pause_button.get_rect().width - 10, 10)
     mouse = pygame.mouse.get_pos()
     IsResize = False
+
 
     pygame.display.update()
 
@@ -38,6 +39,7 @@ def check_click():
         Gameplay.isPlay = 1 - Gameplay.isPlay
         return
 
+
 if __name__ == '__main__':
     running = True
     while running:
@@ -60,6 +62,7 @@ if __name__ == '__main__':
                 check_click()
             
         draw_gameplay_ui()
+        Gameplay.archer.operation(screen)
         pygame.display.update()
 
     pygame.quit()
