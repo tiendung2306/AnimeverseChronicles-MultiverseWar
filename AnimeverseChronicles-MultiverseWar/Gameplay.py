@@ -31,6 +31,15 @@ class gameplay():
     def SetScreen(self, screen):
         self.screen = screen
 
+    def screen_resize(self):
+        self.bg = pygame.image.load('GameplayAssets\\bg1.jpg')
+        self.path = pygame.image.load('GameplayAssets\\path1.png')
+        self.nexus1 = pygame.image.load('GameplayAssets\\nexus1.png')
+        self.nexus2 = pygame.image.load('GameplayAssets\\nexus2.png')
+        self.board = pygame.image.load('GameplayAssets\\board.png')
+        self.play_button = pygame.image.load('GameplayAssets\\play_button.png')
+        self.pause_button = pygame.image.load('GameplayAssets\\pause_button.png')
+
     def SwitchPlayPauseState(self):
         if self.isPlay == True:
             self.tmp_gold = self.curr_gold

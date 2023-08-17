@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 from Gameplay import *
+from states import *
 
 if __name__ == '__main__':
     Gameplay = gameplay()
@@ -13,6 +14,7 @@ if __name__ == '__main__':
 
     play_pause_pos = (screen.get_rect().width - Gameplay.pause_button.get_rect().width - 10, 10)
     mouse = pygame.mouse.get_pos()
+    IsResize = False
 
     pygame.display.update()
 
@@ -39,6 +41,10 @@ def check_click():
 if __name__ == '__main__':
     running = True
     while running:
+        if IsResize == True:
+            IsResize = False
+            Gameplay.screen_resize()
+            Gameplay.SetScreen(screen)
         Gameplay.update()
         mouse = pygame.mouse.get_pos()
         play_pause_pos = (screen.get_rect().width - Gameplay.pause_button.get_rect().width - 10, 10)
@@ -47,11 +53,13 @@ if __name__ == '__main__':
             if event.type == QUIT:
                 running = False
                 break
+            if event.type == VIDEORESIZE:
+                IsResize = True
+                
             if event.type == MOUSEBUTTONDOWN:
                 check_click()
+            
         draw_gameplay_ui()
         pygame.display.update()
-
-        # print(pygame.mouse.get_pos())
 
     pygame.quit()

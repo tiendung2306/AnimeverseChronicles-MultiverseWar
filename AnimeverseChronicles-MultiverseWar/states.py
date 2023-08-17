@@ -1,0 +1,1 @@
+states = ['Menu', 'Gameplay', 'Pause', 'Setting', 'Tutorial']
