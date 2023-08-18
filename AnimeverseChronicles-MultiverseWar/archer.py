@@ -18,7 +18,7 @@ xanh = (127,255,0)
 xam = (193,205,205)
 do = (255,64,64)
 xam_dam = (131,139,139)
-vang =(255,255,0)
+vang = (255,255,0)
 
 text_font = pygame.font.Font("Fonts\\Minecraft.ttf",20)
 
