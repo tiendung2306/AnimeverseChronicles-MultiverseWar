@@ -56,6 +56,12 @@ class gameplay():
         self.nexus1.screen_resize('GameplayAssets\\nexus1.png')
         self.nexus2.screen_resize('GameplayAssets\\nexus2.png')
 
+    def check_click(self, play_pause_button, mouse):
+        if play_pause_button[0] <= mouse[0] <= play_pause_button[0] + self.pause_button.get_rect().width and play_pause_button[1] <= mouse[1] <= play_pause_button[1] + self.pause_button.get_rect().height:
+            self.SwitchPlayPauseState()
+            self.isPlay = 1 - self.isPlay
+            return
+
     def SwitchPlayPauseState(self):
         if self.isPlay == True:
             self.tmp_gold = self.curr_gold

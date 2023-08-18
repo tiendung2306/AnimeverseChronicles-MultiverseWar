@@ -2,15 +2,18 @@ import pygame
 from pygame.locals import *
 from Gameplay import *
 from states import *
+from MainMenu import *
 
 class main():
     def __init__(self):
         pygame.init()
-        self.screen = pygame.display.set_mode((1366, 768), RESIZABLE)
+        self.screen = pygame.display.set_mode((1400, 900))
         pygame.display.set_caption('AnimeverseChronicles-MultiverseWar')
 
+        self.MainMenu = mainmenu()
         self.Gameplay = gameplay()
         self.Gameplay.update()
+        self.state = State()
 
         self.play_pause_button = (self.screen.get_rect().width - self.Gameplay.pause_button.get_rect().width - 10, 10)
         self.mouse = pygame.mouse.get_pos()
@@ -20,7 +23,28 @@ class main():
 
         pygame.display.update()
 
-        self.mainloop()
+        self.set_state(self.state.curr_state) #Goi ra main menu state
+
+    def set_state(self, state):
+        if state == 'Gameplay':
+            self.gameplay_loop()
+        elif state == 'Menu':
+            self.generate_main_menu()
+
+    def generate_main_menu(self):
+        running = True
+        while running:
+            self.screen.blit(self.MainMenu.main_menu_bg, (0, 0))
+            self.MainMenu.update()
+            pygame.display.update()
+            for event in pygame.event.get(): 
+                if event.type == QUIT:
+                    running = False
+                    break
+            
+
+    #def draw_main_menu_ui(self):
+
 
     def draw_gameplay_ui(self):
         self.screen.blit(self.Gameplay.bg, (0, 0))
@@ -36,13 +60,7 @@ class main():
         else:
             self.screen.blit(self.Gameplay.play_button, self.play_pause_button)
 
-    def check_click(self):
-        if self.play_pause_button[0] <= self.mouse[0] <= self.play_pause_button[0] + self.Gameplay.pause_button.get_rect().width and self.play_pause_button[1] <= self.mouse[1] <= self.play_pause_button[1] + self.Gameplay.pause_button.get_rect().height:
-            self.Gameplay.SwitchPlayPauseState()
-            self.Gameplay.isPlay = 1 - self.Gameplay.isPlay
-            return
-
-    def mainloop(self):
+    def gameplay_loop(self):
         running = True
         while running:
             if self.IsResize == True:
@@ -59,7 +77,7 @@ class main():
                 if event.type == VIDEORESIZE:
                     self.IsResize = True
                 if event.type == MOUSEBUTTONDOWN:
-                    self.check_click()
+                    self.Gameplay.check_click(self.play_pause_button, self.mouse)
                 if event.type == pygame.USEREVENT:
                     self.Gameplay.time += 0.01
                 
