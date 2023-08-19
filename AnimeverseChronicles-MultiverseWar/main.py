@@ -1,14 +1,11 @@
 import pygame
 from pygame.locals import *
 from Gameplay import *
-<<<<<<< Updated upstream
 from states import *
 from MainMenu import *
 from settings import *
 
-=======
 from collide_checker import *
->>>>>>> Stashed changes
 class main():
     def __init__(self):
         pygame.init()
@@ -90,8 +87,8 @@ class main():
 
     def gameplay_loop(self):
         running = True
-        pygame.time.Clock().tick(Gameplay.FPS)     
-    while running:
+        pygame.time.Clock().tick(self.Gameplay.FPS)     
+        while running:
             if self.IsResize == True:
                 self.IsResize = False
                 self.Gameplay.screen_resize()
