@@ -11,9 +11,18 @@ class gameplay():
 
         self.screen = pygame.display.get_surface()
 
+        self.bg_original = pygame.image.load('GameplayAssets\\bg1.jpg')
+        self.path_original = pygame.image.load('GameplayAssets\\path1.png')
+        self.board_original = pygame.image.load('GameplayAssets\\board.png')
+        self.settings_button_original = pygame.image.load('GameplayAssets\\settings_button.png')
+        self.play_button_original = pygame.image.load('GameplayAssets\\play_button.png')
+        self.pause_button_original = pygame.image.load('GameplayAssets\\pause_button.png')
+
         self.load_all_gameplay_image()
         self.nexus1 = Nexus('GameplayAssets\\nexus1.png')
         self.nexus2 = Nexus('GameplayAssets\\nexus2.png')
+
+        self.play_pause_button = (self.screen.get_rect().width - self.pause_button.get_rect().width - 10, 10)
 
         self.timer_font = pygame.font.Font('Fonts\\joystix_monospace.otf', 16)
         self.start_time = 0.0
@@ -38,16 +47,18 @@ class gameplay():
         self.archer.gameplay = self
 
     def load_all_gameplay_image(self):
-        self.bg = pygame.image.load('GameplayAssets\\bg1.jpg')
-        self.path = pygame.image.load('GameplayAssets\\path1.png')
-        self.board = pygame.image.load('GameplayAssets\\board.png')
-        self.play_button = pygame.image.load('GameplayAssets\\play_button.png')
-        self.pause_button = pygame.image.load('GameplayAssets\\pause_button.png')
+        self.bg = self.bg_original.copy()
+        self.path = self.path_original.copy()
+        self.board = self.board_original.copy()
+        self.settings_button = self.settings_button_original.copy()
+        self.play_button = self.play_button_original.copy()
+        self.pause_button = self.pause_button_original.copy()
 
         info = pygame.display.Info()
         self.bg = pygame.transform.smoothscale(self.bg, (info.current_w, info.current_h))
         self.path = pygame.transform.smoothscale(self.path, (self.bg.get_rect().width, self.screen.get_rect().height // 7))
         self.board = pygame.transform.smoothscale(self.board, (self.screen.get_rect().width / 7, self.screen.get_rect().width / 7 / 2.4))
+        self.settings_button = pygame.transform.smoothscale(self.settings_button, (self.board.get_rect().width // 6, self.board.get_rect().width // 6))
         self.play_button = pygame.transform.smoothscale(self.play_button, (self.board.get_rect().width // 6, self.board.get_rect().width // 6))
         self.pause_button = pygame.transform.smoothscale(self.pause_button, (self.board.get_rect().width // 6, self.board.get_rect().width // 6))
 
@@ -70,6 +81,20 @@ class gameplay():
             self.start_pause_time = self.time
         else:
             self.pause_time += self.time - self.start_pause_time
+
+    def draw_gameplay_ui(self):
+        self.screen.blit(self.bg, (0, 0))
+        self.screen.blit(self.path, (0, self.screen.get_rect().height - self.path.get_rect().height))
+        self.screen.blit(self.nexus1.nexus_surface, (5,  self.screen.get_rect().height - self.path.get_rect().height - self.nexus1.nexus_surface.get_rect().height + self.path.get_rect().height // 3))
+        self.screen.blit(self.nexus2.nexus_surface, (self.screen.get_rect().width - 5 - self.nexus2.nexus_surface.get_rect().width,  self.screen.get_rect().height - self.path.get_rect().height - self.nexus1.nexus_surface.get_rect().height + self.path.get_rect().height // 3)) 
+        self.screen.blit(self.board, (-2,  -2))
+        self.screen.blit(self.timer_text, self.timer_text_rect)
+        self.screen.blit(self.gold_text, self.gold_text_rect)
+        self.screen.blit(self.settings_button, self.play_pause_button)
+        # if self.isPlay == True:
+        #     self.screen.blit(self.pause_button, self.play_pause_button)
+        # else:
+        #     self.screen.blit(self.play_button, self.play_pause_button)
 
     def update(self):
         #timer process
