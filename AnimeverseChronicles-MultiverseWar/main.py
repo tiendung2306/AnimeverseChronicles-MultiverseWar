@@ -1,15 +1,18 @@
 import pygame
 from pygame.locals import *
 from Gameplay import *
+<<<<<<< Updated upstream
 from states import *
 
+=======
+from collide_checker import *
+>>>>>>> Stashed changes
 if __name__ == '__main__':
     pygame.init()
     screen = pygame.display.set_mode((1366, 768), RESIZABLE)
     pygame.display.set_caption('AnimeverseChronicles-MultiverseWar')
 
-    Gameplay = gameplay()
-    Gameplay.SetScreen(screen)
+    Gameplay = gameplay(screen)
     Gameplay.update()
 
     play_pause_pos = (screen.get_rect().width - Gameplay.pause_button.get_rect().width - 10, 10)
@@ -42,6 +45,7 @@ def check_click():
 
 if __name__ == '__main__':
     running = True
+    pygame.time.Clock().tick(Gameplay.FPS)     
     while running:
         if IsResize == True:
             IsResize = False
@@ -60,9 +64,19 @@ if __name__ == '__main__':
                 
             if event.type == MOUSEBUTTONDOWN:
                 check_click()
+<<<<<<< Updated upstream
             
+=======
+>>>>>>> Stashed changes
         draw_gameplay_ui()
-        Gameplay.archer.operation(screen)
+        Gameplay.archer.operation()
+        Gameplay.sword_man.operation()
+        Gameplay.tanker.operation()
+        # Gameplay.straw_doll.operation()
+        # Gameplay.straw_doll2.operation()
+        # Gameplay.straw_doll3.operation()
+
+        
         pygame.display.update()
 
     pygame.quit()

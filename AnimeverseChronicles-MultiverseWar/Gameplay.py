@@ -3,11 +3,18 @@ import time
 from pygame.locals import *
 from color import *
 from archer import *
+from straw_doll import *
+from sword_man import *
+from tanker import *
 
 class gameplay():
-    def __init__(self):
+    def __init__(self,screen):
         pygame.init()
-        self.bg = pygame.image.load('GameplayAssets\\bg1.jpg')
+
+        self.FPS = 120
+        self.screen = screen
+
+        self.bg = pygame.image.load('GameplayAssets\\bg0.png')
         self.path = pygame.image.load('GameplayAssets\\path1.png')
         self.nexus1 = pygame.image.load('GameplayAssets\\nexus1.png')
         self.nexus2 = pygame.image.load('GameplayAssets\\nexus2.png')
@@ -29,15 +36,24 @@ class gameplay():
         self.pause_button = pygame.image.load('GameplayAssets\\pause_button.png')
         self.isPlay = True
 
-        self.straw_doll = pygame.image.load("GameplayAssets\\straw_doll.png")
-        self.enemy = self.straw_doll.get_rect(topleft = (900,560))
-        self.enemy_list = []
-        self.enemy_list.append(self.enemy)
-        self.archer = archerclass(100, 560, (100, 170), 2)
-        self.archer.gameplay = self
+        # self.straw_doll = straw_doll_class(1000, 560,self)
+        # self.straw_doll2 = straw_doll_class(800, 560,self)
+        # self.straw_doll3 = straw_doll_class(600, 560,self)
+        self.tanker = tankerclass(900,560,self)
 
-    def SetScreen(self, screen):
-        self.screen = screen
+        self.side2 = []
+        # self.side2.append(self.straw_doll)
+        # self.side2.append(self.straw_doll2)
+        # self.side2.append(self.straw_doll3)
+        self.side2.append(self.tanker)
+
+
+        self.archer = archerclass(100, 560,self)
+        self.sword_man = sword_manclass(100, 567,self)
+        self.side1 = []
+        self.side1.append(self.archer)
+        self.side1.append(self.sword_man)
+
 
     def screen_resize(self):
         self.bg = pygame.image.load('GameplayAssets\\bg1.jpg')
