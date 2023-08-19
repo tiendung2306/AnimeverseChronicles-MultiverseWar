@@ -48,6 +48,7 @@ class arrowclass():
                     # print("kkkkkkkkkkkkkkkkkk")
                     enemy_object.get_damage = self.damage
                     enemy_object.get_hit = True
+                    print(enemy_object.box)
                     if not self.piercing:
                         self.status = False
 

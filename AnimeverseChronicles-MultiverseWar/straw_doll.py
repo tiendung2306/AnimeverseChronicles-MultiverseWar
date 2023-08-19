@@ -28,7 +28,7 @@ class straw_doll_class():
         self.x = x
         self.y = y
         self.box = self.img.get_rect(topleft = (self.x,self.y))
-        self.health = 500
+        self.health = 200
         self.status = True
         self.get_damage = 0
         self.alive = True

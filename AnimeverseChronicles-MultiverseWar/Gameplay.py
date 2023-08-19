@@ -46,13 +46,13 @@ class gameplay():
         self.straw_doll1 = straw_doll_class(1000, 560,self)
         self.straw_doll2 = straw_doll_class(800, 560,self)
         self.straw_doll3 = straw_doll_class(600, 560,self)
-        self.tanker = tankerclass(900,560,self)
+        # self.tanker = tankerclass(900,560,self)
 
         self.side2 = []
         self.side2.append(self.straw_doll1)
         self.side2.append(self.straw_doll2)
         self.side2.append(self.straw_doll3)
-        self.side2.append(self.tanker)
+        # self.side2.append(self.tanker)
 
 
         self.archer = archerclass(100, 560,self)
