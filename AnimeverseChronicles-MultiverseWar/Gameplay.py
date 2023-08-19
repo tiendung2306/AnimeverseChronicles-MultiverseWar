@@ -6,34 +6,41 @@ from archer import *
 from straw_doll import *
 from sword_man import *
 from tanker import *
+from nexus import *
 
 class gameplay():
     def __init__(self,screen):
         pygame.init()
 
-        self.FPS = 120
-        self.screen = screen
+        self.FPS = 60
+        self.screen = pygame.display.get_surface()
 
-        self.bg = pygame.image.load('GameplayAssets\\bg0.png')
-        self.path = pygame.image.load('GameplayAssets\\path1.png')
-        self.nexus1 = pygame.image.load('GameplayAssets\\nexus1.png')
-        self.nexus2 = pygame.image.load('GameplayAssets\\nexus2.png')
-        self.board = pygame.image.load('GameplayAssets\\board.png')
+        self.bg_original = pygame.image.load('GameplayAssets\\bg1.jpg')
+        self.path_original = pygame.image.load('GameplayAssets\\path1.png')
+        self.board_original = pygame.image.load('GameplayAssets\\board.png')
+        self.settings_button_original = pygame.image.load('GameplayAssets\\settings_button.png')
+        self.play_button_original = pygame.image.load('GameplayAssets\\play_button.png')
+        self.pause_button_original = pygame.image.load('GameplayAssets\\pause_button.png')
+
+        self.load_all_gameplay_image()
+        self.nexus1 = Nexus('GameplayAssets\\nexus1.png')
+        self.nexus2 = Nexus('GameplayAssets\\nexus2.png')
+
+        self.play_pause_button = (self.screen.get_rect().width - self.pause_button.get_rect().width - 10, 10)
 
         self.timer_font = pygame.font.Font('Fonts\\joystix_monospace.otf', 16)
-        self.start_time = time.time()
-        self.curr_time = 0
-        self.tmp_time = 0
-        self.pause_time = 0
-        self.start_pause_time = 0
+        self.start_time = 0.0
+        self.curr_time = 0.0
+        self.tmp_time = 0.0
+        self.pause_time = 0.0
+        self.start_pause_time = 0.0
+        self.time = 0.0
 
         self.gold_font = pygame.font.Font('Fonts\\joystix_monospace.otf', 20)
         self.curr_gold = 0
         self.tmp_gold = 0
-        self.prev_gold_time = 0
+        self.prev_gold_time = 0.0
 
-        self.play_button = pygame.image.load('GameplayAssets\\play_button.png')
-        self.pause_button = pygame.image.load('GameplayAssets\\pause_button.png')
         self.isPlay = True
 
         # self.straw_doll = straw_doll_class(1000, 560,self)
@@ -54,44 +61,64 @@ class gameplay():
         self.side1.append(self.archer)
         self.side1.append(self.sword_man)
 
+    def load_all_gameplay_image(self):
+        self.bg = self.bg_original.copy()
+        self.path = self.path_original.copy()
+        self.board = self.board_original.copy()
+        self.settings_button = self.settings_button_original.copy()
+        self.play_button = self.play_button_original.copy()
+        self.pause_button = self.pause_button_original.copy()
+
+        info = pygame.display.Info()
+        self.bg = pygame.transform.smoothscale(self.bg, (info.current_w, info.current_h))
+        self.path = pygame.transform.smoothscale(self.path, (self.bg.get_rect().width, self.screen.get_rect().height // 7))
+        self.board = pygame.transform.smoothscale(self.board, (self.screen.get_rect().width / 7, self.screen.get_rect().width / 7 / 2.4))
+        self.settings_button = pygame.transform.smoothscale(self.settings_button, (self.board.get_rect().width // 6, self.board.get_rect().width // 6))
+        self.play_button = pygame.transform.smoothscale(self.play_button, (self.board.get_rect().width // 6, self.board.get_rect().width // 6))
+        self.pause_button = pygame.transform.smoothscale(self.pause_button, (self.board.get_rect().width // 6, self.board.get_rect().width // 6))
 
     def screen_resize(self):
-        self.bg = pygame.image.load('GameplayAssets\\bg1.jpg')
-        self.path = pygame.image.load('GameplayAssets\\path1.png')
-        self.nexus1 = pygame.image.load('GameplayAssets\\nexus1.png')
-        self.nexus2 = pygame.image.load('GameplayAssets\\nexus2.png')
-        self.board = pygame.image.load('GameplayAssets\\board.png')
-        self.play_button = pygame.image.load('GameplayAssets\\play_button.png')
-        self.pause_button = pygame.image.load('GameplayAssets\\pause_button.png')
+        self.load_all_gameplay_image()
+        self.nexus1.screen_resize('GameplayAssets\\nexus1.png')
+        self.nexus2.screen_resize('GameplayAssets\\nexus2.png')
+
+    def check_click(self, play_pause_button, mouse):
+        if play_pause_button[0] <= mouse[0] <= play_pause_button[0] + self.pause_button.get_rect().width and play_pause_button[1] <= mouse[1] <= play_pause_button[1] + self.pause_button.get_rect().height:
+            self.SwitchPlayPauseState()
+            self.isPlay = 1 - self.isPlay
+            return
 
     def SwitchPlayPauseState(self):
         if self.isPlay == True:
             self.tmp_gold = self.curr_gold
 
             self.tmp_time = self.curr_time
-            self.start_pause_time = time.time()
+            self.start_pause_time = self.time
         else:
-            self.pause_time += time.time() - self.start_pause_time
+            self.pause_time += self.time - self.start_pause_time
+
+    def draw_gameplay_ui(self):
+        self.screen.blit(self.bg, (0, 0))
+        self.screen.blit(self.path, (0, self.screen.get_rect().height - self.path.get_rect().height))
+        self.screen.blit(self.nexus1.nexus_surface, (5,  self.screen.get_rect().height - self.path.get_rect().height - self.nexus1.nexus_surface.get_rect().height + self.path.get_rect().height // 3))
+        self.screen.blit(self.nexus2.nexus_surface, (self.screen.get_rect().width - 5 - self.nexus2.nexus_surface.get_rect().width,  self.screen.get_rect().height - self.path.get_rect().height - self.nexus1.nexus_surface.get_rect().height + self.path.get_rect().height // 3)) 
+        self.screen.blit(self.board, (-2,  -2))
+        self.screen.blit(self.timer_text, self.timer_text_rect)
+        self.screen.blit(self.gold_text, self.gold_text_rect)
+        self.screen.blit(self.settings_button, self.play_pause_button)
+        # if self.isPlay == True:
+        #     self.screen.blit(self.pause_button, self.play_pause_button)
+        # else:
+        #     self.screen.blit(self.play_button, self.play_pause_button)
 
     def update(self):
-        info = pygame.display.Info()
-        self.bg = pygame.transform.smoothscale(self.bg, (info.current_w, info.current_h))
-        self.path = pygame.transform.smoothscale(self.path, (self.bg.get_rect().width, self.screen.get_rect().height // 7))
-        pre_nexus_height = self.nexus1.get_rect().height
-        pre_nexus_width = self.nexus1.get_rect().width
-        new_nexus_width = info.current_w//10
-        self.nexus1 = pygame.transform.smoothscale(self.nexus1, (new_nexus_width, new_nexus_width / pre_nexus_width * pre_nexus_height))
-        self.nexus2 = pygame.transform.smoothscale(self.nexus2, (new_nexus_width, new_nexus_width / pre_nexus_width * pre_nexus_height))
-        self.board = pygame.transform.smoothscale(self.board, (self.screen.get_rect().width / 7, self.screen.get_rect().width / 7 / 2.4))
-        self.play_button = pygame.transform.smoothscale(self.play_button, (self.board.get_rect().width // 6, self.board.get_rect().width // 6))
-        self.pause_button = pygame.transform.smoothscale(self.pause_button, (self.board.get_rect().width // 6, self.board.get_rect().width // 6))
-
+        #timer process
         if self.isPlay == False:
             self.curr_time = self.tmp_time
         else:
-            self.curr_time = time.time() - self.start_time - self.pause_time
+            self.curr_time = self.time - self.start_time - self.pause_time
         curr_tmp_min = int(self.curr_time//60)
-        curr_tmp_sec = int(self.curr_time - (self.curr_time//60) * 60)
+        curr_tmp_sec = int(self.curr_time - curr_tmp_min * 60)
         if curr_tmp_min < 10:
             curr_min = '0' + str(curr_tmp_min)
         else:
@@ -104,7 +131,8 @@ class gameplay():
         self.timer_text_rect = self.timer_text.get_rect()
         self.timer_text_rect.center = (self.board.get_rect().width // 2, self.board.get_rect().height // 3 * 2)
 
-        if self.curr_time - self.prev_gold_time >= 1:
+        #gold process
+        if self.curr_time - self.prev_gold_time >= 0.999:
             self.curr_gold += 10
             self.prev_gold_time = self.curr_time
         if self.isPlay == False:
