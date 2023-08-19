@@ -68,7 +68,7 @@ class tankerclass():
     def Geting_hit(self):
         self.get_hit = False
         self.health -= self.get_damage - self.get_damage * self.damage_reduce / 100
-        print("oo")
+        # print("oo")
         self.get_damage = 0
         if self.special_status == False:
             self.mana += 10

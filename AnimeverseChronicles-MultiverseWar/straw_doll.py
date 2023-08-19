@@ -32,21 +32,27 @@ class straw_doll_class():
         self.status = True
         self.get_damage = 0
         self.alive = True
+        self.get_hit = False
+
     def status_bar(self):
         pygame.draw.rect(self.gameplay.screen,do,pygame.Rect(self.box.left + self.size[0] / 4 ,self.box.top - self.size[1] / 20 ,(self.size[0] - self.size[0] / 2) / 500 *self.health,self.size[1] / 20))
+    
     def display(self):
         self.gameplay.screen.blit(self.img,self.box)
         self.status_bar()
-    def get_hit(self):
-        if self.status == False:
-            self.status = True
-            self.health -= self.get_damage
+
+    def Geting_hit(self):
+        self.get_hit = False
+        self.health -= self.get_damage 
+        self.get_damage = 0
+
     def die(self):
         self.gameplay.side2.remove(self)
         self.alive = False
+
     def operation(self):
         if self.alive :
             self.display()
-            self.get_hit()
+            self.Geting_hit()
             if self.health <= 0:
                 self.die()
