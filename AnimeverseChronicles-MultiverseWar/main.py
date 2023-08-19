@@ -29,18 +29,27 @@ class main():
         if state == 'Gameplay':
             self.gameplay_loop()
         elif state == 'Menu':
-            self.generate_main_menu()
+            self.main_menu_loop()
 
-    def generate_main_menu(self):
+    def main_menu_loop(self):
         running = True
         while running:
             self.screen.blit(self.MainMenu.main_menu_bg, (0, 0))
+            self.mouse = pygame.mouse.get_pos()
             self.MainMenu.update()
             pygame.display.update()
             for event in pygame.event.get(): 
                 if event.type == QUIT:
                     running = False
                     break
+                if event.type == MOUSEBUTTONDOWN:
+                    self.MainMenu.check_click(self.mouse)
+            if self.MainMenu.IsQuit == True:
+                running = False
+            if State.curr_state != 'Menu':
+                self.set_state(State.curr_state)
+                return 
+        pygame.quit()
             
 
     #def draw_main_menu_ui(self):
