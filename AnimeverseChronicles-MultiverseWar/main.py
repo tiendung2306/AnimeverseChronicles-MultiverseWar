@@ -88,6 +88,7 @@ class main():
     def gameplay_loop(self):
         running = True
         pygame.time.Clock().tick(self.Gameplay.FPS)     
+        self.Gameplay.enter_gameplay()
         while running:
             if self.IsResize == True:
                 self.IsResize = False
@@ -112,7 +113,12 @@ class main():
             self.Gameplay.straw_doll1.operation()
             self.Gameplay.straw_doll2.operation()
             self.Gameplay.straw_doll3.operation()
+            if self.Gameplay.isPlay == False:
+                self.Gameplay.draw_pause_pannel()
             pygame.display.update()
+            if State.curr_state != 'Gameplay':
+                self.set_state(State.curr_state)
+                return 
 
         pygame.quit()
 
