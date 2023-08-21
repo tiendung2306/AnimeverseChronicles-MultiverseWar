@@ -1,5 +1,4 @@
 import pygame
-import time
 from pygame.locals import *
 from color import *
 from archer import *
@@ -83,6 +82,11 @@ class gameplay():
         self.pause_button = pygame.transform.smoothscale(self.pause_button, (self.board.get_rect().width // 6, self.board.get_rect().width // 6))
 
     def screen_resize(self):
+        self.Pause_Pannel.screen_resize()
+        self.fade = pygame.Surface((self.screen.get_rect().width, self.screen.get_rect().height))
+        self.fade.fill((0,0,0))
+        self.fade.set_alpha(200)
+
         self.load_all_gameplay_image()
         self.nexus1.screen_resize('GameplayAssets\\nexus1.png')
         self.nexus2.screen_resize('GameplayAssets\\nexus2.png')
@@ -95,14 +99,16 @@ class gameplay():
             if play_pause_button[0] <= mouse[0] <= play_pause_button[0] + self.pause_button.get_rect().width and play_pause_button[1] <= mouse[1] <= play_pause_button[1] + self.pause_button.get_rect().height:
                 self.SwitchPlayPauseState()
                 self.isPlay = 1 - self.isPlay
-                return
+                return 'None'
         else: #neu game dang duoc pause
             if self.Pause_Pannel.check_click(mouse) == self.Pause_Pannel.buttons[0]: #an vao nut continue
                 self.SwitchPlayPauseState()
                 self.isPlay = 1 - self.isPlay
-                return
+                return 'None'
+            if self.Pause_Pannel.check_click(mouse) == self.Pause_Pannel.buttons[1]: #an vao nut settings
+                return 'Settings'
             if self.Pause_Pannel.check_click(mouse) == self.Pause_Pannel.buttons[2]: #an vao nut thoat game
-                State.curr_state = State.states[0]
+                return 'Back'
 
     def SwitchPlayPauseState(self):
         if self.isPlay == True:

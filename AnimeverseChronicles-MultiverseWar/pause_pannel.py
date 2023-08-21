@@ -23,6 +23,11 @@ class pause_pannel():
         self.Leave_Game_button_rect = self.Leave_Game_button.get_rect()
         self.Leave_Game_button_rect.center = (self.screen.get_rect().width / 2.0, self.screen.get_rect().height / 6.0 * 4.0)
 
+    def screen_resize(self):
+        self.screen = pygame.display.get_surface()
+        self.load_all_text()
+
+
     def update(self):
         self.screen.blit(self.continue_button, self.continue_button_rect)
         self.screen.blit(self.Settings_button, self.Settings_button_rect)
@@ -31,5 +36,7 @@ class pause_pannel():
     def check_click(self, mouse):
         if self.continue_button_rect.left <= mouse[0] <= self.continue_button_rect.right and self.continue_button_rect.top <= mouse[1] <= self.continue_button_rect.bottom:
             return self.buttons[0]
+        if self.Settings_button_rect.left <= mouse[0] <= self.Settings_button_rect.right and self.Settings_button_rect.top <= mouse[1] <= self.Settings_button_rect.bottom:
+            return self.buttons[1]
         if self.Leave_Game_button_rect.left <= mouse[0] <= self.Leave_Game_button_rect.right and self.Leave_Game_button_rect.top <= mouse[1] <= self.Leave_Game_button_rect.bottom:
             return self.buttons[2]

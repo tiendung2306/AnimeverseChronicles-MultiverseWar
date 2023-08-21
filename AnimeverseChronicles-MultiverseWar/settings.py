@@ -37,6 +37,7 @@ class settings():
         self.settings_bg = pygame.transform.smoothscale(self.settings_bg, (self.screen.get_rect().width, self.screen.get_rect().height))
 
     def screen_resize(self):
+        self.screen = pygame.display.get_surface()
         self.load_all_image()
         self.load_all_text()
 
@@ -48,4 +49,6 @@ class settings():
 
     def check_click(self, mouse):
         if self.back_button_rect.left <= mouse[0] <= self.back_button_rect.right and self.back_button_rect.top <= mouse[1] <= self.back_button_rect.bottom:
-            State.curr_state = State.states[0]
+            return 'Back'
+        return 'None'
+    

@@ -53,6 +53,7 @@ class mainmenu():
         self.main_menu_bg = pygame.transform.smoothscale(self.main_menu_bg, (self.screen.get_rect().width, self.screen.get_rect().height))
 
     def screen_resize(self):
+        self.screen = pygame.display.get_surface()
         self.load_all_image()
         self.load_all_text()
 
