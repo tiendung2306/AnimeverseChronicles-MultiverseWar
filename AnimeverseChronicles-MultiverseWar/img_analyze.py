@@ -49,47 +49,51 @@ archer2_1 = analyzed_img("GameplayAssets\\archer2(1).png", 200 - 66 - 60, 40 , 6
 archer2_2 = analyzed_img("GameplayAssets\\archer2(2).png", 200 - 67 - 58, 40 , 58 , 170)
 archer2_3 = analyzed_img("GameplayAssets\\archer2(3).png", 200 - 70 - 54, 40 , 54 , 162)
 
-arrow1 =  analyzed_img("GameplayAssets\\arrow1.png", 134 , 79 , 64 , 10)
-arrow2 =  analyzed_img("GameplayAssets\\arrow2.png",200 - 134 - 79, 79 , 64 , 10)
+arrow1 =  analyzed_img("GameplayAssets\\arrow1.png", 142 , 79 , 65 , 10)
+arrow2 =  analyzed_img("GameplayAssets\\arrow2.png",200 - 142 - 65, 79 , 65 , 10)
 
-tanker1_1 = analyzed_img("GameplayAssets\\tanker1(1).png", 128 , 65 , 173 , 391)
-tanker1_2 = analyzed_img("GameplayAssets\\tanker1(2).png", 66 , 40 , 60 , 164)
-tanker1_3 = analyzed_img("GameplayAssets\\tanker1(3).png", 66 , 40 , 60 , 164)
-tanker1_4 = analyzed_img("GameplayAssets\\tanker1(4).png", 128 , 65 , 173 , 391)
+tanker1_1 = analyzed_img("GameplayAssets\\tanker1(1).png", 107 , 68 , 187 , 390)
+tanker1_2 = analyzed_img("GameplayAssets\\tanker1(2).png", 107 , 67 , 191 , 390)
+tanker1_3 = analyzed_img("GameplayAssets\\tanker1(3).png", 137 , 66 , 159 , 391)
+tanker1_4 = analyzed_img("GameplayAssets\\tanker1(4).png", 138 , 66 , 160 , 393)
 
+tanker2_1 = analyzed_img("GameplayAssets\\tanker2(1).png", 451 - 107 - 187 , 68 , 187 , 390)
+tanker2_2 = analyzed_img("GameplayAssets\\tanker2(2).png", 451 - 107 - 191 , 67 , 191 , 390)
+tanker2_3 = analyzed_img("GameplayAssets\\tanker2(3).png", 451 - 137 - 159 , 66 , 159 , 391)
+tanker2_4 = analyzed_img("GameplayAssets\\tanker2(4).png", 451 - 138 - 160 , 66 , 160 , 393)
 
 
 
 #CODE BEN DUOI DE TAO HIT BOX TU ANH
 
-img = pygame.image.load("GameplayAssets\\tanker1(1).png")
-WIN = pygame.display.set_mode(img.get_size())
+# img = pygame.image.load("GameplayAssets\\arrow1.png")
+# WIN = pygame.display.set_mode(img.get_size())
 
-a = b = c = d = 0
-Flag = True
-flag2 = False
+# a = b = c = d = 0
+# Flag = True
+# flag2 = False
 
-while Flag:
-    WIN.fill(Black)
-    WIN.blit(img,(0,0))
-    for event in pygame.event.get():
-        if event.type == KEYDOWN:
-            print(a,",",b,",",c - a,",",d - b)
-            Flag = False
-        if event.type == MOUSEBUTTONDOWN:
-            c = d = 0
-            (a,b) = pygame.mouse.get_pos()
-            flag2 = True
-        if  event.type == MOUSEBUTTONUP:
-             flag2 = False
-    if flag2:
-        (c,d) = pygame.mouse.get_pos()
-    else:
-        (m,n) = pygame.mouse.get_pos()
-        hcn1 = pygame.Rect(0,n,WIN.get_size()[0],1)
-        hcn2 = pygame.Rect(m,0,1,WIN.get_size()[1])
-        pygame.draw.rect(WIN,Yellow,hcn1)
-        pygame.draw.rect(WIN,Yellow,hcn2)
-    pygame.draw.rect(WIN,Yellow,pygame.Rect(a,b,c - a,d - b),1)
-    pygame.display.update()
+# while Flag:
+#     WIN.fill(Black)
+#     WIN.blit(img,(0,0))
+#     for event in pygame.event.get():
+#         if event.type == KEYDOWN:
+#             print(a,",",b,",",c - a,",",d - b)
+#             Flag = False
+#         if event.type == MOUSEBUTTONDOWN:
+#             c = d = 0
+#             (a,b) = pygame.mouse.get_pos()
+#             flag2 = True
+#         if  event.type == MOUSEBUTTONUP:
+#              flag2 = False
+#     if flag2:
+#         (c,d) = pygame.mouse.get_pos()
+#     else:
+#         (m,n) = pygame.mouse.get_pos()
+#         hcn1 = pygame.Rect(0,n,WIN.get_size()[0],1)
+#         hcn2 = pygame.Rect(m,0,1,WIN.get_size()[1])
+#         pygame.draw.rect(WIN,Yellow,hcn1)
+#         pygame.draw.rect(WIN,Yellow,hcn2)
+#     pygame.draw.rect(WIN,Yellow,pygame.Rect(a,b,c - a,d - b),1)
+#     pygame.display.update()
 

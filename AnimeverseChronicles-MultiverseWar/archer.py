@@ -68,8 +68,11 @@ class arrowclass():
 
     def arrow_operation(self):
         self.collide_check()
+        if self.special :
+            pygame.draw.rect(self.gameplay.screen,Yellow,self.box)          
         if self.piercing :
-            pygame.draw.rect(self.gameplay.screen,Black,self.box)            
+            pygame.draw.rect(self.gameplay.screen,Black,self.box)  
+
         self.gameplay.screen.blit(pygame.transform.smoothscale(self.img_lib[0].img,(self.imgbox.width,self.imgbox.height)),self.imgbox)
         self.box = self.img_lib[0].imgbox_to_hitbox(self.imgbox)
 
@@ -160,7 +163,7 @@ class archerclass():
                 
                 for object in self.gameplay.side1:
                     if collide_checker(self,object):
-                        if not (object == self):
+                         if (not (object == self)) and (object.box.left >= self.box.left):
                             return 2
 
             elif self.side == -1:
@@ -171,7 +174,7 @@ class archerclass():
                         return 1
                 for object in self.gameplay.side2:
                     if collide_checker(self,object):
-                        if not (object == self):
+                        if (not (object == self)) and (object.box.left <= self.box.left) :
                             return 2
         return 0
         
@@ -189,7 +192,10 @@ class archerclass():
             self.gameplay.side1.remove(self)
         elif self.side == -1:
             self.gameplay.side2.remove(self)
+        self.moving_animation.remove()
         self.attacking_animation.remove()
+        self.standstill_animation.remove()      
+        self.skill_countdowner.remove()  
         self.alive = False
     
     
@@ -226,7 +232,6 @@ class archerclass():
     def special_skill_reset(self):
         self.special_status = False
         self.attack_speed = self.attack_speed_orginal
-        self.skill_countdowner = timing_clock(1.5,self.gameplay)
         self.skill_countdowner.reset()
         self.special_arrow_switcher.reset()
         self.special_arrow_switcher2.reset()

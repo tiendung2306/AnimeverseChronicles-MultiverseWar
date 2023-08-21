@@ -6,7 +6,7 @@ from fake_object import *
 from clock import *
 from switch import *
 from list_function import *
-from animation_player import*
+from animation_player import *
 
 
 class sword_manclass():
@@ -67,7 +67,6 @@ class sword_manclass():
     
     def check_forward(self):
         checker = fake_object_class(self)
-        # checker.box.width += self.attack_scope 
         for tmp_img in self.img_lib:
             checker.box = tmp_img.imgbox_to_hitbox(self.imgbox)
             if self.side == 1:
@@ -78,18 +77,17 @@ class sword_manclass():
                 
                 for object in self.gameplay.side1:
                     if collide_checker(self,object):
-                        if not (object == self):
+                         if (not (object == self)) and (object.box.left >= self.box.left):
                             return 2
 
             elif self.side == -1:
-                # checker.box.centerx -= self.attack_scope 
                 # pygame.draw.rect(self.gameplay.screen,White,checker.box)
                 for object in self.gameplay.side1 :
                     if collide_checker(checker,object):
                         return 1
                 for object in self.gameplay.side2:
                     if collide_checker(self,object):
-                        if not (object == self):
+                        if (not (object == self)) and (object.box.left <= self.box.left) :
                             return 2
         return 0
         
@@ -107,7 +105,9 @@ class sword_manclass():
             self.gameplay.side1.remove(self)
         elif self.side == -1:
             self.gameplay.side2.remove(self)
+        self.moving_animation.remove()
         self.attacking_animation.remove()
+        self.standstill_animation.remove()
         self.alive = False
 
     
@@ -138,8 +138,6 @@ class sword_manclass():
                                 enemy_object.get_damage = self.attack_damage
         elif self.attacking_animation.clock.Return == 1:     
             self.switcher1.reset()
-
-
 
 
     def special_skill(self):

@@ -51,7 +51,7 @@ class straw_doll_class():
     def die(self):
         if self.side == 1:
             self.gameplay.side1.remove(self)
-        elif self.side == 2:
+        elif self.side == -1:
             self.gameplay.side2.remove(self)
         self.alive = False
 

@@ -2,10 +2,7 @@ import pygame
 import time
 from pygame.locals import *
 from color import *
-from archer import *
-from straw_doll import *
-from sword_man import *
-from tanker import *
+from object_manager import * 
 from nexus import *
 
 class gameplay():
@@ -50,21 +47,13 @@ class gameplay():
         self.side2 = []
         self.side3 = []
 
-        # self.straw_doll1 = straw_doll_class(1,1,self)
-        # self.straw_doll2 = straw_doll_class(1,2,self)
-        # self.straw_doll3 = straw_doll_class(1,3,self)
-        # self.tanker = tankerclass(10,self)
-        # self.side1.append(self.straw_doll1)
-        # self.side1.append(self.straw_doll2)
-        # self.side1.append(self.straw_doll3)
-        self.side1.append(sword_manclass(1,1,self))
-        # self.side2.append(self.tanker)
+        # spawn(straw_doll,2,8,self)
+        # spawn(archer,1,1,self)
+        spawn(sword_man,1,5,self)
+        spawn(tanker,1,3,self)
 
-
-        self.archer = archerclass(2, 15,self)
-        # self.sword_man = sword_manclass(2,15,self)
-        self.side2.append(self.archer)
-        # self.side2.append(self.sword_man)
+        # spawn(archer,2,15,self)
+        # spawn(sword_man,2,14,self)
 
     def load_all_gameplay_image(self):
         self.bg = self.bg_original.copy()
