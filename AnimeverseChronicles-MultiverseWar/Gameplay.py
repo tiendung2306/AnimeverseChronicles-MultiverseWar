@@ -47,6 +47,8 @@ class gameplay():
         self.fade.set_alpha(200)
         self.Pause_Pannel = pause_pannel()
 
+        self.spawn_point_height = self.path.get_rect().top + self.path.get_rect().height / 7.0
+
         self.straw_doll1 = straw_doll_class(1000, 560,self)
         self.straw_doll2 = straw_doll_class(800, 560,self)
         self.straw_doll3 = straw_doll_class(600, 560,self)
@@ -80,6 +82,8 @@ class gameplay():
         self.settings_button = pygame.transform.smoothscale(self.settings_button, (self.board.get_rect().width // 6, self.board.get_rect().width // 6))
         self.play_button = pygame.transform.smoothscale(self.play_button, (self.board.get_rect().width // 6, self.board.get_rect().width // 6))
         self.pause_button = pygame.transform.smoothscale(self.pause_button, (self.board.get_rect().width // 6, self.board.get_rect().width // 6))
+
+        self.spawn_point_height = self.path.get_rect().top + self.path.get_rect().height / 7.0
 
     def screen_resize(self):
         self.Pause_Pannel.screen_resize()
