@@ -2,6 +2,7 @@ import random
 import pygame 
 from pygame.locals import *
 from collide_checker import *
+from color import *
 
 
 fpsclock = pygame.time.Clock()
@@ -9,50 +10,56 @@ FPS = 60
 
 
 
-xanh_nhat = (138,54,15)
-trang = (255,255,255)
-den = (0,0,0)
-cam = (255,97,3)
-xanh = (127,255,0)
-xam = (193,205,205)
-do = (255,64,64)
-xam_dam = (131,139,139)
-vang =(255,255,0)
-
-
 class straw_doll_class():
-    def __init__(self,x,y,gameplay):
-        self.gameplay = gameplay
-        self.size = (self.gameplay.screen.get_rect().width / 15 , self.gameplay.screen.get_rect().height / 8)
+    def __init__(self,side,box_number,gameplay):
+        if side == 1 :
+            self.side = 1
+        elif side == 2:
+            self.side = -1
+
+        self.gameplay = gameplay 
+
+        self.size = self.gameplay.box_size
         self.img = pygame.transform.smoothscale(pygame.image.load("GameplayAssets\\straw_doll.png"),self.size)
-        self.x = x
-        self.y = y
-        self.box = self.img.get_rect(topleft = (self.x,self.y))
-        self.health = 200
-        self.status = True
+        self.box = self.img.get_rect(bottomleft = (box_number * self.gameplay.box_size[0],self.gameplay.path_height))        
+        
+        self.health_max = 1000
+        self.health = self.health_max
+        self.mana_max =100
+        self.mana = 0        
+        
         self.get_damage = 0
         self.alive = True
         self.get_hit = False
 
     def status_bar(self):
-        pygame.draw.rect(self.gameplay.screen,do,pygame.Rect(self.box.left + self.size[0] / 4 ,self.box.top - self.size[1] / 20 ,(self.size[0] - self.size[0] / 2) / 500 *self.health,self.size[1] / 20))
+        if self.mana >= self.mana_max:
+            self.mana = 0
+        pygame.draw.rect(self.gameplay.screen,Red,pygame.Rect(self.box.left + self.size[0] / 4 ,self.box.top - self.size[1] / 20 ,(self.size[0] - self.size[0] / 2) / self.health_max *self.health,self.size[1] / 20))
+        pygame.draw.rect(self.gameplay.screen,Blue,pygame.Rect(self.box.left + self.size[0] / 4 ,self.box.top - self.size[1] / 10 - self.size[1] / 30 ,(self.size[0] - self.size[0] / 2) / self.mana_max *self.mana,self.size[1] / 20))
     
     def display(self):
         self.gameplay.screen.blit(self.img,self.box)
-        self.status_bar()
 
     def Geting_hit(self):
         self.get_hit = False
         self.health -= self.get_damage 
         self.get_damage = 0
+        self.mana += 10
+
 
     def die(self):
-        self.gameplay.side2.remove(self)
+        if self.side == 1:
+            self.gameplay.side1.remove(self)
+        elif self.side == 2:
+            self.gameplay.side2.remove(self)
         self.alive = False
 
     def operation(self):
         if self.alive :
             self.display()
-            self.Geting_hit()
+            self.status_bar()
+            if self.get_hit:
+                self.Geting_hit()
             if self.health <= 0:
                 self.die()

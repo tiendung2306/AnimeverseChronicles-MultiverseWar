@@ -108,10 +108,9 @@ class main():
                     self.Gameplay.time += 0.01
                 
             self.Gameplay.draw_gameplay_ui()
-            self.Gameplay.archer.operation()
-            self.Gameplay.straw_doll1.operation()
-            self.Gameplay.straw_doll2.operation()
-            self.Gameplay.straw_doll3.operation()
+
+            self.Gameplay.object_operation()
+            
             pygame.display.update()
 
         pygame.quit()

@@ -20,25 +20,25 @@ vang =(255,255,0)
 
 
 class tankerclass():
-    def __init__(self,x,y,gameplay):
+    def __init__(self,box_number,gameplay):
         self.gameplay = gameplay
-        self.size = (self.gameplay.screen.get_rect().width / 15 , self.gameplay.screen.get_rect().height / 8)
+        self.size = self.gameplay.box_size
         self.img1 = pygame.transform.smoothscale(pygame.image.load("GameplayAssets\\tanker1.png"),self.size)
         self.img2 = pygame.transform.smoothscale(pygame.image.load("GameplayAssets\\tanker2.png"),self.size)
         self.img3 = pygame.transform.smoothscale(pygame.image.load("GameplayAssets\\tanker3.png"),self.size)
         self.img4 = pygame.transform.smoothscale(pygame.image.load("GameplayAssets\\tanker4.png"),self.size)
-        self.x = x
-        self.y = y
-        self.box = self.img1.get_rect(topleft = (self.x,self.y))
-        self.speed = 5 # 5/100 map per second 
-        self.attack_scope = 1 * self.gameplay.screen.get_rect().width / 15 # 4/15 map width
+        self.box = self.img1.get_rect(bottomleft = (box_number * self.gameplay.box_size[0],self.gameplay.path_height))        
+        self.speed = 20 # 5/100 map per second 
+        self.attack_scope = 0 * self.gameplay.box_size[0] # 4/15 map width
         self.attack_speed = 1 # attack(s) pers second
-        self.attack_damage = 10
-        self.health = 100
+        self.attack_damage = 5
+        self.health_max = 500
+        self.health = self.health_max
+        self.mana_max =100
+        self.mana = 0        
         self.damage_reduce =  0 #0%
         self.get_hit = False
         self.alive = True
-        self.mana = 0 #mana max = 100
         self.special_status = False
         self.attack_countdowner = repeated_clock(self.gameplay.FPS, 1 / self.attack_speed)
         self.switcher1 = N_time_switch(1)
@@ -47,8 +47,8 @@ class tankerclass():
 
 
     def status_bar(self):
-        pygame.draw.rect(self.gameplay.screen,do,pygame.Rect(self.box.left + self.size[0] / 4 ,self.box.top - self.size[1] / 20 ,(self.size[0] - self.size[0] / 2) / 100 *self.health,self.size[1] / 20))
-        pygame.draw.rect(self.gameplay.screen,xanh,pygame.Rect(self.box.left + self.size[0] / 4 ,self.box.top - self.size[1] / 10 - self.size[1] / 30 ,(self.size[0] - self.size[0] / 2) / 100 *self.mana,self.size[1] / 20))
+        pygame.draw.rect(self.gameplay.screen,do,pygame.Rect(self.box.left + self.size[0] / 4 ,self.box.top - self.size[1] / 20 ,(self.size[0] - self.size[0] / 2) / self.health_max *self.health,self.size[1] / 20))
+        pygame.draw.rect(self.gameplay.screen,xanh,pygame.Rect(self.box.left + self.size[0] / 4 ,self.box.top - self.size[1] / 10 - self.size[1] / 30 ,(self.size[0] - self.size[0] / 2) / self.mana_max *self.mana,self.size[1] / 20))
     def display(self):
         if self.box.left % 100 > 50 :
             self.gameplay.screen.blit(self.img1,self.box)

@@ -12,9 +12,8 @@ class gameplay():
     def __init__(self):
         pygame.init()
 
-        self.FPS = 60
-        self.screen = pygame.display.get_surface()
 
+        self.screen = pygame.display.get_surface()
         self.bg_original = pygame.image.load('GameplayAssets\\bg1.jpg')
         self.path_original = pygame.image.load('GameplayAssets\\path1.png')
         self.board_original = pygame.image.load('GameplayAssets\\board.png')
@@ -43,23 +42,29 @@ class gameplay():
 
         self.isPlay = True
 
-        self.straw_doll1 = straw_doll_class(1000, 560,self)
-        self.straw_doll2 = straw_doll_class(800, 560,self)
-        self.straw_doll3 = straw_doll_class(600, 560,self)
-        # self.tanker = tankerclass(900,560,self)
-
+        self.FPS = 60
+        self.box_size = (self.screen.get_rect().width / 20 , self.screen.get_rect().height / 10)
+        self.path_height = self.screen.get_rect().height - self.path.get_rect().height + 20
+    #Object import:
+        self.side1 = []
         self.side2 = []
-        self.side2.append(self.straw_doll1)
-        self.side2.append(self.straw_doll2)
-        self.side2.append(self.straw_doll3)
+        self.side3 = []
+
+        # self.straw_doll1 = straw_doll_class(1,1,self)
+        # self.straw_doll2 = straw_doll_class(1,2,self)
+        # self.straw_doll3 = straw_doll_class(1,3,self)
+        # self.tanker = tankerclass(10,self)
+        # self.side1.append(self.straw_doll1)
+        # self.side1.append(self.straw_doll2)
+        # self.side1.append(self.straw_doll3)
+        self.side1.append(sword_manclass(1,1,self))
         # self.side2.append(self.tanker)
 
 
-        self.archer = archerclass(100, 560,self)
-        self.sword_man = sword_manclass(100, 567,self)
-        self.side1 = []
-        self.side1.append(self.archer)
-        self.side1.append(self.sword_man)
+        self.archer = archerclass(2, 15,self)
+        # self.sword_man = sword_manclass(2,15,self)
+        self.side2.append(self.archer)
+        # self.side2.append(self.sword_man)
 
     def load_all_gameplay_image(self):
         self.bg = self.bg_original.copy()
@@ -141,7 +146,9 @@ class gameplay():
         self.gold_text_rect = self.gold_text.get_rect()
         self.gold_text_rect.center = (self.board.get_rect().width // 2, self.board.get_rect().height // 3)
 
-
+    def object_operation(self):
+        for object in self.side1 + self.side2 + self.side3:
+            object.operation()
 
 
 
