@@ -30,7 +30,7 @@ class gameplay():
         self.curr_time = 0.0
         self.pause_time = 0.0
         self.start_pause_time = 0.0
-        self.time = 0.0
+        self.time = 0.0 # dung giong voi time.time()
 
         self.gold_font = pygame.font.Font('Fonts\\joystix_monospace.otf', 20)
         self.curr_gold = 0
@@ -54,12 +54,13 @@ class gameplay():
         self.side3 = []
 
         # spawn(straw_doll,2,8,self)
-        # spawn(archer,1,1,self)
-        spawn(sword_man,1,5,self)
+        spawn(archer,1,1,self)
+        spawn(tanker,1,2,self)
         spawn(tanker,1,3,self)
 
-        # spawn(archer,2,15,self)
-        # spawn(sword_man,2,14,self)
+        spawn(archer,2,15,self)
+        spawn(tanker,2,14,self)
+        spawn(tanker,2,13,self)
 
     def load_all_gameplay_image(self):
         self.bg = self.bg_original.copy()
@@ -141,7 +142,7 @@ class gameplay():
         self.set_fade()
         self.Pause_Pannel.update()
 
-    def update(self):
+    def update(self): #update cac thong so cua game, chay theo tung frame cua gamplay_loop
         #timer process
         if self.isPlay == True:
             self.curr_time = self.time - self.start_time - self.pause_time

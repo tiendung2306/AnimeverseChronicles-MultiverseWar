@@ -223,7 +223,7 @@ class archerclass():
             self.attack_damage = 20
             self.attack_scope = 7 * self.gameplay.box_size[0]
         elif self.special_arrow_switcher2.operation():
-            self.attack_speed = self.attack_speed_orginal
+            self.attack_speed = self.attack_speed_orginal * 2
             self.piercing = False
             self.attack_damage = self.attack_damage_orginal
             self.attack_scope = 4 * self.gameplay.box_size[0]

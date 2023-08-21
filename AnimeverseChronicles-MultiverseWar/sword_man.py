@@ -25,7 +25,7 @@ class sword_manclass():
             self.img_lib = [sword_man2_1, sword_man2_2, sword_man2_3, sword_man2_4]
         self.imgbox = self.img_lib[0].hitbox_to_imgbox(pygame.Rect(box_number * self.gameplay.box_size[0],self.gameplay.path_height - self.gameplay.box_size[1], self.gameplay.box_size[0], self.gameplay.box_size[1]))        
         self.box = self.img_lib[0].imgbox_to_hitbox(self.imgbox)
-        self.speed = 10 # 5/100 map per second 
+        self.speed = 5 # 5/100 map per second 
         self.attack_scope = 1 * self.gameplay.box_size[0] # 4/15 map width
         self.attack_speed = 1/3 # attack(s) pers second
         self.attack_damage = 50

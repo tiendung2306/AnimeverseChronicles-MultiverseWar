@@ -25,13 +25,13 @@ class tankerclass():
             self.img_lib = [tanker2_1, tanker2_2, tanker2_3, tanker2_4]
         self.imgbox = self.img_lib[0].hitbox_to_imgbox(pygame.Rect(box_number * self.gameplay.box_size[0],self.gameplay.path_height - self.gameplay.box_size[1], self.gameplay.box_size[0], self.gameplay.box_size[1]))        
         self.box = self.img_lib[0].imgbox_to_hitbox(self.imgbox)
-        self.speed = 20 # 5/100 map per second 
+        self.speed = 5 # 1/100 map per second 
         self.attack_scope = 0 * self.gameplay.box_size[0] + 1  # 4/15 map width
-        self.attack_speed = 1/5 # attack(s) pers second
+        self.attack_speed = 1/6 # attack(s) pers second
         self.attack_damage = 20
-        self.health_max = 500
+        self.health_max = 300
         self.health = self.health_max
-        self.mana_max =100
+        self.mana_max = 100
         self.mana = 0
         self.damage_reduce =  0 #0%
         self.damage_reduce_special =  40 #%
