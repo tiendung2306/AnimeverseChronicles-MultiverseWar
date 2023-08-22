@@ -5,13 +5,12 @@ from object_manager import *
 from nexus import *
 from pause_pannel import *
 from states import *
+from screen import *
 
 class gameplay():
     def __init__(self):
         pygame.init()
 
-
-        self.screen = pygame.display.get_surface()
         self.bg_original = pygame.image.load('GameplayAssets\\bg1.jpg')
         self.path_original = pygame.image.load('GameplayAssets\\path1.png')
         self.board_original = pygame.image.load('GameplayAssets\\board.png')
@@ -23,7 +22,7 @@ class gameplay():
         self.nexus1 = Nexus('GameplayAssets\\nexus1.png')
         self.nexus2 = Nexus('GameplayAssets\\nexus2.png')
 
-        self.play_pause_button = (self.screen.get_rect().width - self.pause_button.get_rect().width - 10, 10)
+        self.play_pause_button = (screen.screen.get_rect().width - self.pause_button.get_rect().width - 10, 10)
 
         self.timer_font = pygame.font.Font('Fonts\\joystix_monospace.otf', 16)
         self.start_time = 0.0
@@ -38,7 +37,7 @@ class gameplay():
         self.prev_gold_time = 0.0
 
         self.isPlay = True
-        self.fade = pygame.Surface((self.screen.get_rect().width, self.screen.get_rect().height))
+        self.fade = pygame.Surface((screen.screen.get_rect().width, screen.screen.get_rect().height))
         self.fade.fill((0,0,0))
         self.fade.set_alpha(200)
         self.Pause_Pannel = pause_pannel()
@@ -46,8 +45,8 @@ class gameplay():
         self.spawn_point_height = self.path.get_rect().top + self.path.get_rect().height / 7.0
 
         self.FPS = 60
-        self.box_size = (self.screen.get_rect().width / 20 , self.screen.get_rect().height / 10)
-        self.path_height = self.screen.get_rect().height - self.path.get_rect().height + 20
+        self.box_size = (screen.screen.get_rect().width / 20 , screen.screen.get_rect().height / 10)
+        self.path_height = screen.screen.get_rect().height - self.path.get_rect().height + 20
     #Object import:
         self.side1 = []
         self.side2 = []
@@ -57,10 +56,12 @@ class gameplay():
         spawn(archer,1,1,self)
         spawn(tanker,1,2,self)
         spawn(tanker,1,3,self)
+        spawn(sword_man,1,4,self)
 
         spawn(archer,2,15,self)
         spawn(tanker,2,14,self)
         spawn(tanker,2,13,self)
+        spawn(sword_man,2,12,self)
 
     def load_all_gameplay_image(self):
         self.bg = self.bg_original.copy()
@@ -72,8 +73,8 @@ class gameplay():
 
         info = pygame.display.Info()
         self.bg = pygame.transform.smoothscale(self.bg, (info.current_w, info.current_h))
-        self.path = pygame.transform.smoothscale(self.path, (self.bg.get_rect().width, self.screen.get_rect().height // 7))
-        self.board = pygame.transform.smoothscale(self.board, (self.screen.get_rect().width / 7, self.screen.get_rect().width / 7 / 2.4))
+        self.path = pygame.transform.smoothscale(self.path, (self.bg.get_rect().width, screen.screen.get_rect().height // 7))
+        self.board = pygame.transform.smoothscale(self.board, (screen.screen.get_rect().width / 7, screen.screen.get_rect().width / 7 / 2.4))
         self.settings_button = pygame.transform.smoothscale(self.settings_button, (self.board.get_rect().width // 6, self.board.get_rect().width // 6))
         self.play_button = pygame.transform.smoothscale(self.play_button, (self.board.get_rect().width // 6, self.board.get_rect().width // 6))
         self.pause_button = pygame.transform.smoothscale(self.pause_button, (self.board.get_rect().width // 6, self.board.get_rect().width // 6))
@@ -82,7 +83,7 @@ class gameplay():
 
     def screen_resize(self):
         self.Pause_Pannel.screen_resize()
-        self.fade = pygame.Surface((self.screen.get_rect().width, self.screen.get_rect().height))
+        self.fade = pygame.Surface((screen.screen.get_rect().width, screen.screen.get_rect().height))
         self.fade.fill((0,0,0))
         self.fade.set_alpha(200)
 
@@ -91,7 +92,7 @@ class gameplay():
         self.nexus2.screen_resize('GameplayAssets\\nexus2.png')
 
     def set_fade(self): 
-        self.screen.blit(self.fade, (0,0))
+        screen.screen.blit(self.fade, (0,0))
 
     def check_click(self, play_pause_button, mouse):
         if self.isPlay == True: #neu game dang chay
@@ -126,17 +127,17 @@ class gameplay():
 
 
     def draw_gameplay_ui(self):
-        self.screen.blit(self.bg, (0, 0))
-        self.screen.blit(self.path, (0, self.screen.get_rect().height - self.path.get_rect().height))
-        self.screen.blit(self.nexus1.nexus_surface, (5,  self.screen.get_rect().height - self.path.get_rect().height - self.nexus1.nexus_surface.get_rect().height + self.path.get_rect().height // 3))
-        self.screen.blit(self.nexus2.nexus_surface, (self.screen.get_rect().width - 5 - self.nexus2.nexus_surface.get_rect().width,  self.screen.get_rect().height - self.path.get_rect().height - self.nexus1.nexus_surface.get_rect().height + self.path.get_rect().height // 3)) 
-        self.screen.blit(self.board, (-2,  -2))
-        self.screen.blit(self.timer_text, self.timer_text_rect)
-        self.screen.blit(self.gold_text, self.gold_text_rect)
-        self.screen.blit(self.settings_button, self.play_pause_button)
+        screen.screen.blit(self.bg, (0, 0))
+        screen.screen.blit(self.path, (0, screen.screen.get_rect().height - self.path.get_rect().height))
+        screen.screen.blit(self.nexus1.nexus_surface, (5,  screen.screen.get_rect().height - self.path.get_rect().height - self.nexus1.nexus_surface.get_rect().height + self.path.get_rect().height // 3))
+        screen.screen.blit(self.nexus2.nexus_surface, (screen.screen.get_rect().width - 5 - self.nexus2.nexus_surface.get_rect().width,  screen.screen.get_rect().height - self.path.get_rect().height - self.nexus1.nexus_surface.get_rect().height + self.path.get_rect().height // 3)) 
+        screen.screen.blit(self.board, (-2,  -2))
+        screen.screen.blit(self.timer_text, self.timer_text_rect)
+        screen.screen.blit(self.gold_text, self.gold_text_rect)
+        screen.screen.blit(self.settings_button, self.play_pause_button)
             
         # else:
-        #     self.screen.blit(self.play_button, self.play_pause_button)
+        #     screen.screen.blit(self.play_button, self.play_pause_button)
 
     def draw_pause_pannel(self):
         self.set_fade()

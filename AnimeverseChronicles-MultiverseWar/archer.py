@@ -7,7 +7,7 @@ from clock import *
 from switch import *
 from list_function import *
 from animation_player import *
-
+from screen import *
 
    
 
@@ -37,7 +37,7 @@ class arrowclass():
 
 
     def move(self):
-        self.imgbox.centerx += (self.speed * self.archer.gameplay.screen.get_rect().width / 100) / self.archer.gameplay.FPS * self.side
+        self.imgbox.centerx += (self.speed * screen.screen.get_rect().width / 100) / self.archer.gameplay.FPS * self.side
     
 
     def collide_check(self):
@@ -69,11 +69,11 @@ class arrowclass():
     def arrow_operation(self):
         self.collide_check()
         if self.special :
-            pygame.draw.rect(self.gameplay.screen,Yellow,self.box)          
+            pygame.draw.rect(screen.screen,Yellow,self.box)          
         if self.piercing :
-            pygame.draw.rect(self.gameplay.screen,Black,self.box)  
+            pygame.draw.rect(screen.screen,Black,self.box)  
 
-        self.gameplay.screen.blit(pygame.transform.smoothscale(self.img_lib[0].img,(self.imgbox.width,self.imgbox.height)),self.imgbox)
+        screen.screen.blit(pygame.transform.smoothscale(self.img_lib[0].img,(self.imgbox.width,self.imgbox.height)),self.imgbox)
         self.box = self.img_lib[0].imgbox_to_hitbox(self.imgbox)
 
         if self.status:
@@ -136,13 +136,13 @@ class archerclass():
         if self.mana >= self.mana_max:
             self.mana = 0
             self.special_status = True
-        pygame.draw.rect(self.gameplay.screen,Red,pygame.Rect(self.box.left + self.box.width / 4 ,self.box.top - self.box.height / 10 ,(self.box.width - self.box.width / 2) / self.health_max *self.health,self.box.height / 20))
-        pygame.draw.rect(self.gameplay.screen,Blue,pygame.Rect(self.box.left + self.box.width / 4 ,self.box.top - self.box.height / 5 - self.box.height / 30 ,(self.box.width - self.box.width / 2) / self.mana_max *self.mana,self.box.height / 20))
+        pygame.draw.rect(screen.screen,Red,pygame.Rect(self.box.left + self.box.width / 4 ,self.box.top - self.box.height / 10 ,(self.box.width - self.box.width / 2) / self.health_max *self.health,self.box.height / 20))
+        pygame.draw.rect(screen.screen,Blue,pygame.Rect(self.box.left + self.box.width / 4 ,self.box.top - self.box.height / 5 - self.box.height / 30 ,(self.box.width - self.box.width / 2) / self.mana_max *self.mana,self.box.height / 20))
      
     
     def move(self):
         self.box = self.moving_animation.play()
-        self.imgbox.centerx += (self.speed * self.gameplay.screen.get_rect().width / 100) / self.gameplay.FPS  * self.side
+        self.imgbox.centerx += (self.speed * screen.screen.get_rect().width / 100) / self.gameplay.FPS  * self.side
         self.attacking_animation.reset()
 
 
@@ -261,8 +261,8 @@ class archerclass():
                     self.mana += 10
                 if arrows.status == False :
                     self.arrow_list.remove(arrows)
-            pygame.draw.rect(self.gameplay.screen,White,self.box,1)
-            pygame.draw.rect(self.gameplay.screen,White,self.imgbox,1)
+            pygame.draw.rect(screen.screen,White,self.box,1)
+            pygame.draw.rect(screen.screen,White,self.imgbox,1)
 
     
 
