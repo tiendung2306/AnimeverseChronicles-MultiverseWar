@@ -3,6 +3,7 @@ import pygame
 from pygame.locals import *
 from collide_checker import *
 from color import *
+from screen import *
 
 
 fpsclock = pygame.time.Clock()
@@ -35,11 +36,11 @@ class straw_doll_class():
     def status_bar(self):
         if self.mana >= self.mana_max:
             self.mana = 0
-        pygame.draw.rect(self.gameplay.screen,Red,pygame.Rect(self.box.left + self.size[0] / 4 ,self.box.top - self.size[1] / 20 ,(self.size[0] - self.size[0] / 2) / self.health_max *self.health,self.size[1] / 20))
-        pygame.draw.rect(self.gameplay.screen,Blue,pygame.Rect(self.box.left + self.size[0] / 4 ,self.box.top - self.size[1] / 10 - self.size[1] / 30 ,(self.size[0] - self.size[0] / 2) / self.mana_max *self.mana,self.size[1] / 20))
+        pygame.draw.rect(screen.screen,Red,pygame.Rect(self.box.left + self.size[0] / 4 ,self.box.top - self.size[1] / 20 ,(self.size[0] - self.size[0] / 2) / self.health_max *self.health,self.size[1] / 20))
+        pygame.draw.rect(screen.screen,Blue,pygame.Rect(self.box.left + self.size[0] / 4 ,self.box.top - self.size[1] / 10 - self.size[1] / 30 ,(self.size[0] - self.size[0] / 2) / self.mana_max *self.mana,self.size[1] / 20))
     
     def display(self):
-        self.gameplay.screen.blit(self.img,self.box)
+        screen.screen.blit(self.img,self.box)
 
     def Geting_hit(self):
         self.get_hit = False

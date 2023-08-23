@@ -7,6 +7,7 @@ from clock import *
 from switch import *
 from list_function import *
 from animation_player import *
+from screen import *
 
 
 class wizardclass():
@@ -56,8 +57,8 @@ class wizardclass():
         if self.mana >= self.mana_max:
             self.mana = 0
             self.special_status = True
-        pygame.draw.rect(self.gameplay.screen,Red,pygame.Rect(self.box.left + self.box.width / 4 ,self.box.top - self.box.height / 10 ,(self.box.width - self.box.width / 2) / self.health_max *self.health,self.box.height / 20))
-        pygame.draw.rect(self.gameplay.screen,Blue,pygame.Rect(self.box.left + self.box.width / 4 ,self.box.top - self.box.height / 5 - self.box.height / 30 ,(self.box.width - self.box.width / 2) / self.mana_max *self.mana,self.box.height / 20))
+        pygame.draw.rect(screen.screen,Red,pygame.Rect(self.box.left + self.box.width / 4 ,self.box.top - self.box.height / 10 ,(self.box.width - self.box.width / 2) / self.health_max *self.health,self.box.height / 20))
+        pygame.draw.rect(screen.screen,Blue,pygame.Rect(self.box.left + self.box.width / 4 ,self.box.top - self.box.height / 5 - self.box.height / 30 ,(self.box.width - self.box.width / 2) / self.mana_max *self.mana,self.box.height / 20))
         
 
     def move(self):
@@ -67,7 +68,7 @@ class wizardclass():
 
         else:
             self.box = self.moving_animation.play()
-            self.imgbox.centerx = self.spam_pointX + (self.speed * self.gameplay.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.time_flag)  * self.side
+            self.imgbox.centerx = self.spam_pointX + (self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.time_flag)  * self.side
         self.standstill_animation.reset()
         self.attacking_animation.reset()
 
@@ -86,7 +87,7 @@ class wizardclass():
             checker.box = tmp_img.imgbox_to_hitbox(self.imgbox)
             checker.box.width += self.attack_scope 
             if self.side == 1:
-                # pygame.draw.rect(self.gameplay.screen,White,checker.box)
+                # pygame.draw.rect(screen.screen,White,checker.box)
                 for object in self.gameplay.side2 :
                     if collide_checker(checker,object):
                         return 1
@@ -98,7 +99,7 @@ class wizardclass():
 
             elif self.side == -1:
                 checker.box.centerx -= self.attack_scope 
-                # pygame.draw.rect(self.gameplay.screen,White,checker.box)
+                # pygame.draw.rect(screen.screen,White,checker.box)
                 for object in self.gameplay.side1 :
                     if collide_checker(checker,object):
                         return 1
@@ -142,13 +143,13 @@ class wizardclass():
                 checker.box.width += self.attack_scope 
                 if self.side == 1:
                     for enemy_object in self.gameplay.side2:
-                    # pygame.draw.rect(self.gameplay.screen,White,checker.box)
+                    # pygame.draw.rect(screen.screen,White,checker.box)
                         if collide_checker(checker,enemy_object):
                                 enemy_object.get_hit = True
                                 enemy_object.get_damage = self.attack_damage
                 elif self.side == -1:
                     checker.box.centerx -= self.attack_scope 
-                    # pygame.draw.rect(self.gameplay.screen,White,checker.box)
+                    # pygame.draw.rect(screen.screen,White,checker.box)
                     for enemy_object in self.gameplay.side1:
                         if collide_checker(checker,enemy_object):
                                 enemy_object.get_hit = True
@@ -189,8 +190,8 @@ class wizardclass():
             if self.health <= 0:
                 self.die()
 
-            # pygame.draw.rect(self.gameplay.screen,White,self.box,1)
-            # pygame.draw.rect(self.gameplay.screen,White,self.imgbox,1)
+            # pygame.draw.rect(screen.screen,White,self.box,1)
+            # pygame.draw.rect(screen.screen,White,self.imgbox,1)
 
 
 

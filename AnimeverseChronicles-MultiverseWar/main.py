@@ -1,15 +1,16 @@
-import pygame
+import pygame, os
 from pygame.locals import *
 from Gameplay import *
 from states import *
 from MainMenu import *
 from settings import *
+from screen import *
 
 from collide_checker import *
 class main():
     def __init__(self):
+        os.environ['SDL_VIDEO_CENTERED'] = '1'
         pygame.init()
-        self.screen = pygame.display.set_mode((1400, 900), RESIZABLE)
         pygame.display.set_caption('AnimeverseChronicles-MultiverseWar')
 
         self.MainMenu = mainmenu()
@@ -19,6 +20,7 @@ class main():
 
         self.mouse = pygame.mouse.get_pos()
         self.IsResize = False
+        self.IsFullScreen = True
 
         pygame.time.set_timer(pygame.USEREVENT, 10)
 
@@ -48,39 +50,42 @@ class main():
             self.settings_loop()
 
     def screen_resize(self):
-        if self.IsResize == True:
+        if self.IsResize == True or self.Settings.IsResize == True:
                 self.IsResize = False
+                self.Settings.IsResize = False
                 self.MainMenu.screen_resize()
                 self.Settings.screen_resize()
                 self.Gameplay.screen_resize()
-
     def settings_loop(self):
+        self.Settings.setting_pannel_init()
         running = True
         while running:
             self.screen_resize()
-            self.screen.blit(self.Settings.settings_bg, (0, 0))
+            screen.screen.blit(self.Settings.settings_bg, (0, 0))
             self.mouse = pygame.mouse.get_pos()
-            self.Settings.update()
-            pygame.display.update()
-            Button = 'None'
-            for event in pygame.event.get(): 
+            # self.Settings.update()
+            events = pygame.event.get()
+            for event in events: 
                 if event.type == QUIT:
                     running = False
                     break
                 if event.type == VIDEORESIZE:
                     self.IsResize = True
-                if event.type == MOUSEBUTTONDOWN:
-                    Button = self.Settings.check_click(self.mouse)
-            if Button == 'Back':
+            if self.Settings.IsBack == True:
+                self.Settings.IsBack = False
                 self.back_state()
                 return 
+            if self.Settings.menu.is_enabled():
+                self.Settings.menu.update(events)
+                self.Settings.menu.draw(screen.screen)
+            pygame.display.update()
         pygame.quit()
 
     def main_menu_loop(self):
         running = True
         while running:
             self.screen_resize()
-            self.screen.blit(self.MainMenu.main_menu_bg, (0, 0))
+            screen.screen.blit(self.MainMenu.main_menu_bg, (0, 0))
             self.mouse = pygame.mouse.get_pos()
             self.MainMenu.update()
             pygame.display.update()
@@ -108,7 +113,7 @@ class main():
             self.screen_resize()
             self.Gameplay.update()
             self.mouse = pygame.mouse.get_pos()
-            self.Gameplay.play_pause_button = (self.screen.get_rect().width - self.Gameplay.pause_button.get_rect().width - 10, 10)
+            self.Gameplay.play_pause_button = (screen.screen.get_rect().width - self.Gameplay.pause_button.get_rect().width - 10, 10)
             Button = 'None'
 
             for event in pygame.event.get(): 
