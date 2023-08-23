@@ -50,6 +50,7 @@ class settings():
             # print(curr_resolution, '  ', self.resolution_tmp_lists[index])
             if self.IsFullScreen == True:
                 screen.screen = pygame.display.set_mode(self.resolution_tmp_lists[index])
+                pygame.display.toggle_fullscreen()
             else:
                 screen.screen = pygame.display.set_mode(self.resolution_tmp_lists[index])
             self.IsResize = True
