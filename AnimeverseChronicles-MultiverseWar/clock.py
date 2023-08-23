@@ -7,9 +7,8 @@ from switch import *
 class repeated_clock():
     def __init__(self,repeat_time,gameplay):
         self.gameplay = gameplay
-        self.repeat_time = repeat_time #second(s)
-        self.counter = repeat_time
-        self.FPS = self.gameplay.FPS
+        self.repeat_time = + repeat_time #second(s)
+        self.counter = None
         self.Return = None
         self.status = False
         self.switch = N_time_switch(1)
@@ -17,25 +16,22 @@ class repeated_clock():
 
     def start(self):
         if self.switch.operation():
+            self.counter = self.gameplay.curr_time + self.repeat_time #second(s)
             self.status = True  
             self.operation()
 
     def reset(self):
-        self.counter = self.repeat_time
+        self.counter =  self.gameplay.curr_time + self.repeat_time
         self.Return = None
         self.status = False
         self.switch = N_time_switch(1)
 
     def operation(self):
         if self.status:
-            if self.counter == self.repeat_time:
-                self.counter -= 1 / self.FPS
+            if self.gameplay.curr_time >= self.counter:
+                self.counter += self.repeat_time
                 self.Return = True
             else:
-                if self.counter < 0:
-                    self.counter = self.repeat_time
-                else :
-                    self.counter -= 1 / self.FPS
                 self.Return = False
 
     def remove(self):
@@ -44,13 +40,11 @@ class repeated_clock():
 
 
 class N_ValueReturn_repeated_clock():
-    def __init__(self,repeat_time,times,gameplay):
+    def __init__(self,repeat_time,loop_times,gameplay):
         self.gameplay = gameplay
         self.repeat_time = repeat_time #second(s)
-        self.counter = 0
-        self.FPS = self.gameplay.FPS
-        self.times = times
-        self.times_counter = 1
+        self.counter = None
+        self.times = loop_times
         self.Return = 1
         self.status = False
         self.switch = N_time_switch(1)
@@ -58,6 +52,7 @@ class N_ValueReturn_repeated_clock():
 
     def start(self):
         if self.switch.operation():
+            self.counter = self.gameplay.curr_time + self.repeat_time
             self.status = True  
             self.operation()
 
@@ -69,24 +64,22 @@ class N_ValueReturn_repeated_clock():
 
     def operation(self):
         if self.status:
-            if self.counter >= self.repeat_time:
-                self.counter = 0
+            if self.gameplay.curr_time >= self.counter:
+                self.counter += self.repeat_time
                 if self.Return == self.times:
                     self.Return = 1
                 else:
                     self.Return += 1
-            else:
-                self.counter += 1 / self.FPS
+
     def remove(self):
         self.gameplay.side3.remove(self)
 
 
 class timing_clock():
-    def __init__(self,time,gameplay):
+    def __init__(self,lasted_time,gameplay):
         self.gameplay = gameplay
-        self.time = time
-        self.counter = time
-        self.FPS = self.gameplay.FPS
+        self.lasted_time = lasted_time
+        self.counter = None
         self.Return = None
         self.status = False
         self.switch = N_time_switch(1)
@@ -94,22 +87,22 @@ class timing_clock():
 
     def start(self):
         if self.switch.operation():
+            self.counter = self.gameplay.curr_time + self.lasted_time
             self.status = True  
             self.operation()
 
-    def reset(self):
-        self.counter = self.time 
-        self.Return = None
-        self.status = False
-        self.switch = N_time_switch(1)
-
     def operation(self):
         if self.status:
-            if self.counter > 0:
-                self.counter -= 1 / self.FPS
+            if self.gameplay.curr_time <= self.counter :
                 self.Return = True
             else:
                 self.Return = False
+
+    def reset(self):
+        self.counter = None
+        self.Return = None
+        self.status = False
+        self.switch.reset()
 
     def remove(self):
         self.gameplay.side3.remove(self)

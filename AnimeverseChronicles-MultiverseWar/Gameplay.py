@@ -46,21 +46,18 @@ class gameplay():
         self.spawn_point_height = self.path.get_rect().top + self.path.get_rect().height / 7.0
 
         self.FPS = 60
-        self.box_size = (self.screen.get_rect().width / 20 , self.screen.get_rect().height / 10)
+        self.box_size = (self.screen.get_rect().width / 40 , self.screen.get_rect().height / 20)
         self.path_height = self.screen.get_rect().height - self.path.get_rect().height + 20
     #Object import:
         self.side1 = []
         self.side2 = []
         self.side3 = []
 
-        # spawn(straw_doll,2,8,self)
-        spawn(archer,1,1,self)
-        spawn(tanker,1,2,self)
-        spawn(tanker,1,3,self)
-
-        spawn(archer,2,15,self)
-        spawn(tanker,2,14,self)
-        spawn(tanker,2,13,self)
+        spawn(wizard,1,3,self)
+        spawn(straw_doll,2,15,self)
+     
+        # spawn(tanker,2,10,self)
+        # spawn(archer,2,15,self)
 
     def load_all_gameplay_image(self):
         self.bg = self.bg_original.copy()
@@ -172,8 +169,9 @@ class gameplay():
         self.gold_text_rect = self.gold_text.get_rect()
         self.gold_text_rect.center = (self.board.get_rect().width // 2, self.board.get_rect().height // 3)
 
+
     def object_operation(self):
-        for object in self.side1 + self.side2 + self.side3:
+        for object in self.side2 + self.side1 + self.side3:
             object.operation()
 
 

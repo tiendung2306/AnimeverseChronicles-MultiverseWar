@@ -9,7 +9,7 @@ from list_function import *
 from animation_player import *
 
 
-class sword_manclass():
+class wizardclass():
     def __init__(self,side,box_number,gameplay):
         if side == 1 :
             self.side = 1
@@ -20,8 +20,8 @@ class sword_manclass():
 
         self.size = self.gameplay.box_size
         if self.side == 1:
-            self.img_lib = [sword_man1_1, sword_man1_2, sword_man1_3, sword_man1_4]
-        elif self.side == -1:
+                self.img_lib = [wizard1,wizard2,wizard3,wizard4,wizard5,wizard6,wizard7,wizard8]
+        elif self.side == 2:
             self.img_lib = [sword_man2_1, sword_man2_2, sword_man2_3, sword_man2_4]
         self.imgbox = self.img_lib[0].hitbox_to_imgbox(pygame.Rect(box_number * self.gameplay.box_size[0],self.gameplay.path_height - self.gameplay.box_size[1], self.gameplay.box_size[0], self.gameplay.box_size[1]))        
         self.box = self.img_lib[0].imgbox_to_hitbox(self.imgbox)
@@ -30,8 +30,8 @@ class sword_manclass():
         self.time_flag = None
 
         self.speed = 5 # 5/100 map per second 
-        self.attack_scope = 1 * self.gameplay.box_size[0] # 4/15 map width
-        self.attack_speed = 1/3 # attack(s) pers second
+        self.attack_scope = 3 * self.gameplay.box_size[0] # 4/15 map width
+        self.attack_speed = 1 # attack(s) pers second
         self.attack_damage = 50
         self.health_max = 100
         self.health = self.health_max
@@ -43,9 +43,9 @@ class sword_manclass():
         self.get_damage = 0 
         self.special_status = False
 
-        self.moving_animation = animation_player([self.img_lib[0], self.img_lib[1]], 1, self.imgbox , self.gameplay)
-        self.attacking_animation = animation_player([self.img_lib[0], self.img_lib[2], self.img_lib[3]], 1 / self.attack_speed, self.imgbox, self.gameplay)
-        self.standstill_animation = animation_player([self.img_lib[0], self.img_lib[0]], 1, self.imgbox, self.gameplay)
+        self.moving_animation = animation_player([self.img_lib[0],self.img_lib[1],self.img_lib[2]], 1.5, self.imgbox , self.gameplay)
+        self.attacking_animation = animation_player([self.img_lib[3],self.img_lib[4],self.img_lib[5],self.img_lib[6],self.img_lib[7]], 1 / self.attack_speed, self.imgbox, self.gameplay)
+        self.standstill_animation = animation_player(self.img_lib, 1, self.imgbox, self.gameplay)
 
         self.switcher1 = N_time_switch(1)
         self.switcher2 = N_time_switch(1)
@@ -84,6 +84,7 @@ class sword_manclass():
         checker = fake_object_class(self)
         for tmp_img in self.img_lib:
             checker.box = tmp_img.imgbox_to_hitbox(self.imgbox)
+            checker.box.width += self.attack_scope 
             if self.side == 1:
                 # pygame.draw.rect(self.gameplay.screen,White,checker.box)
                 for object in self.gameplay.side2 :
@@ -96,6 +97,7 @@ class sword_manclass():
                             return 2
 
             elif self.side == -1:
+                checker.box.centerx -= self.attack_scope 
                 # pygame.draw.rect(self.gameplay.screen,White,checker.box)
                 for object in self.gameplay.side1 :
                     if collide_checker(checker,object):
@@ -187,8 +189,8 @@ class sword_manclass():
             if self.health <= 0:
                 self.die()
 
-            pygame.draw.rect(self.gameplay.screen,White,self.box,1)
-            pygame.draw.rect(self.gameplay.screen,White,self.imgbox,1)
+            # pygame.draw.rect(self.gameplay.screen,White,self.box,1)
+            # pygame.draw.rect(self.gameplay.screen,White,self.imgbox,1)
 
 
 
