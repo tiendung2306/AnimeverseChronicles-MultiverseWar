@@ -34,7 +34,8 @@ class gameplay():
         self.gold_font = pygame.font.Font('Fonts\\joystix_monospace.otf', 20)
         self.curr_gold = 0
         self.tmp_gold = 0
-        self.prev_gold_time = 0.0
+        self.gold_income = 0
+        self.gold_outcome = 0
 
         self.isPlay = True
         self.fade = pygame.Surface((screen.screen.get_rect().width, screen.screen.get_rect().height))
@@ -112,8 +113,6 @@ class gameplay():
 
     def SwitchPlayPauseState(self):
         if self.isPlay == True:
-            self.tmp_gold = self.curr_gold
-
             self.start_pause_time = self.time
         else:
             self.pause_time = self.pause_time + self.time - self.start_pause_time
@@ -159,11 +158,7 @@ class gameplay():
             curr_sec = str(curr_tmp_sec)
 
             #gold process
-        if self.curr_time - self.prev_gold_time >= 0.9965:
-            self.curr_gold += 10
-            self.prev_gold_time = self.curr_time
-        if self.isPlay == False:
-            self.curr_gold = self.tmp_gold
+        self.curr_gold = int(curr_tmp_min * 60 + curr_tmp_sec) * 10 + self.gold_income - self.gold_outcome #luong vang hien tai = luong vang theo thoi gian + luong vang kiem duoc - luong vang da tieu
         
         self.timer_text = self.timer_font.render(curr_min + ':' + curr_sec, True, Black)
         self.timer_text_rect = self.timer_text.get_rect()

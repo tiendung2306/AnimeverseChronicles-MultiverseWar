@@ -1,4 +1,4 @@
-import pygame
+import pygame, os
 from pygame.locals import *
 from Gameplay import *
 from states import *
@@ -9,8 +9,8 @@ from screen import *
 from collide_checker import *
 class main():
     def __init__(self):
+        os.environ['SDL_VIDEO_CENTERED'] = '1'
         pygame.init()
-    
         pygame.display.set_caption('AnimeverseChronicles-MultiverseWar')
 
         self.MainMenu = mainmenu()
@@ -63,8 +63,7 @@ class main():
             self.screen_resize()
             screen.screen.blit(self.Settings.settings_bg, (0, 0))
             self.mouse = pygame.mouse.get_pos()
-            self.Settings.update()
-            Button = 'None'
+            # self.Settings.update()
             events = pygame.event.get()
             for event in events: 
                 if event.type == QUIT:
@@ -72,9 +71,8 @@ class main():
                     break
                 if event.type == VIDEORESIZE:
                     self.IsResize = True
-                if event.type == MOUSEBUTTONDOWN:
-                    Button = self.Settings.check_click(self.mouse)
-            if Button == 'Back':
+            if self.Settings.IsBack == True:
+                self.Settings.IsBack = False
                 self.back_state()
                 return 
             if self.Settings.menu.is_enabled():
