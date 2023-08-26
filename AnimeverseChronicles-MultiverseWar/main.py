@@ -124,6 +124,9 @@ class main():
                     self.IsResize = True
                 if event.type == MOUSEBUTTONDOWN:
                     Button = self.Gameplay.check_click(self.Gameplay.play_pause_button, self.mouse)
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self.Gameplay.escape_pressed()
                 if event.type == pygame.USEREVENT:
                     self.Gameplay.time += 0.01
                 

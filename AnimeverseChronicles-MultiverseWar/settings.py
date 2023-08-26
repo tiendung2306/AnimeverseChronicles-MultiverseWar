@@ -14,11 +14,26 @@ class settings():
         self.load_all_text()
         self.IsResize = False
         self.IsFullScreen = True
-        self.resolution_lists = [('640 x 480', 0), ('800 x 600', 1), ('1024 x 768', 2), ('1920 x 1200', 3), ('1680 x 1050', 4), ('1440 x 900', 5), 
+        self.all_resolution_lists = [('640 x 480', 0), ('800 x 600', 1), ('1024 x 768', 2), ('1920 x 1200', 3), ('1680 x 1050', 4), ('1440 x 900', 5), 
                                 ('1280 x 800', 6), ('2560 x 1440', 7), ('1920 x 1080', 8), ('1366 x 768', 9), ('1280 x 720', 10), ('3840 x 2160', 11)]
-        self.resolution_tmp_lists = [(640, 480), (800, 600), (1024, 768), (1920, 1200), (1680, 1050), (1440, 900), 
+        self.all_resolution_tmp_lists = [(640, 480), (800, 600), (1024, 768), (1920, 1200), (1680, 1050), (1440, 900), 
                                 (1280, 800), (2560, 1440), (1920, 1080), (1366, 768), (1280, 720), (3840, 2160)]
+        self.resolution_lists = []
+        self.resolution_tmp_lists = []
+        self.process_resolution()
         self.IsBack = False
+
+    def process_resolution(self):
+        flag = False
+        for i in range(0, len(self.all_resolution_tmp_lists)):
+            if self.all_resolution_tmp_lists[i][0] <= screen.curr_monitor_resolution[0] and self.all_resolution_tmp_lists[i][1] <= screen.curr_monitor_resolution[1]:
+                self.resolution_lists.append(self.all_resolution_lists[i])
+                self.resolution_tmp_lists.append(self.all_resolution_tmp_lists[i])
+            if self.all_resolution_tmp_lists[i][0] == screen.curr_monitor_resolution[0] and self.all_resolution_tmp_lists[i][1] == screen.curr_monitor_resolution[1]:
+                flag = True
+        if flag == False:
+            self.resolution_lists.append((str(screen.curr_monitor_resolution[0]) + ' x ' + str(screen.curr_monitor_resolution[1]), 2306))
+            self.resolution_tmp_lists.append(screen.curr_monitor_resolution)
 
     def load_all_text(self):
         self.buttons_font = pygame.font.Font('Fonts\\BigSpace-rPKx.ttf', 64)

@@ -80,7 +80,7 @@ class tankerclass():
 
         else:
             self.box = self.moving_animation.play()
-            self.imgbox.centerx = self.spam_pointX+ (self.speed * screen.get_rect().width / 100) * (self.gameplay.curr_time - self.time_flag)  * self.side
+            self.imgbox.centerx = self.spam_pointX+ (self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.time_flag)  * self.side
         self.standstill_animation.reset()
         self.attacking_animation.reset()
 

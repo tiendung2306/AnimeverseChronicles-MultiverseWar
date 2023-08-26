@@ -6,10 +6,12 @@ from nexus import *
 from pause_pannel import *
 from states import *
 from screen import *
+from gameplay_ui import *
 
 class gameplay():
     def __init__(self):
         pygame.init()
+        self.gameplay_ui = gameplay_ui(self)
 
         self.bg_original = pygame.image.load('GameplayAssets\\bg1.jpg')
         self.path_original = pygame.image.load('GameplayAssets\\path1.png')
@@ -53,7 +55,7 @@ class gameplay():
         self.side2 = []
         self.side3 = []
 
-        spawn(wizard,1,3,self)
+        # spawn(wizard,1,3,self)
         spawn(straw_doll,2,15,self)
      
         # spawn(tanker,2,10,self)
@@ -87,6 +89,8 @@ class gameplay():
 
         self.spawn_point_height = self.path.get_rect().top + self.path.get_rect().height / 7.0
 
+        self.gameplay_ui.load_image()
+
     def screen_resize(self):
         self.Pause_Pannel.screen_resize()
         self.fade = pygame.Surface((screen.screen.get_rect().width, screen.screen.get_rect().height))
@@ -115,6 +119,16 @@ class gameplay():
                 return 'Settings'
             if self.Pause_Pannel.check_click(mouse) == self.Pause_Pannel.buttons[2]: #an vao nut thoat game
                 return 'Back'
+            
+        self.gameplay_ui.check_click(mouse)
+
+    def escape_pressed(self):
+        if self.isPlay == True: #neu game dang chay
+            self.SwitchPlayPauseState()
+            self.isPlay = 1 - self.isPlay
+        else:
+            self.SwitchPlayPauseState()
+            self.isPlay = 1 - self.isPlay
 
     def SwitchPlayPauseState(self):
         if self.isPlay == True:
@@ -139,9 +153,8 @@ class gameplay():
         screen.screen.blit(self.timer_text, self.timer_text_rect)
         screen.screen.blit(self.gold_text, self.gold_text_rect)
         screen.screen.blit(self.settings_button, self.play_pause_button)
-            
-        # else:
-        #     screen.screen.blit(self.play_button, self.play_pause_button)
+
+        self.gameplay_ui.update()
 
     def draw_pause_pannel(self):
         self.set_fade()
