@@ -54,13 +54,14 @@ class settings():
     def set_resolution(self, selected_value, index, **kwargs):
         value_tuple, tmp = selected_value
         curr_resolution = (screen.screen.get_rect().width, screen.screen.get_rect().height)
-        if curr_resolution != self.resolution_tmp_lists[index]:
+        print(value_tuple)
+        if curr_resolution != self.all_resolution_tmp_lists[value_tuple[1]]:
             # print(curr_resolution, '  ', self.resolution_tmp_lists[index])
             if self.IsFullScreen == True:
-                screen.screen = pygame.display.set_mode(self.resolution_tmp_lists[index])
+                screen.screen = pygame.display.set_mode(self.all_resolution_tmp_lists[value_tuple[1]])
                 pygame.display.toggle_fullscreen()
             else:
-                screen.screen = pygame.display.set_mode(self.resolution_tmp_lists[index])
+                screen.screen = pygame.display.set_mode(self.all_resolution_tmp_lists[value_tuple[1]])
             self.IsResize = True
 
     def set_display_mode(self, selected_value, index, *kwargs):

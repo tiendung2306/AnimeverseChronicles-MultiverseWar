@@ -26,6 +26,13 @@ class gameplay():
 
         self.play_pause_button = (screen.screen.get_rect().width - self.pause_button.get_rect().width - 10, 10)
 
+        self.character_cost = {
+            archer : 20,
+            sword_man : 10,
+            tanker : 30,
+            wizard : 50
+        }
+
         self.timer_font = pygame.font.Font('Fonts\\joystix_monospace.otf', 16)
         self.start_time = 0.0
         self.curr_time = 0.0
@@ -35,7 +42,6 @@ class gameplay():
 
         self.gold_font = pygame.font.Font('Fonts\\joystix_monospace.otf', 20)
         self.curr_gold = 0
-        self.tmp_gold = 0
         self.gold_income = 0
         self.gold_outcome = 0
 
@@ -55,21 +61,8 @@ class gameplay():
         self.side2 = []
         self.side3 = []
 
-        # spawn(wizard,1,3,self)
         spawn(straw_doll,2,15,self)
      
-        # spawn(tanker,2,10,self)
-        # spawn(archer,2,15,self)
-        # spawn(straw_doll,2,8,self)
-        # spawn(archer,1,1,self)
-        # spawn(tanker,1,2,self)
-        # spawn(tanker,1,3,self)
-        # spawn(sword_man,1,4,self)
-
-        # spawn(archer,2,15,self)
-        # spawn(tanker,2,14,self)
-        # spawn(tanker,2,13,self)
-        # spawn(sword_man,2,12,self)
 
     def load_all_gameplay_image(self):
         self.bg = self.bg_original.copy()

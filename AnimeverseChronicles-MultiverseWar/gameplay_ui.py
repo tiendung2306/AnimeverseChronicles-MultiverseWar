@@ -18,7 +18,9 @@ class button():
         screen.screen.blit(self.button_image, pos)
 
     def spawn(self):
-        spawn(self.character_type, 1, 0, self.gameplay)
+        if self.gameplay.curr_gold >= self.gameplay.character_cost[self.character_type]:
+            spawn(self.character_type, 1, 0, self.gameplay)
+            self.gameplay.gold_outcome += self.gameplay.character_cost[self.character_type]
 
 
 
