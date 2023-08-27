@@ -232,7 +232,6 @@ class archerclass():
                         self.status = 2
                         return None
         self.status = 3
-        print(self.status)
         
 
     def Geting_hit(self):

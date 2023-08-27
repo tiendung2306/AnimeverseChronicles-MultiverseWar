@@ -12,18 +12,18 @@ from color import *
 # a = b = c = d = 0
 # Flag = True
 # flag2 = False
-# counter = 22
-# img = pygame.image.load("GameplayAssets\\arrow({}).png".format(counter))
+# counter = 1
+# img = pygame.image.load("GameplayAssets\,sword_man{}).png".format(counter))
 # WIN = pygame.display.set_mode(img.get_size())
 # while Flag:
 #     WIN.fill(Black)
 #     WIN.blit(img,(0,0))
 #     for event in pygame.event.get():
 #         if event.type == KEYDOWN:
-#             print("arrow{}".format(counter),"GameplayAssets\\arrow({}).png".format(counter),a,",",b,",",c - a,",",d - b)
+#             print("sword_man{}".format(counter),"GameplayAssets\\sword_man({}).png".format(counter),a,",",b,",",c - a,",",d - b)
             
 #             counter += 1
-#             img = pygame.image.load("GameplayAssets\\arrow({}).png".format(counter))
+#             img = pygame.image.load("GameplayAssets\\sword_man({}).png".format(counter))
 #             if event.key == 9:
 #                 Flag = False
 #             # if event.key == 32 :
@@ -45,19 +45,5 @@ from color import *
 #     pygame.draw.rect(WIN,Yellow,pygame.Rect(a,b,c - a,d - b),1)
 #     pygame.display.update()
 
-for i in range(11,17):
-    print("archer",i)
-# archer17
-# archer18
-# archer19
-# archer20
-# archer21
-# archer22
-# archer23
-# archer24
-# archer25
-# archer26
-# archer27
-# archer28
-# archer29
-# archer30
+for i in range(19,31):
+    print("sword_man",i)
