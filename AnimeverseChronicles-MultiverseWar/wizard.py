@@ -100,7 +100,7 @@ class wizardclass():
         self.health_max = 100.0
         self.health = self.health_max
         self.mana_max =100.0
-        self.mana = 0
+        self.mana = 0.0
 
         self.magicball_list = []
         self.effect_list = []
@@ -124,6 +124,14 @@ class wizardclass():
         self.switcher3 = N_time_switch(1)
         self.skill_countdowner = timing_clock(self.skill_lasting_time,self.gameplay)
 
+
+    # def resize(self):
+    #     (a,b,c,d) = self.imgbox
+    #     tmp = analyzed_img("none.png",a,b,c,d)
+    #     self.imgbox = tmp.imgbox_to_hitbox(screen.screen.get_rect)
+    #     (a,b,c,d) = self.box
+    #     tmp = analyzed_img("none.png",a,b,c,d)
+    #     self.box = tmp.imgbox_to_hitbox(self.imgbox) 
 
 
     def status_bar(self):
@@ -163,9 +171,10 @@ class wizardclass():
                 if collide_checker(checker,object):
                     self.status = 1
                     return None
-            
+            checker.box.width -= self.attack_scope
+            checker.box.width *= 2
             for object in self.gameplay.side1:
-                if collide_checker(self,object):
+                if collide_checker(checker,object):
                     if (not (object == self)) and (object.box.left >= self.box.left):
                         self.status = 2
                         return None
@@ -180,9 +189,11 @@ class wizardclass():
                 if collide_checker(checker,object):
                     self.status = 1
                     return None
-
+            checker.box.width -= self.attack_scope
+            checker.box.centerx += self.attack_scope 
+            checker.box.width *= 2
             for object in self.gameplay.side2:
-                if collide_checker(self,object):
+                if collide_checker(checker,object):
                     if (not (object == self)) and (object.box.left <= self.box.left) :
                         self.status = 2
                         return None
@@ -240,10 +251,8 @@ class wizardclass():
             elif self.side == -1:
                 checker.box.centerx -= self.attack_scope * 1.5
                 for enemy in self.gameplay.side1:
-                    print(checker.box, enemy.box)
                     if collide_checker(checker,enemy):
                         add_effect(enemy, dizzy_effect, 5)
-                        print("okok")
                         self.special_effect_animation = one_time_animation_player([soul1, soul2, soul3, soul4, soul5, soul6, soul6, soul6, soul7, soul8], self.side, 1,soul1.hitbox_to_imgbox(pygame.Rect(enemy.box.right - enemy.box.width / 4, enemy.box.top - enemy.box.height /2, enemy.box.width, enemy.box.height )),  self.gameplay)
                         break
                     else:

@@ -25,7 +25,7 @@ class sword_manclass():
         self.speed = 5.0 # 5/100 map per second 
         self.attack_scope = 1 * self.gameplay.box_size[0] # 4/15 map width
         self.attack_speed = 1/3 # attack(s) pers second
-        self.attack_damage = 50.0
+        self.attack_damage = 30.0
         self.attack_damage_orginal = self.attack_damage
         self.health_max = 100.0
         self.health = self.health_max 
@@ -84,12 +84,13 @@ class sword_manclass():
         checker = fake_object_class(self)
         if self.side == 1:
             checker.box = sword_man1.imgbox_to_hitbox(self.imgbox)
+            checker.box.width *= 2
             # pygame.draw.rect(screen.screen,Red,checker.box)
             for object in self.gameplay.side2 :
                 if collide_checker(checker,object):
                     self.status = 1
                     return None
-            checker.box.width -= self.attack_scope 
+            checker.box.width *= 1 / 2
             for object in self.gameplay.side1:
                 if collide_checker(checker,object):
                         if (not (object == self)) and (object.box.left >= self.box.left):
@@ -98,11 +99,15 @@ class sword_manclass():
 
         elif self.side == -1:
             checker.box = reverse(sword_man1).imgbox_to_hitbox(self.imgbox)
+            checker.box.width *= 2
+            checker.box.centerx -= checker.box.width / 2
             # pygame.draw.rect(self.gameplay.screen,White,checker.box)
             for object in self.gameplay.side1 :
                 if collide_checker(checker,object):
                     self.status = 1
-                    return None
+                    return None            
+            checker.box.centerx += checker.box.width / 2
+            checker.box.width *= 1/ 2
             for object in self.gameplay.side2:
                 if collide_checker(checker,object):
                     if (not (object == self)) and (object.box.left <= self.box.left) :

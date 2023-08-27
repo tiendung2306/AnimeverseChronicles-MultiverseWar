@@ -114,7 +114,7 @@ class archerclass():
         self.health_max = 100.0
         self.health = self.health_max
         self.mana_max =100.0
-        self.mana = 90.0
+        self.mana = 0.0
 
         self.arrow_list = []
         self.effect_list = []

@@ -32,7 +32,14 @@ class straw_doll_class():
         
         self.alive = True
         self.get_hit = False
-
+        
+    def resize(self):
+        (a,b,c,d) = self.imgbox
+        tmp = analyzed_img("none.png",a,b,c,d)
+        self.imgbox = tmp.imgbox_to_hitbox(screen.screen.get_rect)
+        (a,b,c,d) = self.box
+        tmp = analyzed_img("none.png",a,b,c,d)
+        self.box = tmp.imgbox_to_hitbox(self.imgbox)
     def status_bar(self):
         if self.mana >= self.mana_max:
             self.mana = 0

@@ -52,23 +52,10 @@ class gameplay():
         self.side1 = []
         self.side2 = []
         self.side3 = []
+        self.side0 = []
 
-        spawn(archer,1,3,self)
-        spawn(sword_man,2,9,self)
-        # spawn(archer,2,8,self)
-     
-        # spawn(tanker,2,10,self)
-        # spawn(archer,2,15,self)
-        # spawn(straw_doll,2,8,self)
-        # spawn(archer,1,1,self)
-        # spawn(tanker,1,2,self)
-        # spawn(tanker,1,3,self)
-        # spawn(sword_man,1,4,self)
+        spawn(straw_doll,1,30,self)
 
-        # spawn(archer,2,15,self)
-        # spawn(tanker,2,14,self)
-        # spawn(tanker,2,13,self)
-        # spawn(sword_man,2,12,self)
 
     def load_all_gameplay_image(self):
         self.bg = self.bg_original.copy()
@@ -97,6 +84,8 @@ class gameplay():
         self.load_all_gameplay_image()
         self.nexus1.screen_resize('GameplayAssets\\nexus1.png')
         self.nexus2.screen_resize('GameplayAssets\\nexus2.png')
+        # for object in self.side2 + self.side1:
+        #     object.resize()
 
     def set_fade(self): 
         screen.screen.blit(self.fade, (0,0))
@@ -176,7 +165,7 @@ class gameplay():
 
 
     def object_operation(self):
-        for object in self.side2 + self.side1 + self.side3:
+        for object in self.side2 + self.side1 + self.side0 + self.side3 :
             object.operation()
 
 
