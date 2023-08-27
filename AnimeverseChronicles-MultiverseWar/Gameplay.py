@@ -53,8 +53,9 @@ class gameplay():
         self.side2 = []
         self.side3 = []
 
-        spawn(wizard,1,3,self)
-        spawn(straw_doll,2,15,self)
+        spawn(straw_doll,1,3,self)
+        spawn(archer,2,9,self)
+        spawn(archer,2,8,self)
      
         # spawn(tanker,2,10,self)
         # spawn(archer,2,15,self)

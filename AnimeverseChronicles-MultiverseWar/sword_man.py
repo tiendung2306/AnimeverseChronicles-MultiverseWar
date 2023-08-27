@@ -26,9 +26,6 @@ class sword_manclass():
             self.img_lib = [sword_man2_1, sword_man2_2, sword_man2_3, sword_man2_4]
         self.imgbox = self.img_lib[0].hitbox_to_imgbox(pygame.Rect(box_number * self.gameplay.box_size[0],self.gameplay.path_height - self.gameplay.box_size[1], self.gameplay.box_size[0], self.gameplay.box_size[1]))        
         self.box = self.img_lib[0].imgbox_to_hitbox(self.imgbox)
-        
-        self.spam_pointX = None
-        self.time_flag = None
 
         self.speed = 5 # 5/100 map per second 
         self.attack_scope = 1 * self.gameplay.box_size[0] # 4/15 map width
@@ -39,14 +36,15 @@ class sword_manclass():
         self.mana_max =100
         self.mana = 0
 
+        self.effect_list = []
+
         self.alive = True
         self.get_hit = False
-        self.get_damage = 0 
         self.special_status = False
 
-        self.moving_animation = animation_player([self.img_lib[0], self.img_lib[1]], 1, self.imgbox , self.gameplay)
-        self.attacking_animation = animation_player([self.img_lib[0], self.img_lib[2], self.img_lib[3]], 1 / self.attack_speed, self.imgbox, self.gameplay)
-        self.standstill_animation = animation_player([self.img_lib[0], self.img_lib[0]], 1, self.imgbox, self.gameplay)
+        self.moving_animation = animation_player([self.img_lib[0], self.img_lib[1]], self.side,1, self.imgbox , self.gameplay)
+        self.attacking_animation = animation_player([self.img_lib[0], self.img_lib[2], self.img_lib[3]], self.side, 1 / self.attack_speed, self.imgbox, self.gameplay)
+        self.standstill_animation = animation_player([self.img_lib[0], self.img_lib[0]],self.side, 1, self.imgbox, self.gameplay)
 
         self.switcher1 = N_time_switch(1)
         self.switcher2 = N_time_switch(1)
@@ -89,23 +87,28 @@ class sword_manclass():
                 # pygame.draw.rect(screen.screen,White,checker.box)
                 for object in self.gameplay.side2 :
                     if collide_checker(checker,object):
-                        return 1
-                
+                        self.status = 1
+                        return None              
+                           
                 for object in self.gameplay.side1:
                     if collide_checker(self,object):
                          if (not (object == self)) and (object.box.left >= self.box.left):
-                            return 2
+                            self.status = 2
+                            return None
 
             elif self.side == -1:
                 # pygame.draw.rect(screen.screen,White,checker.box)
                 for object in self.gameplay.side1 :
                     if collide_checker(checker,object):
-                        return 1
+                        self.status = 1
+                        return None
+                    
                 for object in self.gameplay.side2:
                     if collide_checker(self,object):
                         if (not (object == self)) and (object.box.left <= self.box.left) :
-                            return 2
-        return 0
+                            self.status = 2
+                            return None
+        self.status = 3
         
 
     def Geting_hit(self):
@@ -172,14 +175,17 @@ class sword_manclass():
     def operation(self):
         if self.alive:
             self.status_bar()
-            tmp = self.check_forward()
-            if tmp == 0:
+            self.check_forward()
+            for effect in self.effect_list:
+                effect.play()
+                
+            if self.status == 3:
                 self.move()
                 
-            elif tmp == 1:
+            elif self.status == 1:
                 self.attack()
 
-            elif tmp == 2 :
+            elif self.status == 2 :
                 self.standstill()
                 
             if self.get_hit :
