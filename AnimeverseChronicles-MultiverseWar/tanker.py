@@ -12,46 +12,43 @@ from screen import *
 
 class tankerclass():
     def __init__(self,side,box_number,gameplay):
+        self.gameplay = gameplay
+        self.box = pygame.Rect(box_number * self.gameplay.box_size[0],self.gameplay.path_height - self.gameplay.box_size[1], self.gameplay.box_size[0], self.gameplay.box_size[1])
         if side == 1 :
             self.side = 1
+            self.imgbox = tanker5.hitbox_to_imgbox(self.box)        
         elif side == 2:
-            self.side = -1   
-        
-        self.gameplay = gameplay
-        
-        self.size = self.gameplay.box_size
-        if self.side == 1:
-            self.img_lib = [tanker1_1, tanker1_2, tanker1_3, tanker1_4]
-        elif self.side == -1:
-            self.img_lib = [tanker2_1, tanker2_2, tanker2_3, tanker2_4]
-        
-        self.imgbox = self.img_lib[0].hitbox_to_imgbox(pygame.Rect(box_number * self.gameplay.box_size[0],self.gameplay.path_height - self.gameplay.box_size[1], self.gameplay.box_size[0], self.gameplay.box_size[1]))        
-        self.box = self.img_lib[0].imgbox_to_hitbox(self.imgbox)
+            self.side = -1
+            self.imgbox = reverse(tanker5).hitbox_to_imgbox(self.box)   
 
-        self.spam_pointX = None
-        self.time_flag = self.gameplay.curr_time 
-
-        self.speed = 5 # 1/100 map per second 
-        self.attack_scope = 0 * self.gameplay.box_size[0] + 1  # 4/15 map width
+        self.speed = 5.0 # 1/100 map per second 
+        self.attack_scope = 1 * self.gameplay.box_size[0] + 1  # 4/15 map width
         self.attack_speed = 1/6 # attack(s) pers second
-        self.attack_damage = 20
-        self.health_max = 500
-        self.health = self.health_max
-        self.mana_max = 100
+        self.attack_damage = 5.0
+        self.health_max = 500.0
+        self.health =  self.health_max
+        self.mana_max = 100.0
         self.mana = 0
         self.damage_reduce =  0 #0%
         self.damage_reduce_special =  40 #%
         self.skill_lasting_time = 3
 
+        self.effect_list = []
+
         self.alive = True
         self.get_hit = False
-        self.alive = True
-        self.get_damage = 0
         self.special_status = False
 
-        self.moving_animation = animation_player([self.img_lib[0], self.img_lib[1]], 1, self.imgbox , self.gameplay)
-        self.attacking_animation = animation_player([self.img_lib[2], self.img_lib[3]], 1 / self.attack_speed, self.imgbox, self.gameplay)
-        self.standstill_animation = animation_player([self.img_lib[0], self.img_lib[0]], 1, self.imgbox, self.gameplay)
+        self.moving_animation = animation_player([tanker13,tanker14,tanker15,tanker16,tanker17,tanker18,tanker19], self.side, 1, self.imgbox , self.gameplay)
+        tmp_lib = [tanker23,tanker24,tanker25,tanker26,tanker27,tanker28,tanker29,tanker30,tanker31]
+        for i in range(6):
+            for img in [tanker20,tanker21,tanker22,tanker21]:
+                for counter in range(2):
+                    tmp_lib.append(img)
+        
+        self.attacking_animation = animation_player(tmp_lib,self.side, 1 / self.attack_speed, self.imgbox, self.gameplay)
+        self.standstill_animation = animation_player([tanker1,tanker2,tanker3,tanker4],self.side, 1, self.imgbox, self.gameplay)
+        self.dying_animation = one_time_animation_player([tanker32,tanker33,tanker34,tanker35,tanker36,tanker37,tanker38,tanker38,tanker38,tanker38], self.side, 0.8, self.imgbox, self.gameplay)
 
         self.switcher1 = N_time_switch(1)
         self.switcher2 = N_time_switch(1)
@@ -59,6 +56,14 @@ class tankerclass():
 
         self.skill_countdowner = timing_clock(3,self.gameplay)
 
+
+    # def resize(self):
+    #     (a,b,c,d) = self.imgbox
+    #     tmp = analyzed_img("none.png",a,b,c,d)
+    #     self.imgbox = tmp.imgbox_to_hitbox(screen.screen.get_rect)
+    #     (a,b,c,d) = self.box
+    #     tmp = analyzed_img("none.png",a,b,c,d)
+    #     self.box = tmp.imgbox_to_hitbox(self.imgbox)
 
     def status_bar(self):
         if self.mana >= self.mana_max:
@@ -93,32 +98,38 @@ class tankerclass():
     
     def check_forward(self):
         checker = fake_object_class(self)
-        for tmp_img in self.img_lib:
-            checker.box = tmp_img.imgbox_to_hitbox(self.imgbox)
-            # checker.box.width += self.attack_scope 
-            if self.side == 1:
-                # pygame.draw.rect(screen.screen,Red,checker.box)
-                for object in self.gameplay.side2 :
-                    if collide_checker(checker,object):
-                        return 1
-                
-                for object in self.gameplay.side1:
-                    if collide_checker(self,object):
-                         if (not (object == self)) and (object.box.left >= self.box.left):
-                            return 2
+        if self.side == 1:
+            checker.box = tanker5.imgbox_to_hitbox(self.imgbox)
+            checker.box.width *= 2
+            # pygame.draw.rect(screen.screen,Red,checker.box)
+            for object in self.gameplay.side2 :
+                if collide_checker(checker,object):
+                    self.status = 1
+                    return None
+            checker.box.width *= 1 / 2
+            for object in self.gameplay.side1:
+                if collide_checker(checker,object):
+                        if (not (object == self)) and (object.box.left > self.box.left):
+                            self.status = 2
+                            return None
 
-            elif self.side == -1:
-                # checker.box.centerx -= self.attack_scope 
-                # pygame.draw.rect(screen.screen,White,checker.box)
-                for object in self.gameplay.side1 :
-                    if collide_checker(checker,object):
-                        return 1
-                for object in self.gameplay.side2:
-                    if collide_checker(self,object):
-                        if (not (object == self)) and (object.box.left <= self.box.left) :
-                            return 2
-        return 0
-
+        elif self.side == -1:
+            checker.box = reverse(tanker5).imgbox_to_hitbox(self.imgbox)
+            checker.box.width *= 2
+            checker.box.centerx -= checker.box.width / 2
+            # pygame.draw.rect(self.gameplay.screen,White,checker.box)
+            for object in self.gameplay.side1 :
+                if collide_checker(checker,object):
+                    self.status = 1
+                    return None
+            checker.box.centerx += checker.box.width / 2
+            checker.box.width *= 1 / 2
+            for object in self.gameplay.side2:
+                if collide_checker(checker,object):
+                    if (not (object == self)) and (object.box.left <= self.box.left) :
+                        self.status = 2
+                        return None
+        self.status = 3
 
     def Geting_hit(self):
         self.get_hit = False
@@ -129,20 +140,28 @@ class tankerclass():
 
 
     def die(self):
-        if self.side == 1:
-            self.gameplay.side1.remove(self)
-        elif self.side == -1:
-            self.gameplay.side2.remove(self)
-        self.moving_animation.remove()
-        self.attacking_animation.remove()
-        self.standstill_animation.remove()      
-        self.skill_countdowner.remove()         
-        self.alive = False
-    
+        if not self.side == 0:
+            if self.side == 1:
+                self.gameplay.side1.remove(self)
+            elif self.side == -1:
+                self.gameplay.side2.remove(self)
+            self.side = 0
+            self.gameplay.side0.append(self)
+            self.moving_animation.remove()
+            self.attacking_animation.remove()
+            self.standstill_animation.remove()      
+            self.skill_countdowner.remove()         
+        else:
+            self.dying_animation.play()
+            # if self.dying_animation.clock.counter == self.dying_animation.clock.times:
+            #     if self.dying_animation.clock.gameplay.curr_time >= self.dying_animation.clock.counter:
+            #         self.alive = False
+            #         self.gameplay.side0.remove(self)
+
 
     def attack(self):
         self.box = self.attacking_animation.play()
-        if self.attacking_animation.clock.Return == 2:
+        if self.attacking_animation.clock.Return == 5 or self.attacking_animation.clock.Return == 8:
             if self.switcher1.operation():
 
                 if not self.special_status :
@@ -164,6 +183,9 @@ class tankerclass():
                         if collide_checker(checker,enemy_object):
                                 enemy_object.get_hit = True
                                 enemy_object.get_damage = self.attack_damage
+        elif self.attacking_animation.clock.Return == 7:
+            self.switcher1.reset()
+
         elif self.attacking_animation.clock.Return == 1:     
             self.switcher1.reset()
         self.standstill_animation.reset()
@@ -186,22 +208,26 @@ class tankerclass():
 
     def operation(self):
             if self.alive:
+                if self.health <= 0:
+                    self.die()
+                    return None
                 self.status_bar()
-                tmp = self.check_forward()
-                if tmp == 0:
+                self.check_forward()
+                for effect in self.effect_list:
+                    effect.play()
+
+                if self.status == 3:
                     self.move()
 
-                elif tmp == 1:
+                elif self.status == 1:
                     self.attack()
 
-                elif tmp == 2 :
+                elif self.status == 2 :
                     self.standstill()
 
                 if self.get_hit :
                     self.Geting_hit()
 
-                if self.health <= 0:
-                    self.die()
-                # pygame.draw.rect(screen.screen,White,self.box,1)
-                # pygame.draw.rect(screen.screen,White,self.imgbox,1)
+                pygame.draw.rect(screen.screen,White,self.box,1)
+                pygame.draw.rect(screen.screen,White,self.imgbox,1)
 

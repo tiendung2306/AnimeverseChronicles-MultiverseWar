@@ -60,9 +60,10 @@ class gameplay():
         self.side1 = []
         self.side2 = []
         self.side3 = []
+        self.side0 = []
 
-        spawn(straw_doll,2,15,self)
-     
+        spawn(straw_doll,1,30,self)
+
 
     def load_all_gameplay_image(self):
         self.bg = self.bg_original.copy()
@@ -93,6 +94,8 @@ class gameplay():
         self.load_all_gameplay_image()
         self.nexus1.screen_resize('GameplayAssets\\nexus1.png')
         self.nexus2.screen_resize('GameplayAssets\\nexus2.png')
+        # for object in self.side2 + self.side1:
+        #     object.resize()
 
     def set_fade(self): 
         screen.screen.blit(self.fade, (0,0))
@@ -181,7 +184,7 @@ class gameplay():
 
 
     def object_operation(self):
-        for object in self.side2 + self.side1 + self.side3:
+        for object in self.side2 + self.side1 + self.side0 + self.side3 :
             object.operation()
 
 
