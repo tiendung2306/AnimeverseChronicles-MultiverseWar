@@ -11,6 +11,9 @@ from gameplay_ui import *
 class gameplay():
     def __init__(self):
         pygame.init()
+
+        self.play_mode = 2 #1 la player vs computer, 2 la pvp
+
         self.gameplay_ui = gameplay_ui(self)
 
         self.bg_original = pygame.image.load('GameplayAssets\\bg1.jpg')
@@ -24,7 +27,13 @@ class gameplay():
         self.nexus1 = Nexus('GameplayAssets\\nexus1.png')
         self.nexus2 = Nexus('GameplayAssets\\nexus2.png')
 
-        self.play_pause_button = (screen.screen.get_rect().width - self.pause_button.get_rect().width - 10, 10)
+        if self.play_mode == 2:
+            tmp = Rect(0, 0, 0, 0)
+            tmp.center = (screen.screen.get_rect().width / 2.0, 10)
+            tmp.top = 10
+            self.play_pause_button = (tmp.left, tmp.top)
+        else:
+            self.play_pause_button = (screen.screen.get_rect().width - screen.screen.get_rect().width // 32, 10)
 
         self.character_cost = {
             archer : 20,
@@ -41,9 +50,12 @@ class gameplay():
         self.time = 0.0 # dung giong voi time.time()
 
         self.gold_font = pygame.font.Font('Fonts\\joystix_monospace.otf', 20)
-        self.curr_gold = 0
-        self.gold_income = 0
-        self.gold_outcome = 0
+        self.curr_gold_1 = 0
+        self.gold_income_1 = 0
+        self.gold_outcome_1 = 0
+        self.curr_gold_2 = 0
+        self.gold_income_2 = 0
+        self.gold_outcome_2 = 0
 
         self.isPlay = True
         self.fade = pygame.Surface((screen.screen.get_rect().width, screen.screen.get_rect().height))
@@ -62,13 +74,15 @@ class gameplay():
         self.side3 = []
         self.side0 = []
 
-        spawn(straw_doll,1,30,self)
+        # spawn(straw_doll,2,30,self)
 
 
     def load_all_gameplay_image(self):
         self.bg = self.bg_original.copy()
         self.path = self.path_original.copy()
-        self.board = self.board_original.copy()
+        self.board_1 = self.board_original.copy()
+        self.board_2 = self.board_original.copy()
+        self.board_2 = pygame.transform.flip(self.board_2, True, False)
         self.settings_button = self.settings_button_original.copy()
         self.play_button = self.play_button_original.copy()
         self.pause_button = self.pause_button_original.copy()
@@ -76,10 +90,19 @@ class gameplay():
         info = pygame.display.Info()
         self.bg = pygame.transform.smoothscale(self.bg, (info.current_w, info.current_h))
         self.path = pygame.transform.smoothscale(self.path, (self.bg.get_rect().width, screen.screen.get_rect().height // 7))
-        self.board = pygame.transform.smoothscale(self.board, (screen.screen.get_rect().width / 7, screen.screen.get_rect().width / 7 / 2.4))
-        self.settings_button = pygame.transform.smoothscale(self.settings_button, (self.board.get_rect().width // 6, self.board.get_rect().width // 6))
-        self.play_button = pygame.transform.smoothscale(self.play_button, (self.board.get_rect().width // 6, self.board.get_rect().width // 6))
-        self.pause_button = pygame.transform.smoothscale(self.pause_button, (self.board.get_rect().width // 6, self.board.get_rect().width // 6))
+        self.board_1 = pygame.transform.smoothscale(self.board_1, (screen.screen.get_rect().width / 7, screen.screen.get_rect().width / 7 / 2.4))
+        self.board_2 = pygame.transform.smoothscale(self.board_2, (screen.screen.get_rect().width / 7, screen.screen.get_rect().width / 7 / 2.4))
+        self.settings_button = pygame.transform.smoothscale(self.settings_button, (self.board_1.get_rect().width // 6, self.board_1.get_rect().width // 6))
+        self.play_button = pygame.transform.smoothscale(self.play_button, (self.board_1.get_rect().width // 6, self.board_1.get_rect().width // 6))
+        self.pause_button = pygame.transform.smoothscale(self.pause_button, (self.board_1.get_rect().width // 6, self.board_1.get_rect().width // 6))
+
+        if self.play_mode == 2:
+            tmp = Rect(0, 0, self.board_1.get_rect().width // 6, self.board_1.get_rect().width // 6)
+            tmp.center = (screen.screen.get_rect().width / 2.0, 10)
+            tmp.top = 10
+            self.play_pause_button = (tmp.left, tmp.top)
+        else:
+            self.play_pause_button = (screen.screen.get_rect().width - screen.screen.get_rect().width // 32, 10)
 
         self.spawn_point_height = self.path.get_rect().top + self.path.get_rect().height / 7.0
 
@@ -96,6 +119,7 @@ class gameplay():
         self.nexus2.screen_resize('GameplayAssets\\nexus2.png')
         # for object in self.side2 + self.side1:
         #     object.resize()
+        self.gameplay_ui.screen_resize()
 
     def set_fade(self): 
         screen.screen.blit(self.fade, (0,0))
@@ -145,10 +169,20 @@ class gameplay():
         screen.screen.blit(self.path, (0, screen.screen.get_rect().height - self.path.get_rect().height))
         screen.screen.blit(self.nexus1.nexus_surface, (5,  screen.screen.get_rect().height - self.path.get_rect().height - self.nexus1.nexus_surface.get_rect().height + self.path.get_rect().height // 3))
         screen.screen.blit(self.nexus2.nexus_surface, (screen.screen.get_rect().width - 5 - self.nexus2.nexus_surface.get_rect().width,  screen.screen.get_rect().height - self.path.get_rect().height - self.nexus1.nexus_surface.get_rect().height + self.path.get_rect().height // 3)) 
-        screen.screen.blit(self.board, (-2,  -2))
-        screen.screen.blit(self.timer_text, self.timer_text_rect)
-        screen.screen.blit(self.gold_text, self.gold_text_rect)
-        screen.screen.blit(self.settings_button, self.play_pause_button)
+        screen.screen.blit(self.board_1, (-2,  -2))
+        if self.play_mode == 2:
+            screen.screen.blit(self.board_2, (screen.screen.get_rect().width + 2 - self.board_2.get_rect().width,  -2))
+        screen.screen.blit(self.timer_text1, self.timer_text1_rect)
+        if self.play_mode == 2:
+            screen.screen.blit(self.timer_text2, self.timer_text2_rect)
+        screen.screen.blit(self.gold_text1, self.gold_text1_rect)
+        if self.play_mode == 2:
+            screen.screen.blit(self.gold_text2, self.gold_text2_rect)
+        # screen.screen.blit(self.settings_button, self.play_pause_button)
+        if self.isPlay == True:
+            screen.screen.blit(self.pause_button, self.play_pause_button)
+        else: 
+            screen.screen.blit(self.play_button, self.play_pause_button)
 
         self.gameplay_ui.update()
 
@@ -172,22 +206,25 @@ class gameplay():
             curr_sec = str(curr_tmp_sec)
 
             #gold process
-        self.curr_gold = int(curr_tmp_min * 60 + curr_tmp_sec) * 10 + self.gold_income - self.gold_outcome #luong vang hien tai = luong vang theo thoi gian + luong vang kiem duoc - luong vang da tieu
+        self.curr_gold_1 = int(curr_tmp_min * 60 + curr_tmp_sec) * 10 + self.gold_income_1 - self.gold_outcome_1 #luong vang hien tai = luong vang theo thoi gian + luong vang kiem duoc - luong vang da tieu
+        self.curr_gold_2 = int(curr_tmp_min * 60 + curr_tmp_sec) * 10 + self.gold_income_2 - self.gold_outcome_2 #luong vang hien tai = luong vang theo thoi gian + luong vang kiem duoc - luong vang da tieu
         
-        self.timer_text = self.timer_font.render(curr_min + ':' + curr_sec, True, Black)
-        self.timer_text_rect = self.timer_text.get_rect()
-        self.timer_text_rect.center = (self.board.get_rect().width // 2, self.board.get_rect().height // 3 * 2)
+        self.timer_text1 = self.timer_font.render(curr_min + ':' + curr_sec, True, Black)
+        self.timer_text1_rect = self.timer_text1.get_rect()
+        self.timer_text1_rect.center = (self.board_1.get_rect().width // 2, self.board_1.get_rect().height // 3 * 2)
+        self.timer_text2 = self.timer_font.render(curr_min + ':' + curr_sec, True, Black)
+        self.timer_text2_rect = self.timer_text2.get_rect()
+        self.timer_text2_rect.center = (screen.screen.get_rect().width - self.board_2.get_rect().width // 2, self.board_2.get_rect().height // 3 * 2)
 
-        self.gold_text = self.gold_font.render(str(self.curr_gold), True, Yellow)
-        self.gold_text_rect = self.gold_text.get_rect()
-        self.gold_text_rect.center = (self.board.get_rect().width // 2, self.board.get_rect().height // 3)
+        self.gold_text1 = self.gold_font.render(str(self.curr_gold_1), True, Yellow)
+        self.gold_text1_rect = self.gold_text1.get_rect()
+        self.gold_text1_rect.center = (self.board_1.get_rect().width // 2, self.board_1.get_rect().height // 3)
+        self.gold_text2 = self.gold_font.render(str(self.curr_gold_2), True, Yellow)
+        self.gold_text2_rect = self.gold_text2.get_rect()
+        self.gold_text2_rect.center = (screen.screen.get_rect().width - self.board_2.get_rect().width // 2, self.board_2.get_rect().height // 3)
+
 
 
     def object_operation(self):
         for object in self.side2 + self.side1 + self.side0 + self.side3 :
             object.operation()
-
-
-
-
-        

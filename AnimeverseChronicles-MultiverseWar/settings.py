@@ -14,26 +14,26 @@ class settings():
         self.load_all_text()
         self.IsResize = False
         self.IsFullScreen = True
-        self.all_resolution_lists = [('640 x 480', 0), ('800 x 600', 1), ('1024 x 768', 2), ('1920 x 1200', 3), ('1680 x 1050', 4), ('1440 x 900', 5), 
-                                ('1280 x 800', 6), ('2560 x 1440', 7), ('1920 x 1080', 8), ('1366 x 768', 9), ('1280 x 720', 10), ('3840 x 2160', 11)]
-        self.all_resolution_tmp_lists = [(640, 480), (800, 600), (1024, 768), (1920, 1200), (1680, 1050), (1440, 900), 
-                                (1280, 800), (2560, 1440), (1920, 1080), (1366, 768), (1280, 720), (3840, 2160)]
         self.resolution_lists = []
-        self.resolution_tmp_lists = []
+        self.resolution_tmp_lists = [(1024, 768), (1920, 1200), (1680, 1050), (1440, 900), (1280, 800), (2560, 1440), 
+                                     (1920, 1080), (1366, 768), (1280, 720), (3840, 2160)]
         self.process_resolution()
         self.IsBack = False
 
     def process_resolution(self):
         flag = False
-        for i in range(0, len(self.all_resolution_tmp_lists)):
-            if self.all_resolution_tmp_lists[i][0] <= screen.curr_monitor_resolution[0] and self.all_resolution_tmp_lists[i][1] <= screen.curr_monitor_resolution[1]:
-                self.resolution_lists.append(self.all_resolution_lists[i])
-                self.resolution_tmp_lists.append(self.all_resolution_tmp_lists[i])
-            if self.all_resolution_tmp_lists[i][0] == screen.curr_monitor_resolution[0] and self.all_resolution_tmp_lists[i][1] == screen.curr_monitor_resolution[1]:
+        remove_list = []
+        for x in self.resolution_tmp_lists:
+            if x[0] == screen.curr_monitor_resolution[0] and x[1] == screen.curr_monitor_resolution[1]:
                 flag = True
+            if x[0] > screen.curr_monitor_resolution[0] or x[1] > screen.curr_monitor_resolution[1]:
+                remove_list.append(x)
+        for x in remove_list:
+            self.resolution_tmp_lists.remove(x)    
         if flag == False:
-            self.resolution_lists.append((str(screen.curr_monitor_resolution[0]) + ' x ' + str(screen.curr_monitor_resolution[1]), 2306))
             self.resolution_tmp_lists.append(screen.curr_monitor_resolution)
+        for x in self.resolution_tmp_lists:
+            self.resolution_lists.append((str(x[0]) + ' x ' + str(x[1]), x))
 
     def load_all_text(self):
         self.buttons_font = pygame.font.Font('Fonts\\BigSpace-rPKx.ttf', 64)
@@ -54,14 +54,13 @@ class settings():
     def set_resolution(self, selected_value, index, **kwargs):
         value_tuple, tmp = selected_value
         curr_resolution = (screen.screen.get_rect().width, screen.screen.get_rect().height)
-        print(value_tuple)
-        if curr_resolution != self.all_resolution_tmp_lists[value_tuple[1]]:
+        if curr_resolution != value_tuple[1]:
             # print(curr_resolution, '  ', self.resolution_tmp_lists[index])
             if self.IsFullScreen == True:
-                screen.screen = pygame.display.set_mode(self.all_resolution_tmp_lists[value_tuple[1]])
+                screen.screen = pygame.display.set_mode(value_tuple[1])
                 pygame.display.toggle_fullscreen()
             else:
-                screen.screen = pygame.display.set_mode(self.all_resolution_tmp_lists[value_tuple[1]])
+                screen.screen = pygame.display.set_mode(value_tuple[1])
             self.IsResize = True
 
     def set_display_mode(self, selected_value, index, *kwargs):
@@ -89,7 +88,10 @@ class settings():
         self.menu = pygame_menu.Menu('', screen.screen.get_rect().width / 12.0 * 11.0, screen.screen.get_rect().height / 12.0 * 11.0, theme=self.mytheme)
         self.menu.add.dropselect('Display Mode: ', [('Fullscreen', 0), ('Windowed', 1)], default=1-self.IsFullScreen, onchange=self.set_display_mode, font_size=30, selection_option_font_size=30, selection_color=pygame.color.Color(0,0,128))
         curr_resolution = (screen.screen.get_rect().width, screen.screen.get_rect().height)
-        self.menu.add.dropselect('Resolution: ', self.resolution_lists, default=self.resolution_tmp_lists.index(curr_resolution), onchange=self.set_resolution, font_size=30, selection_option_font_size=30, selection_color=pygame.color.Color(0,0,128))
+        curr_state = (str(curr_resolution[0]) + ' x ' + str(curr_resolution[1]), curr_resolution)
+        if self.resolution_lists.index(curr_state) == ValueError:
+            self.resolution_lists.append(curr_state)
+        self.menu.add.dropselect('Resolution: ', self.resolution_lists, default=self.resolution_lists.index(curr_state), onchange=self.set_resolution, font_size=30, selection_option_font_size=30, selection_color=pygame.color.Color(0,0,128))
         self.menu.add.button('Back', self.hit_back_button)
 
     def screen_resize(self):

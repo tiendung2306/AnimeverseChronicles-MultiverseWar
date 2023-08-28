@@ -113,7 +113,13 @@ class main():
             self.screen_resize()
             self.Gameplay.update()
             self.mouse = pygame.mouse.get_pos()
-            self.Gameplay.play_pause_button = (screen.screen.get_rect().width - self.Gameplay.pause_button.get_rect().width - 10, 10)
+            if self.Gameplay.play_mode == 2:
+                tmp = Rect(0, 0, self.Gameplay.board_1.get_rect().width // 6, self.Gameplay.board_1.get_rect().width // 6)
+                tmp.center = (screen.screen.get_rect().width / 2.0, 10)
+                tmp.top = 10
+                self.play_pause_button = (tmp.left, tmp.top)
+            else:
+                self.Gameplay.play_pause_button = (screen.screen.get_rect().width - screen.screen.get_rect().width // 32, 10)
             Button = 'None'
 
             for event in pygame.event.get(): 
