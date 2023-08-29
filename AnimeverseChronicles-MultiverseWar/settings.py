@@ -89,7 +89,9 @@ class settings():
         self.menu.add.dropselect('Display Mode: ', [('Fullscreen', 0), ('Windowed', 1)], default=1-self.IsFullScreen, onchange=self.set_display_mode, font_size=30, selection_option_font_size=30, selection_color=pygame.color.Color(0,0,128))
         curr_resolution = (screen.screen.get_rect().width, screen.screen.get_rect().height)
         curr_state = (str(curr_resolution[0]) + ' x ' + str(curr_resolution[1]), curr_resolution)
-        if self.resolution_lists.index(curr_state) == ValueError:
+        try:
+            self.resolution_lists.index(curr_state)
+        except:
             self.resolution_lists.append(curr_state)
         self.menu.add.dropselect('Resolution: ', self.resolution_lists, default=self.resolution_lists.index(curr_state), onchange=self.set_resolution, font_size=30, selection_option_font_size=30, selection_color=pygame.color.Color(0,0,128))
         self.menu.add.button('Back', self.hit_back_button)
