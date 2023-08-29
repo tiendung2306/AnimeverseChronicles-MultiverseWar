@@ -97,7 +97,7 @@ class gameplay_ui():
 
 
     def check_click(self, mouse):
-        if len(self.character_spawn_buttons) != len(self.button_rect_1):
+        if len(self.character_spawn_buttons) != len(self.button_rect_1) or len(self.character_spawn_buttons) != len(self.button_rect_2):
             return
         for i in range(0, len(self.character_spawn_buttons)):
             if self.button_rect_1[i].left <= mouse[0] <= self.button_rect_1[i].right and self.button_rect_1[i].top <= mouse[1] <= self.button_rect_1[i].bottom:

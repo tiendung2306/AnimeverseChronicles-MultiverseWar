@@ -126,6 +126,7 @@ class gameplay():
 
     def check_click(self, play_pause_button, mouse):
         if self.isPlay == True: #neu game dang chay
+            self.gameplay_ui.check_click(mouse)
             if play_pause_button[0] <= mouse[0] <= play_pause_button[0] + self.pause_button.get_rect().width and play_pause_button[1] <= mouse[1] <= play_pause_button[1] + self.pause_button.get_rect().height:
                 self.SwitchPlayPauseState()
                 self.isPlay = 1 - self.isPlay
@@ -137,10 +138,8 @@ class gameplay():
                 return 'None'
             if self.Pause_Pannel.check_click(mouse) == self.Pause_Pannel.buttons[1]: #an vao nut settings
                 return 'Settings'
-            if self.Pause_Pannel.check_click(mouse) == self.Pause_Pannel.buttons[2]: #an vao nut thoat game
+            if self.Pause_Pannel.check_click(mouse) == self.Pause_Pannel.buttons[2]: #an vao nut back to menu
                 return 'Back'
-            
-        self.gameplay_ui.check_click(mouse)
 
     def escape_pressed(self):
         if self.isPlay == True: #neu game dang chay

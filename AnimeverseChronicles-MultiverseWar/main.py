@@ -37,6 +37,8 @@ class main():
             self.main_menu_loop()
         elif state == 'Settings':
             self.settings_loop()
+        elif state == 'Play mode':
+            self.play_mode_loop()
     
     def back_state(self):
         del State.list_states[-1]
@@ -48,6 +50,9 @@ class main():
             self.main_menu_loop()
         elif state == 'Settings':
             self.settings_loop()
+        elif state == 'Play mode':
+            State.curr_state = State.states[0]
+            self.main_menu_loop()
 
     def screen_resize(self):
         if self.IsResize == True or self.Settings.IsResize == True:
@@ -105,9 +110,35 @@ class main():
         pygame.quit()
             
 
+    def play_mode_loop(self):
+        running = True
+        while running:
+            self.screen_resize()
+            screen.screen.blit(self.MainMenu.main_menu_bg, (0, 0))
+            self.mouse = pygame.mouse.get_pos()
+            self.MainMenu.play_mode_update()
+            pygame.display.update()
+            gameplay_mode = -1
+            for event in pygame.event.get(): 
+                if event.type == QUIT:
+                    running = False
+                    break
+                if event.type == VIDEORESIZE:
+                    self.IsResize = True
+                if event.type == MOUSEBUTTONDOWN:
+                    gameplay_mode = self.MainMenu.play_mode_check_click(self.mouse)
+            if State.curr_state != 'Play mode':
+                if State.curr_state == State.states[1]:
+                    if gameplay_mode == -1:
+                        print('What the f*ck, how can it be -1. Panikkk!!!!!!!!')
+                    self.Gameplay.play_mode = gameplay_mode
+                self.set_state(State.curr_state)
+                return 
+        pygame.quit()
+
     def gameplay_loop(self):
         running = True
-        pygame.time.Clock().tick(self.Gameplay.FPS)     
+        # pygame.time.Clock().tick(self.Gameplay.FPS)     
         self.Gameplay.enter_gameplay()
         while running:
             self.screen_resize()

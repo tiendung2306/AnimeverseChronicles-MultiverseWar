@@ -7,6 +7,7 @@ from screen import *
 class mainmenu():
     def __init__(self):
         self.buttons = ['Play', 'Tutorial',  'Settings', 'Quit']
+        self.play_mode_buttons = ['1 Player', '2 Players', 'Back']
         self.Screen = screen()
         self.buttons_color = Navy
         self.title_color = Dark_Yellow
@@ -47,6 +48,18 @@ class mainmenu():
         self.menu_title_rect2 = self.menu_title2.get_rect()
         self.menu_title_rect2.center = (self.Screen.screen.get_rect().width / 2.0, self.Screen.screen.get_rect().height / 32.0 * 9.0)
 
+        self.one_player_button = self.menu_button_font.render(self.play_mode_buttons[0], True, self.buttons_color)
+        self.one_player_button_rect = self.one_player_button.get_rect()
+        self.one_player_button_rect.center = (self.Screen.screen.get_rect().width / 3.0, self.Screen.screen.get_rect().height / 5.0 * 3.0)
+
+        self.two_players_button = self.menu_button_font.render(self.play_mode_buttons[1], True, self.buttons_color)
+        self.two_players_button_rect = self.two_players_button.get_rect()
+        self.two_players_button_rect.center = (self.Screen.screen.get_rect().width / 3.0 * 2.0, self.Screen.screen.get_rect().height / 5.0 * 3.0)
+
+        self.back_button = self.menu_button_font.render(self.play_mode_buttons[2], True, self.buttons_color)
+        self.back_button_rect = self.back_button.get_rect()
+        self.back_button_rect.center = (self.Screen.screen.get_rect().width / 3.0, self.Screen.screen.get_rect().height / 5.0 * 4.0)
+
 
     def load_all_image(self):
         self.main_menu_bg = self.main_menu_bg_original.copy()
@@ -68,8 +81,27 @@ class mainmenu():
 
     def check_click(self, mouse):
         if self.play_button_rect.left <= mouse[0] <= self.play_button_rect.right and self.play_button_rect.top <= mouse[1] <= self.play_button_rect.bottom:
-            State.curr_state = State.states[1]
+            State.curr_state = State.states[5]
         if self.quit_button_rect.left <= mouse[0] <= self.quit_button_rect.right and self.quit_button_rect.top <= mouse[1] <= self.quit_button_rect.bottom:
             self.IsQuit = True
         if self.setting_button_rect.left <= mouse[0] <= self.setting_button_rect.right and self.setting_button_rect.top <= mouse[1] <= self.setting_button_rect.bottom:
             State.curr_state = State.states[3]
+
+    def play_mode_update(self):
+        self.Screen.screen.blit(self.one_player_button, self.one_player_button_rect)
+        self.Screen.screen.blit(self.two_players_button, self.two_players_button_rect)
+        self.Screen.screen.blit(self.back_button, self.back_button_rect)
+
+        self.Screen.screen.blit(self.menu_title1, self.menu_title_rect1)
+        self.Screen.screen.blit(self.menu_title2, self.menu_title_rect2)
+
+    def play_mode_check_click(self, mouse):
+        if self.one_player_button_rect.left <= mouse[0] <= self.one_player_button_rect.right and self.one_player_button_rect.top <= mouse[1] <= self.one_player_button_rect.bottom:
+            State.curr_state = State.states[1]
+            return 1
+        if self.two_players_button_rect.left <= mouse[0] <= self.two_players_button_rect.right and self.two_players_button_rect.top <= mouse[1] <= self.two_players_button_rect.bottom:
+            State.curr_state = State.states[1]
+            return 2
+        if self.back_button_rect.left <= mouse[0] <= self.back_button_rect.right and self.back_button_rect.top <= mouse[1] <= self.back_button_rect.bottom:
+            State.curr_state = State.states[0]
+            return -1
