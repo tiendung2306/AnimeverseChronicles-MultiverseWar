@@ -98,6 +98,7 @@ class settings():
         self.load_all_image()
         self.load_all_text()
 
+        pygame.time.wait(1000)
         self.setting_pannel_init()
 
     # def update(self):

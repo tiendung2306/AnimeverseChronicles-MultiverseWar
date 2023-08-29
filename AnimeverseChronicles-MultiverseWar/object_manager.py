@@ -5,7 +5,9 @@ from archer import *
 from sword_man import *
 from tanker import *
 from wizard import *
+from nexus_test import *
 
+nexus = -1
 straw_doll = 0
 archer = 1
 sword_man = 2
@@ -37,3 +39,9 @@ def spawn(object_type,side,position,gameplay):
             gameplay.side1.append(wizardclass(side,position,gameplay))
         elif side == 2 :
             gameplay.side2.append(wizardclass(side,position,gameplay))
+    elif object_type == -1 :
+        if side == 1 :
+            gameplay.side1.append(nexusclass(side,position,gameplay))
+        elif side == 2 :
+            gameplay.side2.append(nexusclass(side,position,gameplay))
+        

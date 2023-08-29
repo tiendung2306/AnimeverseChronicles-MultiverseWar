@@ -211,7 +211,7 @@ class archerclass():
             checker.box.width -= self.attack_scope 
             for object in self.gameplay.side1:
                 if collide_checker(checker,object):
-                        if (not (object == self)) and (object.box.left >= self.box.left):
+                        if (not (object == self)) and (object.box.left >= checker.box.left):
                             self.status = 2
                             return None
 
@@ -228,7 +228,7 @@ class archerclass():
             checker.box.width -= self.attack_scope 
             for object in self.gameplay.side2:
                 if collide_checker(checker,object):
-                    if (not (object == self)) and (object.box.left <= self.box.left) :
+                    if (not (object == self)) and (object.box.left <= checker.box.left) :
                         self.status = 2
                         return None
         self.status = 3

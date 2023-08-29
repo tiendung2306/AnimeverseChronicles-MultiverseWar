@@ -138,7 +138,6 @@ class main():
 
     def gameplay_loop(self):
         running = True
-        # pygame.time.Clock().tick(self.Gameplay.FPS)     
         self.Gameplay.enter_gameplay()
         while running:
             self.screen_resize()

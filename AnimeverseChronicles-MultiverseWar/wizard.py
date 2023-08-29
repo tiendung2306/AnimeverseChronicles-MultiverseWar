@@ -100,7 +100,7 @@ class wizardclass():
         self.health_max = 100.0
         self.health = self.health_max
         self.mana_max =100.0
-        self.mana = 0.0
+        self.mana = 90
 
         self.magicball_list = []
         self.effect_list = []
@@ -118,11 +118,11 @@ class wizardclass():
     
         self.attacking_animation = animation_player(tmp_lib,self.side, 1 / self.attack_speed, self.imgbox, self.gameplay)
         self.standstill_animation = animation_player([wizard1,wizard2,wizard3,wizard2], self.side, 1, self.imgbox, self.gameplay)
+        self.special_skill_animation = one_time_animation_player([wizard11,wizard12,wizard13,wizard14,wizard15,wizard16,wizard17,wizard18,wizard19,wizard20,wizard21,wizard22,wizard23,wizard24,wizard25,wizard26,wizard27,wizard28], self.side, 2, self.imgbox, self.gameplay)
 
         self.switcher1 = N_time_switch(1)
         self.switcher2 = N_time_switch(1)
         self.switcher3 = N_time_switch(1)
-        self.skill_countdowner = timing_clock(self.skill_lasting_time,self.gameplay)
 
 
     # def resize(self):
@@ -175,7 +175,7 @@ class wizardclass():
             checker.box.width *= 2
             for object in self.gameplay.side1:
                 if collide_checker(checker,object):
-                    if (not (object == self)) and (object.box.left >= self.box.left):
+                    if (not (object == self)) and (object.box.left >= checker.box.left):
                         self.status = 2
                         return None
 
@@ -194,7 +194,7 @@ class wizardclass():
             checker.box.width *= 2
             for object in self.gameplay.side2:
                 if collide_checker(checker,object):
-                    if (not (object == self)) and (object.box.left <= self.box.left) :
+                    if (not (object == self)) and (object.box.left <= checker.box.left) :
                         self.status = 2
                         return None
         self.status = 3
@@ -216,7 +216,6 @@ class wizardclass():
         self.moving_animation.remove()
         self.attacking_animation.remove()
         self.standstill_animation.remove()      
-        self.skill_countdowner.remove()  
         self.alive = False
     
     
@@ -234,41 +233,36 @@ class wizardclass():
 
     
     def special_skill(self):
-        if self.switcher2.operation():
-            self.skill_countdowner.start()
-            self.special_skill_animation = one_time_animation_player([wizard11,wizard12,wizard13,wizard14,wizard15,wizard16,wizard17,wizard18,wizard19,wizard20,wizard21,wizard22,wizard23,wizard24,wizard25,wizard26,wizard27,wizard28], self.side, 2, self.imgbox, self.gameplay)
-            checker = fake_object_class(self)
-            checker.box.width += self.attack_scope * 1.5
-            if self.side == 1:
-                for enemy in self.gameplay.side2:
-                    if collide_checker(checker,enemy):
-                        add_effect(enemy, dizzy_effect, 5)
-                        self.special_effect_animation = one_time_animation_player([soul1, soul2, soul3, soul4, soul5, soul6, soul6, soul6, soul7, soul8], self.side, 1,soul1.hitbox_to_imgbox(pygame.Rect(enemy.box.left - enemy.box.width * 3 / 4, enemy.box.top - enemy.box.height /2, enemy.box.width, enemy.box.height )),  self.gameplay)
-                        break
-                    else:
-                        self.special_skill_reset()
+        self.box = self.special_skill_animation.play()
+        if self.special_skill_animation.clock.Return == 5:
+            if self.switcher2.operation():
+                checker = fake_object_class(self)
+                checker.box.width += self.attack_scope * 1.5
+                if self.side == 1:
+                    for enemy in self.gameplay.side2:
+                        if collide_checker(checker,enemy):
+                            add_effect(enemy, dizzy_effect, 5)
+                            add_effect(enemy, soul_sucking_effect, None)
+                            break
+                        else:
+                            self.special_skill_reset()
 
-            elif self.side == -1:
-                checker.box.centerx -= self.attack_scope * 1.5
-                for enemy in self.gameplay.side1:
-                    if collide_checker(checker,enemy):
-                        add_effect(enemy, dizzy_effect, 5)
-                        self.special_effect_animation = one_time_animation_player([soul1, soul2, soul3, soul4, soul5, soul6, soul6, soul6, soul7, soul8], self.side, 1,soul1.hitbox_to_imgbox(pygame.Rect(enemy.box.right - enemy.box.width / 4, enemy.box.top - enemy.box.height /2, enemy.box.width, enemy.box.height )),  self.gameplay)
-                        break
-                    else:
-                        self.special_skill_reset()
-        else:
-            self.box = self.special_skill_animation.play()
-            if self.special_skill_animation.clock.Return >= 5:
-                self.special_effect_animation.play()
-            if self.special_skill_animation.status == False:
-                self.special_skill_reset()
+                elif self.side == -1:
+                    checker.box.centerx -= self.attack_scope * 1.5
+                    for enemy in self.gameplay.side1:
+                        if collide_checker(checker,enemy):
+                            add_effect(enemy, dizzy_effect, 5)
+                            add_effect(enemy, soul_sucking_effect, None)                        
+                            break
+                        else:
+                            self.special_skill_reset()            
+        if self.special_skill_animation.status == False:
+            self.special_skill_reset()
             
 
 
     def special_skill_reset(self):
         self.special_status = False
-        self.skill_countdowner.reset()
         self.switcher2.reset()
 
 

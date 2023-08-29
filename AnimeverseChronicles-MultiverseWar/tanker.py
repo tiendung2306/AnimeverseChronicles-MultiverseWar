@@ -57,14 +57,6 @@ class tankerclass():
         self.skill_countdowner = timing_clock(3,self.gameplay)
 
 
-    # def resize(self):
-    #     (a,b,c,d) = self.imgbox
-    #     tmp = analyzed_img("none.png",a,b,c,d)
-    #     self.imgbox = tmp.imgbox_to_hitbox(screen.screen.get_rect)
-    #     (a,b,c,d) = self.box
-    #     tmp = analyzed_img("none.png",a,b,c,d)
-    #     self.box = tmp.imgbox_to_hitbox(self.imgbox)
-
     def status_bar(self):
         if self.mana >= self.mana_max:
             self.mana = 0
@@ -109,7 +101,7 @@ class tankerclass():
             checker.box.width *= 1 / 2
             for object in self.gameplay.side1:
                 if collide_checker(checker,object):
-                        if (not (object == self)) and (object.box.left > self.box.left):
+                        if (not (object == self)) and (object.box.left > checker.box.left):
                             self.status = 2
                             return None
 
@@ -126,7 +118,7 @@ class tankerclass():
             checker.box.width *= 1 / 2
             for object in self.gameplay.side2:
                 if collide_checker(checker,object):
-                    if (not (object == self)) and (object.box.left <= self.box.left) :
+                    if (not (object == self)) and (object.box.left <= checker.box.left) :
                         self.status = 2
                         return None
         self.status = 3
@@ -152,11 +144,10 @@ class tankerclass():
             self.standstill_animation.remove()      
             self.skill_countdowner.remove()         
         else:
-            self.dying_animation.play()
-            # if self.dying_animation.clock.counter == self.dying_animation.clock.times:
-            #     if self.dying_animation.clock.gameplay.curr_time >= self.dying_animation.clock.counter:
-            #         self.alive = False
-            #         self.gameplay.side0.remove(self)
+            if self.dying_animation.play():
+                self.alive = False
+                self.gameplay.side0.remove(self)
+
 
 
     def attack(self):
@@ -173,7 +164,6 @@ class tankerclass():
                     for enemy_object in self.gameplay.side2:
                     # pygame.draw.rect(screen.screen,White,checker.box)
                         if collide_checker(checker,enemy_object):
-                                # print("kk")
                                 enemy_object.get_hit = True
                                 enemy_object.get_damage = self.attack_damage
                 elif self.side == -1:
@@ -205,6 +195,21 @@ class tankerclass():
             self.switcher2.reset()
             self.skill_countdowner.reset()
 
+    def resize(self):
+        # fake_imgbox = tanker5.hitbox_to_imgbox(pygame.Rect(0,self.gameplay.path_height - self.gameplay.box_size[1],self.gameplay.box_size[0], self.gameplay.box_size[1]))
+        # self.imgbox.width = fake_imgbox.width
+        # self.imgbox.height = fake_imgbox.height
+        pass
+        # self.imgbox.left = tmp_rect.left
+        # self.imgbox.top = tmp_rect.top
+        # self.imgbox.width = tmp_rect.width
+        # self.imgbox.height = tmp_rect.height
+        # tmp = analyzed_img("GameplayAssets\\none.png",self.box.left, self.box.top, self.box.width, self.box.height)
+        # tmp_rect = tmp.imgbox_to_hitbox(screen.screen.get_rect())
+        # self.imgbox.left = tmp_rect.left
+        # self.imgbox.top = tmp_rect.top
+        # self.imgbox.width = tmp_rect.width
+        # self.imgbox.height = tmp_rect.height
 
     def operation(self):
             if self.alive:
