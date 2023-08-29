@@ -62,7 +62,9 @@ class gameplay():
         self.side3 = []
         self.side0 = []
 
-        spawn(straw_doll,1,30,self)
+        spawn(nexus,2,35,self)
+        # spawn(sword_man,1,5,self)
+
 
 
     def load_all_gameplay_image(self):
@@ -94,6 +96,9 @@ class gameplay():
         self.load_all_gameplay_image()
         self.nexus1.screen_resize('GameplayAssets\\nexus1.png')
         self.nexus2.screen_resize('GameplayAssets\\nexus2.png')
+
+        self.box_size = (screen.screen.get_rect().width / 40 , screen.screen.get_rect().height / 20)
+        self.path_height = screen.screen.get_rect().height - self.path.get_rect().height + 20
         # for object in self.side2 + self.side1:
         #     object.resize()
 

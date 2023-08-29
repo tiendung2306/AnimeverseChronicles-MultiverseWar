@@ -34,8 +34,7 @@ def reverse(analyzed_IMG):
     tmp.img = pygame.transform.flip(tmp.img, True, False)
     return tmp
 
-
-
+nexus_test = analyzed_img("GameplayAssets\\nexus_test.png", 63 , 117 , 235 , 314)
 
 sword_man1_1  = analyzed_img("GameplayAssets\\sword_man1(1).png", 77 , 153 , 163 , 464)
 sword_man1_2  = analyzed_img("GameplayAssets\\sword_man1(2).png", 88 , 154 , 156 , 477)

@@ -13,7 +13,7 @@ a = b = c = d = 0
 Flag = True
 flag2 = False
 counter = 1
-img = pygame.image.load("GameplayAssets\\wizard({}).png".format(counter))
+img = pygame.image.load("GameplayAssets\\nexus1.png".format(counter))
 WIN = pygame.display.set_mode(img.get_size())
 while Flag:
     WIN.fill(Black)
