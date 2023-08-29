@@ -303,8 +303,8 @@ class wizardclass():
                 if magic_ball.status == False :
                     self.magicball_list.remove(magic_ball)
 
-            pygame.draw.rect(screen.screen,White,self.box,1)
-            pygame.draw.rect(screen.screen,White,self.imgbox,1)
+            # pygame.draw.rect(screen.screen,White,self.box,1)
+            # pygame.draw.rect(screen.screen,White,self.imgbox,1)
 
     
 

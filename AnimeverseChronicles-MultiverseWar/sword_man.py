@@ -228,8 +228,8 @@ class sword_manclass():
 
             if self.health <= 0:
                 self.die()
-            pygame.draw.rect(screen.screen,White,self.box,1)
-            pygame.draw.rect(screen.screen,White,self.imgbox,1)
+            # pygame.draw.rect(screen.screen,White,self.box,1)
+            # pygame.draw.rect(screen.screen,White,self.imgbox,1)
 
 
 

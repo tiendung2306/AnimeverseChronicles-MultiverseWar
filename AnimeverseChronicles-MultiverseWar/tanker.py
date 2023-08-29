@@ -228,6 +228,6 @@ class tankerclass():
                 if self.get_hit :
                     self.Geting_hit()
 
-                pygame.draw.rect(screen.screen,White,self.box,1)
-                pygame.draw.rect(screen.screen,White,self.imgbox,1)
+                # pygame.draw.rect(screen.screen,White,self.box,1)
+                # pygame.draw.rect(screen.screen,White,self.imgbox,1)
 

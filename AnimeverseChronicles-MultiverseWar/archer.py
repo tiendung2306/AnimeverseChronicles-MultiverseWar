@@ -340,8 +340,8 @@ class archerclass():
                     self.mana += 10
                 if arrows.status == False :
                     self.arrow_list.remove(arrows)
-            pygame.draw.rect(screen.screen,White,self.box,1)
-            pygame.draw.rect(screen.screen,White,self.imgbox,1)
+            # pygame.draw.rect(screen.screen, White, self.box,1)
+            # pygame.draw.rect(screen.screen, White, self.imgbox,1)
 
     
 
