@@ -2,11 +2,18 @@ import pygame
 from pygame.locals import *
 from color import *
 
-class  analyzed_img():
+def reverse(analyzed_IMG):
+    (a, b, c, d ) = analyzed_IMG.data
+    tmp = pre_analyze_img(analyzed_IMG.img_name, analyzed_IMG.img.get_size()[0] - a - c, b, c, d)
+    tmp.img = pygame.transform.flip(tmp.img, True, False)
+    return tmp
+
+class  pre_analyze_img():
     def __init__(self,img,a,b,c,d):
         self.img_name = img
         self.img = pygame.image.load(img)
         self.data = (a,b,c,d)
+
     def hitbox_to_imgbox(self,hitbox):
         (m, n) = self.img.get_size()
         (a, b, c, d ) = self.data
@@ -28,23 +35,45 @@ class  analyzed_img():
 
         return pygame.Rect(imgbox.left + x, imgbox.top + y,rong,dai)
     
-def reverse(analyzed_IMG):
-    (a, b, c, d ) = analyzed_IMG.data
-    tmp = analyzed_img(analyzed_IMG.img_name, analyzed_IMG.img.get_size()[0] - a - c, b, c, d)
-    tmp.img = pygame.transform.flip(tmp.img, True, False)
-    return tmp
+class analyzed_img():
+    def __init__(self,img,a,b,c,d):
+        self.img_name = img
+        self.img = pygame.image.load(img)
+        self.data = (a,b,c,d)        
+        self.reverse = reverse(pre_analyze_img(img,a,b,c,d))
+
+    def hitbox_to_imgbox(self,hitbox):
+        (m, n) = self.img.get_size()
+        (a, b, c, d ) = self.data
+        x = hitbox.width * a / c
+        y = hitbox.height * b / d
+        rong = hitbox.width * m / c
+        dai = hitbox.height * n / d
+
+        return pygame.Rect(hitbox.left - x, hitbox.top - y,rong,dai)
+
+
+    def imgbox_to_hitbox(self,imgbox):
+        (m, n) = self.img.get_size()
+        (a, b, c, d ) = self.data
+        x = imgbox.width * a / m
+        y = imgbox.height * b / n
+        rong = imgbox.width * c / m
+        dai = imgbox.height * d / n
+
+        return pygame.Rect(imgbox.left + x, imgbox.top + y,rong,dai)
 
 nexus_test = analyzed_img("GameplayAssets\\nexus_test.png", 63 , 117 , 235 , 314)
 
-sword_man1_1  = analyzed_img("GameplayAssets\\sword_man1(1).png", 77 , 153 , 163 , 464)
-sword_man1_2  = analyzed_img("GameplayAssets\\sword_man1(2).png", 88 , 154 , 156 , 477)
-sword_man1_3  = analyzed_img("GameplayAssets\\sword_man1(3).png", 79 , 123 , 131 , 495)
-sword_man1_4  = analyzed_img("GameplayAssets\\sword_man1(4).png", 93 , 133 , 158 , 484)
+# sword_man1_1  = analyzed_img("GameplayAssets\\sword_man1(1).png", 77 , 153 , 163 , 464)
+# sword_man1_2  = analyzed_img("GameplayAssets\\sword_man1(2).png", 88 , 154 , 156 , 477)
+# sword_man1_3  = analyzed_img("GameplayAssets\\sword_man1(3).png", 79 , 123 , 131 , 495)
+# sword_man1_4  = analyzed_img("GameplayAssets\\sword_man1(4).png", 93 , 133 , 158 , 484)
 
-sword_man2_1  = analyzed_img("GameplayAssets\\sword_man2(1).png",700 - 77 - 163, 153 , 163 , 464)   
-sword_man2_2  = analyzed_img("GameplayAssets\\sword_man2(2).png",700 - 88 - 156, 154 , 156 , 477)
-sword_man2_3  = analyzed_img("GameplayAssets\\sword_man2(3).png",700 - 79 - 131, 123 , 131 , 495)
-sword_man2_4  = analyzed_img("GameplayAssets\\sword_man2(4).png",700 - 93 - 158, 133 , 158 , 484)
+# sword_man2_1  = analyzed_img("GameplayAssets\\sword_man2(1).png",700 - 77 - 163, 153 , 163 , 464)   
+# sword_man2_2  = analyzed_img("GameplayAssets\\sword_man2(2).png",700 - 88 - 156, 154 , 156 , 477)
+# sword_man2_3  = analyzed_img("GameplayAssets\\sword_man2(3).png",700 - 79 - 131, 123 , 131 , 495)
+# sword_man2_4  = analyzed_img("GameplayAssets\\sword_man2(4).png",700 - 93 - 158, 133 , 158 , 484)
 
 sword_man1 = analyzed_img("GameplayAssets\sword_man(1).png", 254 , 352 , 108 , 239)
 sword_man2 = analyzed_img("GameplayAssets\sword_man(2).png", 254 , 352 , 108 , 239)
@@ -85,24 +114,24 @@ sword_man36 = analyzed_img("GameplayAssets\sword_man(36).png", 259 , 385 , 124 ,
 sword_man37 = analyzed_img("GameplayAssets\sword_man(37).png", 251 , 377 , 88 , 214)
 sword_man38 = analyzed_img("GameplayAssets\sword_man(38).png", 246 , 354 , 122 , 239)
 
-archer1_1 = analyzed_img("GameplayAssets\\archer1(1).png", 66 , 40 , 60 , 164)
-archer1_2 = analyzed_img("GameplayAssets\\archer1(2).png", 67 , 40 , 58 , 170)
-archer1_3 = analyzed_img("GameplayAssets\\archer1(3).png", 70 , 40 , 54 , 162)
+# archer1_1 = analyzed_img("GameplayAssets\\archer1(1).png", 66 , 40 , 60 , 164)
+# archer1_2 = analyzed_img("GameplayAssets\\archer1(2).png", 67 , 40 , 58 , 170)
+# archer1_3 = analyzed_img("GameplayAssets\\archer1(3).png", 70 , 40 , 54 , 162)
 
-archer2_1 = analyzed_img("GameplayAssets\\archer2(1).png", 200 - 66 - 60, 40 , 60 , 164)
-archer2_2 = analyzed_img("GameplayAssets\\archer2(2).png", 200 - 67 - 58, 40 , 58 , 170)
-archer2_3 = analyzed_img("GameplayAssets\\archer2(3).png", 200 - 70 - 54, 40 , 54 , 162)
+# archer2_1 = analyzed_img("GameplayAssets\\archer2(1).png", 200 - 66 - 60, 40 , 60 , 164)
+# archer2_2 = analyzed_img("GameplayAssets\\archer2(2).png", 200 - 67 - 58, 40 , 58 , 170)
+# archer2_3 = analyzed_img("GameplayAssets\\archer2(3).png", 200 - 70 - 54, 40 , 54 , 162)
 
-archer1 = analyzed_img("GameplayAssets\\archer(1).png", 255 , 371 , 85 , 221)
-archer2 = analyzed_img("GameplayAssets\\archer(2).png", 263 , 356 , 87 , 235)
-archer3 = analyzed_img("GameplayAssets\\archer(3).png", 248 , 383 , 99 , 208)
-archer4 = analyzed_img("GameplayAssets\\archer(4).png", 249 , 377 , 94 , 213)
-archer5 = analyzed_img("GameplayAssets\\archer(5).png", 259 , 373 , 90 , 216)
-archer6 = analyzed_img("GameplayAssets\\archer(6).png", 259 , 373 , 90 , 216)
-archer7 = analyzed_img("GameplayAssets\\archer(7).png", 258 , 364 , 91 , 224)
-archer8 = analyzed_img("GameplayAssets\\archer(8).png", 264 , 372 , 88 , 220)
-archer9 = analyzed_img("GameplayAssets\\archer(9).png", 275 , 372 , 85 , 217)
-archer10 = analyzed_img("GameplayAssets\\archer(10).png", 268 , 381 , 87 , 210)
+archer1 = analyzed_img("GameplayAssets\\archer(1).png", 166 , 285 , 113 , 212)
+archer2 = analyzed_img("GameplayAssets\\archer(2).png", 166 , 285 , 113 , 212)
+archer3 = analyzed_img("GameplayAssets\\archer(3).png", 166 , 285 , 113 , 212)
+archer4 = analyzed_img("GameplayAssets\\archer(4).png", 166 , 285 , 113 , 212)
+archer5 = analyzed_img("GameplayAssets\\archer(5).png", 166 , 285 , 113 , 212)
+archer6 = analyzed_img("GameplayAssets\\archer(6).png", 166 , 285 , 113 , 212)
+archer7 = analyzed_img("GameplayAssets\\archer(7).png", 166 , 285 , 113 , 212)
+archer8 = analyzed_img("GameplayAssets\\archer(8).png", 166 , 285 , 113 , 212)
+archer9 = analyzed_img("GameplayAssets\\archer(9).png", 166 , 285 , 113 , 212)
+archer10 = analyzed_img("GameplayAssets\\archer(10).png", 166 , 285 , 113 , 212)
 archer11 = analyzed_img("GameplayAssets\\archer(11).png", 194 , 285 , 81 , 206)
 archer12 = analyzed_img("GameplayAssets\\archer(12).png", 194 , 288 , 82 , 203)
 archer13 = analyzed_img("GameplayAssets\\archer(13).png", 195 , 294 , 81 , 198)
@@ -127,18 +156,18 @@ archer30 = analyzed_img("GameplayAssets\\archer(30).png", 199 , 298 , 69 , 192)
 arrow = analyzed_img("GameplayAssets\\arrow.png", 279 , 332 , 132 , 20)
 special_arrow = analyzed_img("GameplayAssets\\special_arrow.png", 279 , 332 , 132 , 20)
 
-arrow1 =  analyzed_img("GameplayAssets\\arrow1.png", 142 , 79 , 65 , 10)
-arrow2 =  analyzed_img("GameplayAssets\\arrow2.png",200 - 142 - 65, 79 , 65 , 10)
+# arrow1 =  analyzed_img("GameplayAssets\\arrow1.png", 142 , 79 , 65 , 10)
+# arrow2 =  analyzed_img("GameplayAssets\\arrow2.png",200 - 142 - 65, 79 , 65 , 10)
 
-tanker1_1 = analyzed_img("GameplayAssets\\tanker1(1).png", 107 , 68 , 187 , 390)
-tanker1_2 = analyzed_img("GameplayAssets\\tanker1(2).png", 107 , 67 , 191 , 390)
-tanker1_3 = analyzed_img("GameplayAssets\\tanker1(3).png", 137 , 66 , 159 , 391)
-tanker1_4 = analyzed_img("GameplayAssets\\tanker1(4).png", 138 , 66 , 160 , 393)
+# tanker1_1 = analyzed_img("GameplayAssets\\tanker1(1).png", 107 , 68 , 187 , 390)
+# tanker1_2 = analyzed_img("GameplayAssets\\tanker1(2).png", 107 , 67 , 191 , 390)
+# tanker1_3 = analyzed_img("GameplayAssets\\tanker1(3).png", 137 , 66 , 159 , 391)
+# tanker1_4 = analyzed_img("GameplayAssets\\tanker1(4).png", 138 , 66 , 160 , 393)
 
-tanker2_1 = analyzed_img("GameplayAssets\\tanker2(1).png", 451 - 107 - 187 , 68 , 187 , 390)
-tanker2_2 = analyzed_img("GameplayAssets\\tanker2(2).png", 451 - 107 - 191 , 67 , 191 , 390)
-tanker2_3 = analyzed_img("GameplayAssets\\tanker2(3).png", 451 - 137 - 159 , 66 , 159 , 391)
-tanker2_4 = analyzed_img("GameplayAssets\\tanker2(4).png", 451 - 138 - 160 , 66 , 160 , 393)
+# tanker2_1 = analyzed_img("GameplayAssets\\tanker2(1).png", 451 - 107 - 187 , 68 , 187 , 390)
+# tanker2_2 = analyzed_img("GameplayAssets\\tanker2(2).png", 451 - 107 - 191 , 67 , 191 , 390)
+# tanker2_3 = analyzed_img("GameplayAssets\\tanker2(3).png", 451 - 137 - 159 , 66 , 159 , 391)
+# tanker2_4 = analyzed_img("GameplayAssets\\tanker2(4).png", 451 - 138 - 160 , 66 , 160 , 393)
 
 tanker1 = analyzed_img("GameplayAssets\\tanker(1).png", 229 , 60 , 85 , 222)
 tanker2 = analyzed_img("GameplayAssets\\tanker(2).png", 229 , 60 , 85 , 222)

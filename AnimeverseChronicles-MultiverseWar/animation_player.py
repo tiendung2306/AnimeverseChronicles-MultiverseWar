@@ -8,10 +8,10 @@ class animation_player():
     def __init__(self,img_lib,side,loop_time,imgbox,gameplay):
         self.img_lib = []
         if side == 1:
-            self.img_lib =img_lib
+            self.img_lib = img_lib  
         else:
             for img in img_lib:
-                self.img_lib.append(reverse(img))
+                self.img_lib.append(img.reverse)
         self.frames = len(img_lib)
         self.loop_time = loop_time
         self.imgbox = imgbox
@@ -43,7 +43,7 @@ class one_time_animation_player():
             self.img_lib =img_lib
         else:
             for img in img_lib:
-                self.img_lib.append(reverse(img))
+                self.img_lib.append(img.reverse)
         self.frames = len(img_lib)
         self.loop_time = loop_time
         self.imgbox = imgbox
@@ -56,8 +56,7 @@ class one_time_animation_player():
             self.clock.start()
             if self.clock.Return == self.clock.times:
                 if self.clock.gameplay.curr_time >= self.clock.counter:
-                    self.remove()
-                    return True
+                    self.status = False
             screen.screen.blit(pygame.transform.scale(self.img_lib[self.clock.Return - 1].img, (self.imgbox.width,self.imgbox.height)), self.imgbox)
             return self.img_lib[self.clock.Return - 1].imgbox_to_hitbox(self.imgbox)
             
@@ -70,6 +69,7 @@ class one_time_animation_player():
             
     def reset(self):
         self.clock.reset
+        self.status  =  True
 
     def remove(self):
         self.clock.remove()
@@ -82,7 +82,7 @@ class animation_player_special():
             self.img_lib =img_lib
         else:
             for img in img_lib:
-                self.img_lib.append(reverse(img))
+                self.img_lib.append(img.reverse)
         self.real_imgbox_list = real_imgbox_list
         self.frames = len(img_lib)
         self.loop_time = loop_time
@@ -118,7 +118,7 @@ class one_time_animation_player_special():
             self.img_lib =img_lib
         else:
             for img in img_lib:
-                self.img_lib.append(reverse(img))
+                self.img_lib.append(img.reverse)
         self.real_imgbox_list = real_imgbox_list
         self.frames = len(img_lib)
         self.loop_time = loop_time

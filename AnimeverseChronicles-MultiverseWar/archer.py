@@ -36,11 +36,12 @@ class arrowclass():
 
         self.damaged_object = []
         if self.piercing :
-            self.x_limit = self.archer.box.right + self.archer.attack_scope * 2
             if self.side == 1:
+                self.x_limit = self.archer.box.right + self.archer.attack_scope * 2
                 self.img = special_arrow
             elif self.side == -1:
                 self.img = reverse(special_arrow)
+                self.x_limit = self.archer.box.left - self.archer.attack_scope * 2
 
 
     def move(self):
@@ -69,9 +70,14 @@ class arrowclass():
 
 
     def limit_check(self):
-        if (len(self.damaged_object) == 3) or (self.box.right >= self.x_limit):
+        if self.side == 1:
+            if self.box.right >= self.x_limit:
+                self.status = False
+        elif self.side == -1:
+            if self.box.left <= self.x_limit:
+                self.status = False
+        if len(self.damaged_object) == 3 :
             self.status = False
-
 
     def operation(self):
         self.collide_check()
@@ -130,8 +136,7 @@ class archerclass():
         self.switcher1 = N_time_switch(1)
         self.switcher2 = N_time_switch(1)
         self.switcher3 = N_time_switch(1)
-        self.switcher4 = N_time_switch(1)
-        self.switcher5 = N_time_switch(1)
+
 
         self.skill_countdowner = timing_clock(self.skill_lasting_time,self.gameplay)
 
@@ -151,51 +156,21 @@ class archerclass():
     
     def move(self):
         if self.switcher3.operation():
-            if self.side == 1 :
-                tmp = archer1.hitbox_to_imgbox(self.box) 
-                self.imgbox.left =  tmp.left  
-                self.imgbox.top = tmp.top
-                self.imgbox.width = tmp.width
-                self.imgbox.height = tmp.height
-
-            elif self.side == -1:
-                tmp = reverse(archer1).hitbox_to_imgbox(self.box)    
-                self.imgbox.left =  tmp.left  
-                self.imgbox.top = tmp.top
-                self.imgbox.width = tmp.width
-                self.imgbox.height = tmp.height
-
             self.time_flag = self.gameplay.curr_time
             self.spam_pointX = ( self.imgbox.left + self.imgbox.right) / 2
             self.standstill_animation.reset()
             self.attacking_animation.reset()
-            self.switcher4.reset()
-            self.switcher5.reset()
+
 
         else:
             self.imgbox.centerx = self.spam_pointX + (self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.time_flag)  * self.side
             self.box = self.moving_animation.play()
 
     def standstill(self):
-        if self.switcher5.operation():
-            if self.side == 1 :
-                tmp = archer11.hitbox_to_imgbox(self.box) 
-                self.imgbox.left =  tmp.left  
-                self.imgbox.top = tmp.top
-                self.imgbox.width = tmp.width
-                self.imgbox.height = tmp.height
-
-            elif self.side == -1:
-                tmp = reverse(archer11).hitbox_to_imgbox(self.box)    
-                self.imgbox.left =  tmp.left  
-                self.imgbox.top = tmp.top
-                self.imgbox.width = tmp.width
-                self.imgbox.height = tmp.height
         self.box = self.standstill_animation.play()
         self.moving_animation.reset()
         self.attacking_animation.reset()
         self.switcher3.reset()
-        self.switcher4.reset()
     
 
     def check_forward(self):
@@ -208,10 +183,9 @@ class archerclass():
                 if collide_checker(checker,object):
                     self.status = 1
                     return None
-            checker.box.width -= self.attack_scope 
             for object in self.gameplay.side1:
-                if collide_checker(checker,object):
-                        if (not (object == self)) and (object.box.left >= checker.box.left):
+                if collide_checker(self,object):
+                        if (not (object == self)) and (object.box.right > self.box.right):
                             self.status = 2
                             return None
 
@@ -224,11 +198,9 @@ class archerclass():
                 if collide_checker(checker,object):
                     self.status = 1
                     return None
-            checker.box.centerx += self.attack_scope 
-            checker.box.width -= self.attack_scope 
             for object in self.gameplay.side2:
-                if collide_checker(checker,object):
-                    if (not (object == self)) and (object.box.left <= checker.box.left) :
+                if collide_checker(self,object):
+                    if (not (object == self)) and (object.box.left < self.box.left) :
                         self.status = 2
                         return None
         self.status = 3
@@ -255,25 +227,6 @@ class archerclass():
     
     
     def attack(self):
-        if self.switcher4.operation():
-            if self.side == 1 :
-                tmp = archer11.hitbox_to_imgbox(self.box) 
-                self.imgbox.left =  tmp.left  
-                self.imgbox.top = tmp.top
-                self.imgbox.width = tmp.width
-                self.imgbox.height = tmp.height
-
-            elif self.side == -1:
-                tmp = reverse(archer11).hitbox_to_imgbox(self.box)    
-                self.imgbox.left =  tmp.left  
-                self.imgbox.top = tmp.top
-                self.imgbox.width = tmp.width
-                self.imgbox.height = tmp.height
-            self.standstill_animation.reset()
-            self.moving_animation.reset()
-            self.switcher3.reset()
-            self.switcher5.reset()
-
         self.box = self.attacking_animation.play()
         if self.attacking_animation.clock.Return == 9:
             if self.switcher1.operation():
@@ -286,6 +239,9 @@ class archerclass():
                     self.arrow_list.append(arrowclass(self))  
         elif self.attacking_animation.clock.Return == 1:     
             self.switcher1.reset()
+        self.standstill_animation.reset()
+        self.moving_animation.reset()
+        self.switcher3.reset()
 
 
     
