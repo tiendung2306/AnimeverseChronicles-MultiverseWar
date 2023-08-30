@@ -14,6 +14,10 @@ class gameplay():
 
         self.play_mode = 2 #1 la player vs computer, 2 la pvp
 
+        self.spawn_time = 1.25 #thoi gian de spawn mot con nhan vat tinh theo s
+        self.spawn_queue1 = []
+        self.spawn_queue2 = []
+
         self.gameplay_ui = gameplay_ui(self)
 
         self.bg_original = pygame.image.load('GameplayAssets\\bg1.jpg')
@@ -157,9 +161,9 @@ class gameplay():
 
     def enter_gameplay(self):
         self.screen_resize()
-        if self.isPlay == False:
-            self.SwitchPlayPauseState()
-            self.isPlay = 1 - self.isPlay
+        # if self.isPlay == False:
+        #     self.SwitchPlayPauseState()
+        #     self.isPlay = 1 - self.isPlay
 
 
 
@@ -205,8 +209,8 @@ class gameplay():
             curr_sec = str(curr_tmp_sec)
 
             #gold process
-        self.curr_gold_1 = int(curr_tmp_min * 60 + curr_tmp_sec) * 10 + self.gold_income_1 - self.gold_outcome_1 #luong vang hien tai = luong vang theo thoi gian + luong vang kiem duoc - luong vang da tieu
-        self.curr_gold_2 = int(curr_tmp_min * 60 + curr_tmp_sec) * 10 + self.gold_income_2 - self.gold_outcome_2 #luong vang hien tai = luong vang theo thoi gian + luong vang kiem duoc - luong vang da tieu
+        self.curr_gold_1 = int(curr_tmp_min * 60 + curr_tmp_sec) * 50 + self.gold_income_1 - self.gold_outcome_1 #luong vang hien tai = luong vang theo thoi gian + luong vang kiem duoc - luong vang da tieu
+        self.curr_gold_2 = int(curr_tmp_min * 60 + curr_tmp_sec) * 50 + self.gold_income_2 - self.gold_outcome_2 #luong vang hien tai = luong vang theo thoi gian + luong vang kiem duoc - luong vang da tieu
         
         self.timer_text1 = self.timer_font.render(curr_min + ':' + curr_sec, True, Black)
         self.timer_text1_rect = self.timer_text1.get_rect()

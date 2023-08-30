@@ -81,7 +81,7 @@ class settings():
 
     def setting_pannel_init(self):
         self.mytheme = pygame_menu.Theme(background_color=(0, 0, 0, 0), # transparent background
-                title_background_color=((0, 0, 0, 0)),
+                title_background_color=((1, 1, 1, 0)),
                 title_font_shadow=True,
                 widget_padding=25,
                 )
@@ -100,7 +100,7 @@ class settings():
         self.load_all_image()
         self.load_all_text()
 
-        pygame.time.wait(1000)
+        pygame.time.wait(100)
         self.setting_pannel_init()
 
     # def update(self):
