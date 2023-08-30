@@ -20,7 +20,7 @@ while Flag:
     WIN.blit(img,(0,0))
     for event in pygame.event.get():
         if event.type == KEYDOWN:
-            print("archer{}".format(counter),"GameplayAssets\\archer({}).png".format(counter),a,",",b,",",c - a,",",d - b)
+            # print("archer{}".format(counter),"GameplayAssets\\archer({}).png".format(counter),a,",",b,",",c - a,",",d - b)
             
             counter += 1
             img = pygame.image.load("GameplayAssets\\archer({}).png".format(counter))

@@ -185,7 +185,7 @@ class wizardclass():
             checker.box =reverse(wizard1).imgbox_to_hitbox(self.imgbox)
             checker.box.width += self.attack_scope
             checker.box.centerx -= self.attack_scope 
-            pygame.draw.rect(screen.screen,White,checker.box,1)
+            # pygame.draw.rect(screen.screen,White,checker.box,1)
             for object in self.gameplay.side1 :
                 if collide_checker(checker,object):
                     self.status = 1
@@ -220,7 +220,7 @@ class wizardclass():
     
     def attack(self):
         self.box = self.attacking_animation.play()
-        print(self.box)
+        # print(self.box)
         if self.attacking_animation.clock.Return == 3:
             if self.switcher1.operation():
                 self.magicball_list.append(magic_ball_class(self))  
@@ -297,8 +297,8 @@ class wizardclass():
                     self.magicball_list.remove(magic_ball)
 
 
-            pygame.draw.rect(screen.screen,Red,self.box,1)
-            pygame.draw.rect(screen.screen,White,self.imgbox,1)
+            # pygame.draw.rect(screen.screen,Red,self.box,1)
+            # pygame.draw.rect(screen.screen,White,self.imgbox,1)
 
     
 
