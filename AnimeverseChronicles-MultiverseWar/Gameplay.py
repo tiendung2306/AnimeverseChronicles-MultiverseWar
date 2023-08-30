@@ -14,7 +14,7 @@ class gameplay():
 
         self.play_mode = 2 #1 la player vs computer, 2 la pvp
 
-        self.spawn_time = 1.25 #thoi gian de spawn mot con nhan vat tinh theo s
+        self.spawn_time = 2 #thoi gian de spawn mot con nhan vat tinh theo s
         self.spawn_queue1 = []
         self.spawn_queue2 = []
 

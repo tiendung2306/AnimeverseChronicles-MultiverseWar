@@ -34,15 +34,17 @@ class button():
                 return True
         return False
 
+    def spend_gold(self, side):
+        if side == 1:
+            self.gameplay.gold_outcome_1 += self.gameplay.character_cost[self.character_type]
+        else:
+            self.gameplay.gold_outcome_2 += self.gameplay.character_cost[self.character_type]
+
     def spawn(self, side):
         if side == 1:
-            if self.gameplay.curr_gold_1 >= self.gameplay.character_cost[self.character_type]:
-                spawn(self.character_type, side, 0, self.gameplay)
-                self.gameplay.gold_outcome_1 += self.gameplay.character_cost[self.character_type]
+            spawn(self.character_type, side, 0, self.gameplay)
         else:
-            if self.gameplay.curr_gold_2 >= self.gameplay.character_cost[self.character_type]:
-                spawn(self.character_type, side, 39, self.gameplay)
-                self.gameplay.gold_outcome_2 += self.gameplay.character_cost[self.character_type]
+            spawn(self.character_type, side, 39, self.gameplay)
 
 class spawn_process():
     def __init__(self, gameplay, side):
@@ -63,14 +65,14 @@ class spawn_process():
             self.size = (screen.screen.get_rect().width / 8.7, screen.screen.get_rect().height / 130)
             pygame.draw.rect(screen.screen, self.color, pygame.Rect(self.position1[0], self.position1[1], self.size[0], self.size[1]), 1, 7)
 
-            process_bar_fill_percent = (self.gameplay.time - self.start_spawn_time) / self.spawn_time * 100
+            process_bar_fill_percent = (self.gameplay.curr_time - self.start_spawn_time) / self.spawn_time * 100
             if len(self.gameplay.spawn_queue1) > 0:
                 if process_bar_fill_percent < 100.0:
                     self.is_spawn = False
                     pygame.draw.rect(screen.screen, self.color, pygame.Rect(self.position1[0], self.position1[1], self.size[0] * process_bar_fill_percent / 100.0, self.size[1]), 0, 7)
                 else:
                     self.is_spawn = True
-                    self.start_spawn_time = self.gameplay.time
+                    self.start_spawn_time = self.gameplay.curr_time
             circle1 = 1
             circle2 = 1
             circle3 = 1
@@ -85,16 +87,17 @@ class spawn_process():
             pygame.draw.circle(screen.screen, self.color, (self.position1[0] + self.size[0] + 3*screen.screen.get_rect().width / 150, self.position1[1] + self.size[1] / 1.8), self.size[1] / 1.75, circle3)
         else:
             self.position2 = (screen.screen.get_rect().width - screen.screen.get_rect().width / 550 - self.size[0], screen.screen.get_rect().width / 7 / 2.4)
+            self.size = (screen.screen.get_rect().width / 8.7, screen.screen.get_rect().height / 130)
             pygame.draw.rect(screen.screen, self.color, pygame.Rect(self.position2[0], self.position2[1], self.size[0], self.size[1]), 1, 7)
             
-            process_bar_fill_percent = (self.gameplay.time - self.start_spawn_time) / self.spawn_time * 100
+            process_bar_fill_percent = (self.gameplay.curr_time - self.start_spawn_time) / self.spawn_time * 100.0
             if len(self.gameplay.spawn_queue2) > 0:
                 if process_bar_fill_percent < 100.0:
                     self.is_spawn = False
-                    pygame.draw.rect(screen.screen, self.color, pygame.Rect(self.position2[0], self.position2[1], self.size[0] * process_bar_fill_percent / 100.0, self.size[1]), 0, 7)
+                    pygame.draw.rect(screen.screen, self.color, pygame.Rect(self.position2[0] + self.size[0] - self.size[0] * process_bar_fill_percent / 100.0 - 1, self.position2[1], self.size[0] * process_bar_fill_percent / 100.0, self.size[1]), 0, 7)
                 else:
                     self.is_spawn = True
-                    self.start_spawn_time = self.gameplay.time
+                    self.start_spawn_time = self.gameplay.curr_time
             
             circle1 = 1
             circle2 = 1
@@ -110,7 +113,7 @@ class spawn_process():
             pygame.draw.circle(screen.screen, self.color, (self.position2[0] - 3*screen.screen.get_rect().width / 150, self.position2[1] + self.size[1] / 1.8), self.size[1] / 1.75, circle3)
 
     def start_fill_process_bar(self):
-        self.start_spawn_time = self.gameplay.time   
+        self.start_spawn_time = self.gameplay.curr_time   
 
 class gameplay_ui():
     def __init__(self, gameplay):
@@ -184,11 +187,13 @@ class gameplay_ui():
                 self.spawn_bar1.start_fill_process_bar()
             if len(self.gameplay.spawn_queue1) < 3:
                 self.gameplay.spawn_queue1.append(button_num)
+                self.character_spawn_buttons[button_num].spend_gold(side)
         else: 
             if len(self.gameplay.spawn_queue2) == 0:
                 self.spawn_bar2.start_fill_process_bar()
             if len(self.gameplay.spawn_queue2) < 3:
                 self.gameplay.spawn_queue2.append(button_num)
+                self.character_spawn_buttons[button_num].spend_gold(side)
 
     def check_click(self, mouse):
         if len(self.character_spawn_buttons) != len(self.button_rect_1) or len(self.character_spawn_buttons) != len(self.button_rect_2):
@@ -212,7 +217,6 @@ class gameplay_ui():
         self.draw_button()
         self.draw_spawn_bar()
         if len(self.gameplay.spawn_queue1) > 0 and self.spawn_bar1.is_spawn == True:
-            print(self.gameplay.spawn_queue1[0])
             self.spawn(self.gameplay.spawn_queue1[0], 1)
             del self.gameplay.spawn_queue1[0]
             self.spawn_bar1.is_spawn == False
