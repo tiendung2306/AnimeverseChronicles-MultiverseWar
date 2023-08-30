@@ -13,17 +13,17 @@ a = b = c = d = 0
 Flag = True
 flag2 = False
 counter = 1
-img = pygame.image.load("GameplayAssets\\nexus1.png".format(counter))
+img = pygame.image.load("GameplayAssets\\archer({}).png".format(counter))
 WIN = pygame.display.set_mode(img.get_size())
 while Flag:
     WIN.fill(Black)
     WIN.blit(img,(0,0))
     for event in pygame.event.get():
         if event.type == KEYDOWN:
-            print("wizard{}".format(counter),"GameplayAssets\\wizard({}).png".format(counter),a,",",b,",",c - a,",",d - b)
+            print("archer{}".format(counter),"GameplayAssets\\archer({}).png".format(counter),a,",",b,",",c - a,",",d - b)
             
             counter += 1
-            img = pygame.image.load("GameplayAssets\\wizard({}).png".format(counter))
+            img = pygame.image.load("GameplayAssets\\archer({}).png".format(counter))
             if event.key == 9:
                 Flag = False
             # if event.key == 32 :

@@ -154,12 +154,14 @@ class wizardclass():
         self.standstill_animation.reset()
         self.attacking_animation.reset()
 
+
+
     def standstill(self):
         self.box = self.standstill_animation.play()
         self.moving_animation.reset()
         self.attacking_animation.reset()
         self.switcher3.reset()
-    
+
 
     def check_forward(self):
         checker = fake_object_class(self)
@@ -171,11 +173,10 @@ class wizardclass():
                 if collide_checker(checker,object):
                     self.status = 1
                     return None
-            checker.box.width -= self.attack_scope
-            checker.box.width *= 2
+ 
             for object in self.gameplay.side1:
-                if collide_checker(checker,object):
-                    if (not (object == self)) and (object.box.left >= checker.box.left):
+                if collide_checker(self,object):
+                    if (not (object == self)) and (object.box.right > self.box.right):
                         self.status = 2
                         return None
 
@@ -189,12 +190,10 @@ class wizardclass():
                 if collide_checker(checker,object):
                     self.status = 1
                     return None
-            checker.box.width -= self.attack_scope
-            checker.box.centerx += self.attack_scope 
-            checker.box.width *= 2
+                
             for object in self.gameplay.side2:
-                if collide_checker(checker,object):
-                    if (not (object == self)) and (object.box.left <= checker.box.left) :
+                if collide_checker(self,object):
+                    if (not (object == self)) and (object.box.left < self.box.left) :
                         self.status = 2
                         return None
         self.status = 3
@@ -221,6 +220,7 @@ class wizardclass():
     
     def attack(self):
         self.box = self.attacking_animation.play()
+        print(self.box)
         if self.attacking_animation.clock.Return == 3:
             if self.switcher1.operation():
                 self.magicball_list.append(magic_ball_class(self))  
@@ -258,13 +258,12 @@ class wizardclass():
                             self.special_skill_reset()            
         if self.special_skill_animation.status == False:
             self.special_skill_reset()
-            
 
 
     def special_skill_reset(self):
         self.special_status = False
         self.switcher2.reset()
-
+        self.special_skill_animation.reset()
 
     def operation(self):
         if self.alive: 
@@ -297,8 +296,9 @@ class wizardclass():
                 if magic_ball.status == False :
                     self.magicball_list.remove(magic_ball)
 
-            # pygame.draw.rect(screen.screen,White,self.box,1)
-            # pygame.draw.rect(screen.screen,White,self.imgbox,1)
+
+            pygame.draw.rect(screen.screen,Red,self.box,1)
+            pygame.draw.rect(screen.screen,White,self.imgbox,1)
 
     
 

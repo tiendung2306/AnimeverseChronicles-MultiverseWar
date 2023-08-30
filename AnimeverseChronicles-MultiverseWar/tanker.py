@@ -74,12 +74,12 @@ class tankerclass():
         if self.switcher3.operation():
             self.time_flag = self.gameplay.curr_time
             self.spam_pointX = ( self.imgbox.left + self.imgbox.right) / 2
+            self.standstill_animation.reset()
+            self.attacking_animation.reset()
 
         else:
             self.box = self.moving_animation.play()
             self.imgbox.centerx = self.spam_pointX+ (self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.time_flag)  * self.side
-        self.standstill_animation.reset()
-        self.attacking_animation.reset()
 
     def standstill(self):
         self.box = self.standstill_animation.play()
@@ -91,7 +91,7 @@ class tankerclass():
     def check_forward(self):
         checker = fake_object_class(self)
         if self.side == 1:
-            checker.box = tanker5.imgbox_to_hitbox(self.imgbox)
+            checker.box = tanker1.imgbox_to_hitbox(self.imgbox)
             checker.box.width *= 2
             # pygame.draw.rect(screen.screen,Red,checker.box)
             for object in self.gameplay.side2 :
@@ -100,13 +100,13 @@ class tankerclass():
                     return None
             checker.box.width *= 1 / 2
             for object in self.gameplay.side1:
-                if collide_checker(checker,object):
-                        if (not (object == self)) and (object.box.left > checker.box.left):
+                if collide_checker(self ,object):
+                        if (not (object == self)) and (object.box.right > self.box.right):
                             self.status = 2
                             return None
 
         elif self.side == -1:
-            checker.box = reverse(tanker5).imgbox_to_hitbox(self.imgbox)
+            checker.box = reverse(tanker1).imgbox_to_hitbox(self.imgbox)
             checker.box.width *= 2
             checker.box.centerx -= checker.box.width / 2
             # pygame.draw.rect(self.gameplay.screen,White,checker.box)
@@ -114,14 +114,14 @@ class tankerclass():
                 if collide_checker(checker,object):
                     self.status = 1
                     return None
-            checker.box.centerx += checker.box.width / 2
-            checker.box.width *= 1 / 2
+
             for object in self.gameplay.side2:
-                if collide_checker(checker,object):
-                    if (not (object == self)) and (object.box.left <= checker.box.left) :
+                if collide_checker(self,object):
+                    if (not (object == self)) and (object.box.left < self.box.left) :
                         self.status = 2
                         return None
         self.status = 3
+
 
     def Geting_hit(self):
         self.get_hit = False

@@ -21,6 +21,7 @@ class sword_manclass():
         elif side == 2:
             self.side = -1
             self.imgbox = reverse(sword_man1).hitbox_to_imgbox(self.box)    
+
             
         self.speed = 5.0 # 5/100 map per second 
         self.attack_scope = 1 * self.gameplay.box_size[0] # 4/15 map width
@@ -44,10 +45,11 @@ class sword_manclass():
             for img in [sword_man11,sword_man12,sword_man13,sword_man14,sword_man15,sword_man16,sword_man17,sword_man18]:
                 for counter in range(2):
                     tmp_lib.append(img)
-    
+
         self.attacking_animation = animation_player(tmp_lib, self.side, 1 / self.attack_speed, self.imgbox, self.gameplay)
         self.special_skill_animation = one_time_animation_player([sword_man19,sword_man20,sword_man21,sword_man22,sword_man23,sword_man24,sword_man25,sword_man26,sword_man27,sword_man28,sword_man29,sword_man30], self.side, 1, self.imgbox, self.gameplay)
         self.standstill_animation = animation_player([sword_man11,sword_man12,sword_man13,sword_man14,sword_man15,sword_man16,sword_man17,sword_man18],self.side, 1, self.imgbox, self.gameplay)
+        
 
         self.switcher1 = N_time_switch(1)
         self.switcher2 = N_time_switch(1)
@@ -90,12 +92,11 @@ class sword_manclass():
                 if collide_checker(checker,object):
                     self.status = 1
                     return None
-            checker.box.width *= 1 / 2
             for object in self.gameplay.side1:
-                if collide_checker(checker,object):
-                        if (not (object == self)) and (object.box.left >= checker.box.left):
-                            self.status = 2
-                            return None
+                if collide_checker(self, object):
+                    if (not (object == self)) and (object.box.right > self.box.right):
+                        self.status = 2
+                        return None
 
         elif self.side == -1:
             checker.box = reverse(sword_man1).imgbox_to_hitbox(self.imgbox)
@@ -106,11 +107,10 @@ class sword_manclass():
                 if collide_checker(checker,object):
                     self.status = 1
                     return None            
-            checker.box.centerx += checker.box.width / 2
-            checker.box.width *= 1/ 2
+
             for object in self.gameplay.side2:
-                if collide_checker(checker,object):
-                    if (not (object == self)) and (object.box.left <= checker.box.left) :
+                if collide_checker(self, object):
+                    if (not (object == self)) and (object.box.left < self.box.left) :
                         self.status = 2
                         return None
         self.status = 3

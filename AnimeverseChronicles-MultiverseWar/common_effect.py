@@ -25,7 +25,10 @@ class dizzy():
 class soul_sucking():
     def __init__(self, object):
         self.imgbox = object.box
-        self.animation = one_time_animation_player_special([soul1, soul2, soul3, soul4, soul5, soul6, soul6, soul6, soul7, soul8], - object.side, 1, object.box, (- 3 / 4, -1 / 2, 1, 1), object.gameplay)
+        if object.side == 1:
+            self.animation = one_time_animation_player_special([soul1, soul2, soul3, soul4, soul5, soul6, soul6, soul6, soul7, soul8], - object.side, 1, object.box, ( 3 / 4, -1 / 2, 1, 1), object.gameplay)
+        else:
+            self.animation = one_time_animation_player_special([soul1, soul2, soul3, soul4, soul5, soul6, soul6, soul6, soul7, soul8], - object.side, 1, object.box, ( - 3 / 4, -1 / 2, 1, 1), object.gameplay)
         self.clock = timing_clock(1 ,object.gameplay)
         self.object = object
     
