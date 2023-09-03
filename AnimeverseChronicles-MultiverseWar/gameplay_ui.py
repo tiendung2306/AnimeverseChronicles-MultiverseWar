@@ -161,7 +161,7 @@ class gameplay_ui():
     def draw_button(self):
         prev_pos_width = screen.screen.get_rect().width / 7
         for i in range(0, len(self.character_spawn_buttons)):
-            pygame.draw.rect(screen.screen, Gray62, pygame.Rect(self.button_rect_1[i].left, self.button_rect_1[i].top, screen.screen.get_rect().width / 20, screen.screen.get_rect().width / 20), border_radius=25)
+            pygame.draw.rect(screen.screen, Gray62, pygame.Rect(self.button_rect_1[i].left, self.button_rect_1[i].top, screen.screen.get_rect().width / 20, screen.screen.get_rect().width / 20), border_radius=int(screen.screen.get_rect().width / 80))
             screen.screen.blit(self.button_border, (self.button_rect_1[i].left, self.button_rect_1[i].top))
             character_rect = self.character_spawn_buttons[i].button_image_1.get_rect()
             character_rect.center = self.button_rect_1[i].center
@@ -171,7 +171,7 @@ class gameplay_ui():
         if self.gameplay.play_mode == 2:
             prev_pos_width = screen.screen.get_rect().width / 7.0 * 6.0 - self.button_border.get_rect().width
             for i in range(0, len(self.character_spawn_buttons)):
-                pygame.draw.rect(screen.screen, Gray62, pygame.Rect(self.button_rect_2[i].left, self.button_rect_2[i].top, screen.screen.get_rect().width / 20, screen.screen.get_rect().width / 20), border_radius=25)
+                pygame.draw.rect(screen.screen, Gray62, pygame.Rect(self.button_rect_2[i].left, self.button_rect_2[i].top, screen.screen.get_rect().width / 20, screen.screen.get_rect().width / 20), border_radius=int(screen.screen.get_rect().width / 80))
                 screen.screen.blit(self.button_border, (self.button_rect_2[i].left, self.button_rect_2[i].top))
                 character_rect = self.character_spawn_buttons[i].button_image_2.get_rect()
                 character_rect.center = self.button_rect_2[i].center
