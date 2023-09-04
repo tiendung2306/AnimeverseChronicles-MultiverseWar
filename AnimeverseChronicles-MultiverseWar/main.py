@@ -169,6 +169,9 @@ class main():
             self.Gameplay.draw_gameplay_ui()
 
             self.Gameplay.object_operation()
+
+            self.Gameplay.pre_curr_time = self.Gameplay.curr_time
+
             if self.Gameplay.isPlay == False:
                 self.Gameplay.draw_pause_pannel()
             pygame.display.update()

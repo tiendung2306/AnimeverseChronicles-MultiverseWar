@@ -1,5 +1,6 @@
 import pygame
 from pygame.locals import *
+from img_analyze import *
 
 class screen():
     pygame.init()

@@ -63,8 +63,9 @@ class analyzed_img():
 
         return pygame.Rect(imgbox.left + x, imgbox.top + y,rong,dai)
 
-nexus_test = analyzed_img("GameplayAssets\\nexus_test.png", 63 , 117 , 235 , 314)
 
+nexus = analyzed_img("GameplayAssets\\nexus.png",85 , 46 , 160 , 531)
+anh = analyzed_img("GameplayAssets\\none.png",85 , 46 , 160 , 531)
 # sword_man1_1  = analyzed_img("GameplayAssets\\sword_man1(1).png", 77 , 153 , 163 , 464)
 # sword_man1_2  = analyzed_img("GameplayAssets\\sword_man1(2).png", 88 , 154 , 156 , 477)
 # sword_man1_3  = analyzed_img("GameplayAssets\\sword_man1(3).png", 79 , 123 , 131 , 495)
@@ -265,6 +266,13 @@ dizzy_effect7 = analyzed_img("GameplayAssets\\dizzy_effect(7).png", 27 , 58 , 52
 dizzy_effect8 = analyzed_img("GameplayAssets\\dizzy_effect(8).png", 27 , 58 , 522 , 290)
 dizzy_effect9 = analyzed_img("GameplayAssets\\dizzy_effect(9).png", 27 , 58 , 522 , 290)
 
+knock_back1 = analyzed_img("GameplayAssets\knock_back(1).png", 283 , 198 , 143 , 84)
+knock_back2 = analyzed_img("GameplayAssets\knock_back(2).png", 287 , 180 , 195 , 101)
+knock_back3 = analyzed_img("GameplayAssets\knock_back(3).png", 291 , 160 , 189 , 120)
+knock_back4 = analyzed_img("GameplayAssets\knock_back(4).png", 291 , 160 , 189 , 120)
+knock_back5 = analyzed_img("GameplayAssets\knock_back(5).png", 291 , 160 , 189 , 120)
+knock_back6 = analyzed_img("GameplayAssets\knock_back(6).png", 378 , 147 , 83 , 115)
+
 soul1 = analyzed_img("GameplayAssets\soul(1).png", 241 , 109 , 221 , 201)
 soul2 = analyzed_img("GameplayAssets\soul(2).png", 241 , 109 , 221 , 201)
 soul3 = analyzed_img("GameplayAssets\soul(3).png", 241 , 109 , 221 , 201)
@@ -273,5 +281,46 @@ soul5 = analyzed_img("GameplayAssets\soul(5).png", 241 , 109 , 221 , 201)
 soul6 = analyzed_img("GameplayAssets\soul(6).png", 241 , 109 , 221 , 201)
 soul7 = analyzed_img("GameplayAssets\soul(7).png", 241 , 109 , 221 , 201)
 soul8 = analyzed_img("GameplayAssets\soul(8).png", 241 , 109 , 221 , 201)
+
+goku1 = analyzed_img("GameplayAssets\goku(1).png ",139 , 90 , 110 , 226)
+goku2 = analyzed_img("GameplayAssets\goku(2).png ",139 , 90 , 110 , 226)
+goku3 = analyzed_img("GameplayAssets\goku(3).png ",139 , 90 , 110 , 226)
+goku4 = analyzed_img("GameplayAssets\goku(4).png ",139 , 90 , 110 , 226)
+goku5 = analyzed_img("GameplayAssets\goku(5).png ",102 , 137 , 201 , 136)
+goku6 = analyzed_img("GameplayAssets\goku(6).png ",102 , 137 , 201 , 136)
+goku7 = analyzed_img("GameplayAssets\goku(7).png ",102 , 137 , 201 , 136)
+goku8 = analyzed_img("GameplayAssets\goku(8).png ",102 , 137 , 201 , 136)
+goku9 = analyzed_img("GameplayAssets\goku(9).png ",135 , 166 , 99 , 151)
+goku10 = analyzed_img("GameplayAssets\goku(10).png", 179 , 131 , 97 , 175)
+goku11 = analyzed_img("GameplayAssets\goku(11).png", 161 , 126 , 85 , 198)
+goku12 = analyzed_img("GameplayAssets\goku(12).png", 161 , 126 , 85 , 198)
+goku13 = analyzed_img("GameplayAssets\goku(13).png", 161 , 126 , 85 , 198)
+goku14 = analyzed_img("GameplayAssets\goku(14).png", 161 , 126 , 85 , 198)
+goku15 = analyzed_img("GameplayAssets\goku(15).png", 208 , 137 , 116 , 203)
+goku16 = analyzed_img("GameplayAssets\goku(16).png", 224 , 120 , 130 , 211)
+goku17 = analyzed_img("GameplayAssets\goku(17).png", 224 , 120 , 130 , 211)
+goku18 = analyzed_img("GameplayAssets\goku(18).png", 224 , 120 , 130 , 211)
+goku19 = analyzed_img("GameplayAssets\goku(19).png", 224 , 120 , 130 , 211)
+goku20 = analyzed_img("GameplayAssets\goku(20).png", 224 , 120 , 130 , 211)
+goku21 = analyzed_img("GameplayAssets\goku(21).png", 224 , 120 , 130 , 211)
+goku22 = analyzed_img("GameplayAssets\goku(22).png", 224 , 120 , 130 , 211)
+goku23 = analyzed_img("GameplayAssets\goku(23).png", 224 , 120 , 130 , 211)
+goku24 = analyzed_img("GameplayAssets\goku(24).png", 224 , 120 , 130 , 211)
+goku25 = analyzed_img("GameplayAssets\goku(25).png", 224 , 120 , 130 , 211)
+
+kame = pygame.image.load("GameplayAssets\\kame.png")
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

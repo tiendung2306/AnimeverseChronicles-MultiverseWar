@@ -13,7 +13,8 @@ from screen import *
 class tankerclass():
     def __init__(self,side,box_number,gameplay):
         self.gameplay = gameplay
-        self.box = pygame.Rect(box_number * self.gameplay.box_size[0],self.gameplay.path_height - self.gameplay.box_size[1], self.gameplay.box_size[0], self.gameplay.box_size[1])
+        self.size = (self.gameplay.box_size[0] / 1.65, (self.gameplay.box_size[0] / 1.65 * tanker5.data[3] )/ tanker5.data[2] )
+        self.box = pygame.Rect(box_number * self.gameplay.box_size[0],self.gameplay.path_height - self.size[1] * 4 / 5, self.size[0], self.size[1])
         if side == 1 :
             self.side = 1
             self.imgbox = tanker5.hitbox_to_imgbox(self.box)        
@@ -56,6 +57,22 @@ class tankerclass():
 
         self.skill_countdowner = timing_clock(3,self.gameplay)
 
+    def resize(self):
+        a = float(screen.screen.get_width()) / self.gameplay.screen[0]
+        b = float(screen.screen.get_height()) /  self.gameplay.screen[1]
+        tmp_box = pygame.Rect(self.box.left * a, self.box.top *  b, self.box.width * a, self.box.height * b)
+        self.size = (self.gameplay.box_size[0] / 1.65, (self.gameplay.box_size[0] / 1.65 * tanker5.data[3] )/ tanker5.data[2] )
+        fake_box = pygame.Rect( self.gameplay.box_size[0],self.gameplay.path_height - self.size[1] * 4 / 5, self.size[0], self.size[1])
+        fake_imgbox = tanker5.hitbox_to_imgbox(fake_box)
+        self.imgbox.left *= a
+        self.imgbox.top = fake_imgbox.top
+        self.imgbox.width = fake_imgbox.width
+        self.imgbox.height = fake_imgbox.height
+        self.box.top = tmp_box.top
+        self.box.left = tmp_box.left
+        self.box.width = tmp_box.width
+        self.box.height = tmp_box.height
+
 
     def status_bar(self):
         if self.mana >= self.mana_max:
@@ -71,21 +88,16 @@ class tankerclass():
     
     
     def move(self):
-        if self.switcher3.operation():
-            self.time_flag = self.gameplay.curr_time
-            self.spam_pointX = ( self.imgbox.left + self.imgbox.right) / 2
-            self.standstill_animation.reset()
-            self.attacking_animation.reset()
+        self.standstill_animation.reset()
+        self.attacking_animation.reset()
+        copy(self.box, self.moving_animation.play())
+        self.imgbox.centerx += (self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time)  * self.side
 
-        else:
-            self.box = self.moving_animation.play()
-            self.imgbox.centerx = self.spam_pointX+ (self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.time_flag)  * self.side
 
     def standstill(self):
-        self.box = self.standstill_animation.play()
+        copy(self.box, self.standstill_animation.play())
         self.moving_animation.reset()
         self.attacking_animation.reset()
-        self.switcher3.reset()
     
     
     def check_forward(self):
@@ -98,12 +110,12 @@ class tankerclass():
                 if collide_checker(checker,object):
                     self.status = 1
                     return None
-            checker.box.width *= 1 / 2
-            for object in self.gameplay.side1:
-                if collide_checker(self ,object):
-                        if (not (object == self)) and (object.box.right > self.box.right):
-                            self.status = 2
-                            return None
+
+            for object in self.gameplay.side1 + self.gameplay.side4:
+                if collide_checker(checker ,object):
+                    if (not (object == self)) and (object.box.right > checker.box.right):
+                        self.status = 2
+                        return None
 
         elif self.side == -1:
             checker.box = reverse(tanker1).imgbox_to_hitbox(self.imgbox)
@@ -115,9 +127,9 @@ class tankerclass():
                     self.status = 1
                     return None
 
-            for object in self.gameplay.side2:
-                if collide_checker(self,object):
-                    if (not (object == self)) and (object.box.left < self.box.left) :
+            for object in self.gameplay.side2 + self.gameplay.side4:
+                if collide_checker(checker,object):
+                    if (not (object == self)) and (object.box.left < checker.box.left) :
                         self.status = 2
                         return None
         self.status = 3
@@ -151,7 +163,7 @@ class tankerclass():
 
 
     def attack(self):
-        self.box = self.attacking_animation.play()
+        copy(self.box, self.attacking_animation.play())
         if self.attacking_animation.clock.Return == 5 or self.attacking_animation.clock.Return == 8:
             if self.switcher1.operation():
 
@@ -180,7 +192,6 @@ class tankerclass():
             self.switcher1.reset()
         self.standstill_animation.reset()
         self.moving_animation.reset()
-        self.switcher3.reset()
 
 
     def special_skill(self):
@@ -195,21 +206,6 @@ class tankerclass():
             self.switcher2.reset()
             self.skill_countdowner.reset()
 
-    def resize(self):
-        # fake_imgbox = tanker5.hitbox_to_imgbox(pygame.Rect(0,self.gameplay.path_height - self.gameplay.box_size[1],self.gameplay.box_size[0], self.gameplay.box_size[1]))
-        # self.imgbox.width = fake_imgbox.width
-        # self.imgbox.height = fake_imgbox.height
-        pass
-        # self.imgbox.left = tmp_rect.left
-        # self.imgbox.top = tmp_rect.top
-        # self.imgbox.width = tmp_rect.width
-        # self.imgbox.height = tmp_rect.height
-        # tmp = analyzed_img("GameplayAssets\\none.png",self.box.left, self.box.top, self.box.width, self.box.height)
-        # tmp_rect = tmp.imgbox_to_hitbox(screen.screen.get_rect())
-        # self.imgbox.left = tmp_rect.left
-        # self.imgbox.top = tmp_rect.top
-        # self.imgbox.width = tmp_rect.width
-        # self.imgbox.height = tmp_rect.height
 
     def operation(self):
             if self.alive:
@@ -218,6 +214,7 @@ class tankerclass():
                     return None
                 self.status_bar()
                 self.check_forward()
+
                 for effect in self.effect_list:
                     effect.play()
 

@@ -20,6 +20,7 @@ class gameplay():
 
         self.gameplay_ui = gameplay_ui(self)
 
+        self.fake_bg_original = pygame.image.load('GameplayAssets\\mainmenubg.png')
         self.bg_original = pygame.image.load('GameplayAssets\\bg1.jpg')
         self.path_original = pygame.image.load('GameplayAssets\\path1.png')
         self.board_original = pygame.image.load('GameplayAssets\\board.png')
@@ -28,8 +29,7 @@ class gameplay():
         self.pause_button_original = pygame.image.load('GameplayAssets\\pause_button.png')
 
         self.load_all_gameplay_image()
-        self.nexus1 = Nexus('GameplayAssets\\nexus1.png')
-        self.nexus2 = Nexus('GameplayAssets\\nexus2.png')
+
 
         if self.play_mode == 2:
             tmp = Rect(0, 0, 0, 0)
@@ -48,6 +48,7 @@ class gameplay():
 
         self.timer_font = pygame.font.Font('Fonts\\joystix_monospace.otf', 16)
         self.start_time = 0.0
+        self.pre_curr_time = 0.0
         self.curr_time = 0.0
         self.pause_time = 0.0
         self.start_pause_time = 0.0
@@ -69,16 +70,22 @@ class gameplay():
 
         self.spawn_point_height = self.path.get_rect().top + self.path.get_rect().height / 7.0
 
-        self.FPS = 60
         self.box_size = (screen.screen.get_rect().width / 40 , screen.screen.get_rect().height / 20)
-        self.path_height = screen.screen.get_rect().height - self.path.get_rect().height + 20
+        self.path_height = screen.screen.get_rect().height - self.path.get_rect().height 
+        self.screen = screen.screen.get_size()
     #Object import:
         self.side1 = []
         self.side2 = []
         self.side3 = []
+        self.side4 = []
         self.side0 = []
 
+        self.nexus1 = Nexusclass(1, self)
+        self.nexus2 = Nexusclass(2, self)
+
+
     def load_all_gameplay_image(self):
+        self.fake_bg = self.fake_bg_original.copy()
         self.bg = self.bg_original.copy()
         self.path = self.path_original.copy()
         self.board_1 = self.board_original.copy()
@@ -89,6 +96,10 @@ class gameplay():
         self.pause_button = self.pause_button_original.copy()
 
         info = pygame.display.Info()
+        self.fake_bg = pygame.transform.smoothscale(self.fake_bg, screen.screen.get_size())
+        self.other_bg = self.bg.copy()
+        self.other_bg.set_alpha(0)
+        self.other_bg.fill((255, 255, 255))
         self.bg = pygame.transform.smoothscale(self.bg, (info.current_w, info.current_h))
         self.path = pygame.transform.smoothscale(self.path, (self.bg.get_rect().width, screen.screen.get_rect().height // 7))
         self.board_1 = pygame.transform.smoothscale(self.board_1, (screen.screen.get_rect().width / 7, screen.screen.get_rect().width / 7 / 2.4))
@@ -96,6 +107,7 @@ class gameplay():
         self.settings_button = pygame.transform.smoothscale(self.settings_button, (self.board_1.get_rect().width // 6, self.board_1.get_rect().width // 6))
         self.play_button = pygame.transform.smoothscale(self.play_button, (self.board_1.get_rect().width // 6, self.board_1.get_rect().width // 6))
         self.pause_button = pygame.transform.smoothscale(self.pause_button, (self.board_1.get_rect().width // 6, self.board_1.get_rect().width // 6))
+
 
         if self.play_mode == 2:
             tmp = Rect(0, 0, self.board_1.get_rect().width // 6, self.board_1.get_rect().width // 6)
@@ -116,13 +128,15 @@ class gameplay():
         self.fade.set_alpha(200)
 
         self.load_all_gameplay_image()
-        self.nexus1.screen_resize('GameplayAssets\\nexus1.png')
-        self.nexus2.screen_resize('GameplayAssets\\nexus2.png')
+ 
 
         self.box_size = (screen.screen.get_rect().width / 40 , screen.screen.get_rect().height / 20)
         self.path_height = screen.screen.get_rect().height - self.path.get_rect().height + 20
-        # for object in self.side2 + self.side1:
-        #     object.resize()
+
+        for object in self.side2 + self.side1:
+            object.resize()
+            
+        self.screen = screen.screen.get_size()
         self.gameplay_ui.screen_resize()
 
     def set_fade(self): 
@@ -168,10 +182,11 @@ class gameplay():
 
 
     def draw_gameplay_ui(self):
-        screen.screen.blit(self.bg, (0, 0))
+        screen.screen.blit(self.bg , (0, 0))
+        screen.screen.blit(self.other_bg, (0,0))
         screen.screen.blit(self.path, (0, screen.screen.get_rect().height - self.path.get_rect().height))
-        screen.screen.blit(self.nexus1.nexus_surface, (5,  screen.screen.get_rect().height - self.path.get_rect().height - self.nexus1.nexus_surface.get_rect().height + self.path.get_rect().height // 3))
-        screen.screen.blit(self.nexus2.nexus_surface, (screen.screen.get_rect().width - 5 - self.nexus2.nexus_surface.get_rect().width,  screen.screen.get_rect().height - self.path.get_rect().height - self.nexus1.nexus_surface.get_rect().height + self.path.get_rect().height // 3)) 
+        # screen.screen.blit(self.nexus1.nexus_surface, (5,  screen.screen.get_rect().height - self.path.get_rect().height - self.nexus1.nexus_surface.get_rect().height + self.path.get_rect().height // 3))
+        # screen.screen.blit(self.nexus2.nexus_surface, (screen.screen.get_rect().width - 5 - self.nexus2.nexus_surface.get_rect().width,  screen.screen.get_rect().height - self.path.get_rect().height - self.nexus1.nexus_surface.get_rect().height + self.path.get_rect().height // 3)) 
         screen.screen.blit(self.board_1, (-2,  -2))
         if self.play_mode == 2:
             screen.screen.blit(self.board_2, (screen.screen.get_rect().width + 2 - self.board_2.get_rect().width,  -2))
@@ -186,6 +201,7 @@ class gameplay():
             screen.screen.blit(self.pause_button, self.play_pause_button)
         else: 
             screen.screen.blit(self.play_button, self.play_pause_button)
+
 
         self.gameplay_ui.update()
 
@@ -231,3 +247,4 @@ class gameplay():
     def object_operation(self):
         for object in self.side2 + self.side1 + self.side0 + self.side3 :
             object.operation()
+        # screen.screen.blit(self.fake_screen, (0,0))

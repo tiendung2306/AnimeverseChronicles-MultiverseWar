@@ -25,7 +25,6 @@ class arrowclass():
             self.box = reverse(arrow).imgbox_to_hitbox(self.imgbox)
             self.img = reverse(arrow)
 
-        self.spam_pointX = ( self.imgbox.left + self.imgbox.right) / 2
         self.time_flag = self.archer.gameplay.curr_time 
 
         self.piercing = self.archer.piercing
@@ -43,9 +42,21 @@ class arrowclass():
                 self.img = reverse(special_arrow)
                 self.x_limit = self.archer.box.left - self.archer.attack_scope * 2
 
+    def resize(self):
+        a = float(screen.screen.get_width()) / self.gameplay.screen[0]
+        b = float(screen.screen.get_height()) /  self.gameplay.screen[1]
+        tmp_box = pygame.Rect(self.box.left * a, self.box.top *  b, self.box.width * a, self.box.height * b)
+        self.imgbox.left *= a
+        self.imgbox.top = self.archer.imgbox.top
+        self.imgbox.width = self.archer.imgbox.width
+        self.imgbox.height = self.archer.imgbox.height
+        self.box.top = tmp_box.top
+        self.box.left = tmp_box.left
+        self.box.width = tmp_box.width
+        self.box.height = tmp_box.height
 
     def move(self):
-        self.imgbox.centerx = self.spam_pointX + (self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.time_flag)  * self.side
+        self.imgbox.centerx += (self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time)  * self.side
 
 
     def collide_check(self):
@@ -87,7 +98,7 @@ class arrowclass():
         #     pygame.draw.rect(screen.screen,Black,self.box)  
 
         screen.screen.blit(pygame.transform.smoothscale(self.img.img,(self.imgbox.width,self.imgbox.height)),self.imgbox)
-        self.box = self.img.imgbox_to_hitbox(self.imgbox)
+        copy(self.box, self.img.imgbox_to_hitbox(self.imgbox))
 
         if self.status:
             if self.piercing :
@@ -99,7 +110,9 @@ class arrowclass():
 class archerclass():
     def __init__(self, side, box_number, gameplay):
         self.gameplay = gameplay
-        self.box = pygame.Rect(box_number * self.gameplay.box_size[0],self.gameplay.path_height - self.gameplay.box_size[1], self.gameplay.box_size[0], self.gameplay.box_size[1])
+        self.size = (self.gameplay.box_size[0] / 1.25, (self.gameplay.box_size[0] / 1.25 * archer1.data[3] )/ archer1.data[2] )
+        self.box = pygame.Rect(box_number * self.gameplay.box_size[0],self.gameplay.path_height - self.size[1] * 3 / 4, self.size[0], self.size[1])
+        
         if side == 1 :
             self.side = 1
             self.imgbox = archer1.hitbox_to_imgbox(self.box)        
@@ -135,12 +148,30 @@ class archerclass():
 
         self.switcher1 = N_time_switch(1)
         self.switcher2 = N_time_switch(1)
-        self.switcher3 = N_time_switch(1)
 
 
         self.skill_countdowner = timing_clock(self.skill_lasting_time,self.gameplay)
 
         self.special_arrow_switcher = N_time_switch(1)
+
+
+    def resize(self):
+        a = float(screen.screen.get_width()) / self.gameplay.screen[0]
+        b = float(screen.screen.get_height()) /  self.gameplay.screen[1]
+        tmp_box = pygame.Rect(self.box.left * a, self.box.top *  b, self.box.width * a, self.box.height * b)
+        self.size = (self.gameplay.box_size[0] / 1.25, (self.gameplay.box_size[0] / 1.25 * archer1.data[3] )/ archer1.data[2] )
+        fake_box = pygame.Rect( self.gameplay.box_size[0],self.gameplay.path_height - self.size[1] * 3 / 4, self.size[0], self.size[1])
+        fake_imgbox = archer1.hitbox_to_imgbox(fake_box)
+        self.imgbox.left *= a
+        self.imgbox.top = fake_imgbox.top
+        self.imgbox.width = fake_imgbox.width
+        self.imgbox.height = fake_imgbox.height
+        self.box.top = tmp_box.top
+        self.box.left = tmp_box.left
+        self.box.width = tmp_box.width
+        self.box.height = tmp_box.height
+        for arrows in self.arrow_list:
+            arrows.resize()
 
 
     def status_bar(self):
@@ -155,22 +186,15 @@ class archerclass():
      
     
     def move(self):
-        if self.switcher3.operation():
-            self.time_flag = self.gameplay.curr_time
-            self.spam_pointX = ( self.imgbox.left + self.imgbox.right) / 2
-            self.standstill_animation.reset()
-            self.attacking_animation.reset()
-
-
-        else:
-            self.imgbox.centerx = self.spam_pointX + (self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.time_flag)  * self.side
-            self.box = self.moving_animation.play()
+        self.standstill_animation.reset()
+        self.attacking_animation.reset()
+        self.imgbox.centerx += (self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time)  * self.side
+        copy(self.box, self.moving_animation.play())
 
     def standstill(self):
-        self.box = self.standstill_animation.play()
+        copy(self.box , self.standstill_animation.play())
         self.moving_animation.reset()
         self.attacking_animation.reset()
-        self.switcher3.reset()
     
 
     def check_forward(self):
@@ -227,7 +251,7 @@ class archerclass():
     
     
     def attack(self):
-        self.box = self.attacking_animation.play()
+        copy(self.box, self.attacking_animation.play())
         if self.attacking_animation.clock.Return == 9:
             if self.switcher1.operation():
 
@@ -241,7 +265,6 @@ class archerclass():
             self.switcher1.reset()
         self.standstill_animation.reset()
         self.moving_animation.reset()
-        self.switcher3.reset()
 
 
     

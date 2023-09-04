@@ -68,7 +68,7 @@ class one_time_animation_player():
         self.clock.Return = tmp
             
     def reset(self):
-        self.clock.reset
+        self.clock.reset()
         self.status  =  True
 
     def remove(self):
@@ -95,7 +95,7 @@ class animation_player_special():
         (a,b,c,d) = self.real_imgbox_list
         tmp = pygame.Rect(self.imgbox.left + self.imgbox.width * a, self.imgbox.top + self.imgbox.height * b, self.imgbox.width * c, self.imgbox.height * d)
         tmp_2 = self.img_lib[self.clock.Return - 1].hitbox_to_imgbox(tmp)
-        screen.screen.blit(pygame.transform.scale(self.img_lib[self.clock.Return - 1].img, (tmp_2.width, tmp_2.height)), tmp_2)
+        self.gameplay.fake_screen.blit(pygame.transform.scale(self.img_lib[self.clock.Return - 1].img, (tmp_2.width, tmp_2.height)), tmp_2)
         return self.img_lib[self.clock.Return - 1].imgbox_to_hitbox(self.imgbox)
     
     def update_looptime(self, new_loop_time):

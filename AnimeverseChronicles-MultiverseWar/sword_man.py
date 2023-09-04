@@ -13,7 +13,8 @@ from screen import *
 class sword_manclass():
     def __init__(self,side,box_number,gameplay):
         self.gameplay = gameplay
-        self.box = pygame.Rect(box_number * self.gameplay.box_size[0],self.gameplay.path_height - self.gameplay.box_size[1], self.gameplay.box_size[0], self.gameplay.box_size[1])
+        self.size = (self.gameplay.box_size[0] / 1.5, (self.gameplay.box_size[0] / 1.5 * sword_man1.data[3] )/ sword_man1.data[2] )
+        self.box = pygame.Rect(box_number * self.gameplay.box_size[0],self.gameplay.path_height - self.size[1] * 3 / 4, self.size[0], self.size[1])
 
         if side == 1 :
             self.side = 1
@@ -21,8 +22,7 @@ class sword_manclass():
         elif side == 2:
             self.side = -1
             self.imgbox = reverse(sword_man1).hitbox_to_imgbox(self.box)    
-
-            
+        
         self.speed = 5.0 # 5/100 map per second 
         self.attack_scope = 1 * self.gameplay.box_size[0] # 4/15 map width
         self.attack_speed = 1/3 # attack(s) pers second
@@ -53,7 +53,6 @@ class sword_manclass():
 
         self.switcher1 = N_time_switch(1)
         self.switcher2 = N_time_switch(1)
-        self.switcher3 = N_time_switch(1)
         self.direct = False
 
 
@@ -61,24 +60,35 @@ class sword_manclass():
         pygame.draw.rect(screen.screen,Red,pygame.Rect(self.box.left + self.box.width / 4 ,self.box.top - self.box.height / 10 ,(self.box.width - self.box.width / 2) / self.health_max *self.health,self.box.height / 20))
         pygame.draw.rect(screen.screen,Blue,pygame.Rect(self.box.left + self.box.width / 4 ,self.box.top - self.box.height / 5 - self.box.height / 30 ,(self.box.width - self.box.width / 2) / self.mana_max *self.mana,self.box.height / 20))
         
+    def resize(self):
+        a = float(screen.screen.get_width()) / self.gameplay.screen[0]
+        b = float(screen.screen.get_height()) /  self.gameplay.screen[1]
+        print(self.gameplay.path_height, "sw")
+        tmp_box = pygame.Rect(self.box.left * a, self.box.top *  b, self.box.width * a, self.box.height * b)
+        self.size = (self.gameplay.box_size[0] / 1.5, (self.gameplay.box_size[0] / 1.5 * sword_man1.data[3] )/ sword_man1.data[2] )
+        fake_box = pygame.Rect( self.gameplay.box_size[0],self.gameplay.path_height - self.size[1] * 3 / 4, self.size[0], self.size[1])
+        fake_imgbox = sword_man1.hitbox_to_imgbox(fake_box)
+        self.imgbox.left *= a
+        self.imgbox.top = fake_imgbox.top
+        self.imgbox.width = fake_imgbox.width
+        self.imgbox.height = fake_imgbox.height
+        self.box.top = tmp_box.top
+        self.box.left = tmp_box.left
+        self.box.width = tmp_box.width
+        self.box.height = tmp_box.height
+
 
     def move(self):
-        if self.switcher3.operation():
-            self.time_flag = self.gameplay.curr_time
-            self.spam_pointX = ( self.imgbox.left + self.imgbox.right) / 2
-
-        else:
-            self.box = self.moving_animation.play()
-            self.imgbox.centerx = self.spam_pointX + (self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.time_flag)  * self.side
+        copy(self.box, self.moving_animation.play())
+        self.imgbox.centerx += (self.speed * screen.screen.get_width() / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time)  * self.side
         self.standstill_animation.reset()
         self.attacking_animation.reset()
 
 
     def standstill(self):
-        self.box = self.standstill_animation.play()
+        copy(self.box, self.standstill_animation.play())
         self.moving_animation.reset()
         self.attacking_animation.reset()
-        self.switcher3.reset()
 
     
     
@@ -138,7 +148,7 @@ class sword_manclass():
     def attack(self):
         if self.special_status:
             self.special_skill()
-            self.box = self.special_skill_animation.play()
+            copy(self.box, self.special_skill_animation.play())
             if self.special_skill_animation.clock.Return == 4 or self.special_skill_animation.clock.Return == 9 :     
                 if self.switcher1.operation():
                     self.mana += 10 
@@ -193,8 +203,7 @@ class sword_manclass():
                             
             self.standstill_animation.reset()
             self.moving_animation.reset()
-            self.switcher3.reset()
-
+    
 
     def special_skill(self):
             if self.switcher2.operation():
@@ -216,6 +225,7 @@ class sword_manclass():
 
             if self.status == 3:
                 self.move()
+                # print(self.imgbox)
                 
             elif self.status == 1:
                     self.attack()

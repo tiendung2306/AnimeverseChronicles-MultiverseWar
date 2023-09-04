@@ -36,10 +36,24 @@ class magic_ball_class():
         self.animation_player = animation_player([magic_ball1, magic_ball2, magic_ball3, magic_ball4,magic_ball5],self.side,1,self.imgbox,self.wizard.gameplay)
         self.switch = N_time_switch(1)
 
+    def resize(self):
+        a = float(screen.screen.get_width()) / self.gameplay.screen[0]
+        b = float(screen.screen.get_height()) /  self.gameplay.screen[1]
+        tmp_box = pygame.Rect(self.box.left * a, self.box.top *  b, self.box.width * a, self.box.height * b)
+        tmp_imgbox = pygame.Rect(self.wizard.imgbox.left,self.wizard.imgbox.top,self.wizard.imgbox.width,self.wizard.imgbox.height)
+        fake_imgbox = wizard_to_magic_ball.imgbox_to_hitbox(tmp_imgbox)
+        self.imgbox.left *= a
+        self.imgbox.top = fake_imgbox.top
+        self.imgbox.width = fake_imgbox.width
+        self.imgbox.height = fake_imgbox.height
+        self.box.top = tmp_box.top
+        self.box.left = tmp_box.left
+        self.box.width = tmp_box.width
+        self.box.height = tmp_box.height
 
     def move(self):
-        self.imgbox.centerx = self.spam_pointX+ (self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.time_flag)  * self.side
-        self.box = self.animation_player.play()
+        self.imgbox.centerx += (self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time)  * self.side
+        copy(self.box, self.animation_player.play())
 
     def explosive(self):
         if self.switch.operation():
@@ -81,7 +95,8 @@ class magic_ball_class():
 class wizardclass():
     def __init__(self, side, box_number, gameplay):
         self.gameplay = gameplay
-        self.box = pygame.Rect(box_number * self.gameplay.box_size[0],self.gameplay.path_height - self.gameplay.box_size[1], self.gameplay.box_size[0], self.gameplay.box_size[1])
+        self.size = (self.gameplay.box_size[0] / 2, (self.gameplay.box_size[0] / 2 * wizard1.data[3] )/ wizard1.data[2] )
+        self.box = pygame.Rect(box_number * self.gameplay.box_size[0],self.gameplay.path_height - self.size[1] * 4 / 5, self.size[0], self.size[1])
         if side == 1 :
             self.side = 1
             self.imgbox = wizard1.hitbox_to_imgbox(self.box)        
@@ -125,13 +140,23 @@ class wizardclass():
         self.switcher3 = N_time_switch(1)
 
 
-    # def resize(self):
-    #     (a,b,c,d) = self.imgbox
-    #     tmp = analyzed_img("none.png",a,b,c,d)
-    #     self.imgbox = tmp.imgbox_to_hitbox(screen.screen.get_rect)
-    #     (a,b,c,d) = self.box
-    #     tmp = analyzed_img("none.png",a,b,c,d)
-    #     self.box = tmp.imgbox_to_hitbox(self.imgbox) 
+    def resize(self):
+        a = float(screen.screen.get_width()) / self.gameplay.screen[0]
+        b = float(screen.screen.get_height()) /  self.gameplay.screen[1]
+        tmp_box = pygame.Rect(self.box.left * a, self.box.top *  b, self.box.width * a, self.box.height * b)
+        self.size = (self.gameplay.box_size[0] / 2, (self.gameplay.box_size[0] / 2 * wizard1.data[3] )/ wizard1.data[2] )
+        fake_box = pygame.Rect( self.gameplay.box_size[0],self.gameplay.path_height - self.size[1] * 4 / 5, self.size[0], self.size[1])
+        fake_imgbox = wizard1.hitbox_to_imgbox(fake_box)
+        self.imgbox.left *= a
+        self.imgbox.top = fake_imgbox.top
+        self.imgbox.width = fake_imgbox.width
+        self.imgbox.height = fake_imgbox.height
+        self.box.top = tmp_box.top
+        self.box.left = tmp_box.left
+        self.box.width = tmp_box.width
+        self.box.height = tmp_box.height
+        for magic_ball in self.magicball_list:
+            magic_ball.resize()
 
 
     def status_bar(self):
@@ -144,23 +169,17 @@ class wizardclass():
      
     
     def move(self):
-        if self.switcher3.operation():
-            self.time_flag = self.gameplay.curr_time
-            self.spam_pointX = ( self.imgbox.left + self.imgbox.right) / 2
-
-        else:
-            self.box = self.moving_animation.play()
-            self.imgbox.centerx = self.spam_pointX+ (self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.time_flag)  * self.side
+        copy(self.box, self.moving_animation.play())
+        self.imgbox.centerx += (self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time)  * self.side
         self.standstill_animation.reset()
         self.attacking_animation.reset()
 
 
 
     def standstill(self):
-        self.box = self.standstill_animation.play()
+        copy(self.box, self.standstill_animation.play())
         self.moving_animation.reset()
         self.attacking_animation.reset()
-        self.switcher3.reset()
 
 
     def check_forward(self):
@@ -174,7 +193,7 @@ class wizardclass():
                     self.status = 1
                     return None
  
-            for object in self.gameplay.side1:
+            for object in self.gameplay.side1 + self.gameplay.side4:
                 if collide_checker(self,object):
                     if (not (object == self)) and (object.box.right > self.box.right):
                         self.status = 2
@@ -191,7 +210,7 @@ class wizardclass():
                     self.status = 1
                     return None
                 
-            for object in self.gameplay.side2:
+            for object in self.gameplay.side2 + self.gameplay.side4:
                 if collide_checker(self,object):
                     if (not (object == self)) and (object.box.left < self.box.left) :
                         self.status = 2
@@ -219,7 +238,7 @@ class wizardclass():
     
     
     def attack(self):
-        self.box = self.attacking_animation.play()
+        copy(self.box, self.attacking_animation.play())
         # print(self.box)
         if self.attacking_animation.clock.Return == 3:
             if self.switcher1.operation():
@@ -229,11 +248,10 @@ class wizardclass():
 
         self.standstill_animation.reset()
         self.moving_animation.reset()
-        self.switcher3.reset()
 
     
     def special_skill(self):
-        self.box = self.special_skill_animation.play()
+        copy(self.box, self.special_skill_animation.play())
         if self.special_skill_animation.clock.Return == 5:
             if self.switcher2.operation():
                 checker = fake_object_class(self)
@@ -243,9 +261,8 @@ class wizardclass():
                         if collide_checker(checker,enemy):
                             add_effect(enemy, dizzy_effect, 5)
                             add_effect(enemy, soul_sucking_effect, None)
-                            break
-                        else:
-                            self.special_skill_reset()
+                            return
+                    self.special_skill_reset()
 
                 elif self.side == -1:
                     checker.box.centerx -= self.attack_scope * 1.5
@@ -253,9 +270,8 @@ class wizardclass():
                         if collide_checker(checker,enemy):
                             add_effect(enemy, dizzy_effect, 5)
                             add_effect(enemy, soul_sucking_effect, None)                        
-                            break
-                        else:
-                            self.special_skill_reset()            
+                            return
+                    self.special_skill_reset()            
         if self.special_skill_animation.status == False:
             self.special_skill_reset()
 
@@ -292,7 +308,7 @@ class wizardclass():
             
             for magic_ball in self.magicball_list:
                 if magic_ball.operation():
-                    self.mana += 10
+                    self.mana += 30
                 if magic_ball.status == False :
                     self.magicball_list.remove(magic_ball)
 

@@ -42,9 +42,9 @@ class button():
 
     def spawn(self, side):
         if side == 1:
-            spawn(self.character_type, side, 0, self.gameplay)
+            spawn(self.character_type, side, 4, self.gameplay)
         else:
-            spawn(self.character_type, side, 39, self.gameplay)
+            spawn(self.character_type, side, 35, self.gameplay)
 
 class spawn_process():
     def __init__(self, gameplay, side):
