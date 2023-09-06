@@ -7,6 +7,7 @@ from pause_pannel import *
 from states import *
 from screen import *
 from gameplay_ui import *
+from key_binding_manager import *
 
 class gameplay():
     def __init__(self):
@@ -90,6 +91,7 @@ class gameplay():
 
         info = pygame.display.Info()
         self.bg = pygame.transform.smoothscale(self.bg, (info.current_w, info.current_h))
+        self.board_1_fake = pygame.transform.smoothscale(self.board_1, (info.current_w, info.current_h))
         self.path = pygame.transform.smoothscale(self.path, (self.bg.get_rect().width, screen.screen.get_rect().height // 7))
         self.board_1 = pygame.transform.smoothscale(self.board_1, (screen.screen.get_rect().width / 7, screen.screen.get_rect().width / 7 / 2.4))
         self.board_2 = pygame.transform.smoothscale(self.board_2, (screen.screen.get_rect().width / 7, screen.screen.get_rect().width / 7 / 2.4))
@@ -145,6 +147,24 @@ class gameplay():
             if self.Pause_Pannel.check_click(mouse) == self.Pause_Pannel.buttons[2]: #an vao nut back to menu
                 return 'Back'
 
+    def check_press(self, event):
+        if event.key == pygame.K_ESCAPE:
+            self.Gameplay.escape_pressed()
+        if event.key == keybindingmanager.key_map['Slot 1']:
+            self.gameplay_ui.insert_in_spawn_queue(0, 2)
+        if event.key == keybindingmanager.key_map['Slot 2']:
+            self.gameplay_ui.insert_in_spawn_queue(1, 2)
+        if event.key == keybindingmanager.key_map['Slot 3']:
+            self.gameplay_ui.insert_in_spawn_queue(2, 2)
+        if event.key == keybindingmanager.key_map['Slot 4']:
+            self.gameplay_ui.insert_in_spawn_queue(3, 2)
+        if event.key == keybindingmanager.key_map['Slot 5']:
+            self.gameplay_ui.insert_in_spawn_queue(4, 2)
+        if event.key == keybindingmanager.key_map['Slot 6']:
+            self.gameplay_ui.insert_in_spawn_queue(5, 2)
+        if event.key == keybindingmanager.key_map['Slot 7']:
+            self.gameplay_ui.insert_in_spawn_queue(6, 2)
+
     def escape_pressed(self):
         if self.isPlay == True: #neu game dang chay
             self.SwitchPlayPauseState()
@@ -166,9 +186,12 @@ class gameplay():
         #     self.isPlay = 1 - self.isPlay
 
 
-
     def draw_gameplay_ui(self):
         screen.screen.blit(self.bg, (0, 0))
+        # self.another_bg = self.bg.copy()
+        # self.another_bg.set_alpha(0)
+        # self.another_bg.fill((255,255,255))  
+        # screen.screen.blit(self.another_bg, (0, 0))
         screen.screen.blit(self.path, (0, screen.screen.get_rect().height - self.path.get_rect().height))
         screen.screen.blit(self.nexus1.nexus_surface, (5,  screen.screen.get_rect().height - self.path.get_rect().height - self.nexus1.nexus_surface.get_rect().height + self.path.get_rect().height // 3))
         screen.screen.blit(self.nexus2.nexus_surface, (screen.screen.get_rect().width - 5 - self.nexus2.nexus_surface.get_rect().width,  screen.screen.get_rect().height - self.path.get_rect().height - self.nexus1.nexus_surface.get_rect().height + self.path.get_rect().height // 3)) 
@@ -231,3 +254,7 @@ class gameplay():
     def object_operation(self):
         for object in self.side2 + self.side1 + self.side0 + self.side3 :
             object.operation()
+
+class Save_game():
+    def __init__(self, gameplay):
+        self.gameplay = gameplay

@@ -181,6 +181,12 @@ class gameplay_ui():
     def spawn(self, button_num, side):
         self.character_spawn_buttons[button_num].spawn(side)
 
+    def insert_in_spawn_queue(self, button_num, side):
+        if len(self.character_spawn_buttons) <= button_num:
+            return
+        if self.character_spawn_buttons[button_num].can_spawn(side) == True:
+                    self.click_spawn_button(button_num, side)
+
     def click_spawn_button(self, button_num, side):
         if side == 1:
             if len(self.gameplay.spawn_queue1) == 0:
@@ -200,14 +206,11 @@ class gameplay_ui():
             return
         for i in range(0, len(self.character_spawn_buttons)):
             if self.button_rect_1[i].left <= mouse[0] <= self.button_rect_1[i].right and self.button_rect_1[i].top <= mouse[1] <= self.button_rect_1[i].bottom:
-                if self.character_spawn_buttons[i].can_spawn(1) == True:
-                    self.click_spawn_button(i, 1)
+                self.insert_in_spawn_queue(i, 1)
         if self.gameplay.play_mode == 2:
             for i in range(0, len(self.character_spawn_buttons)):
                 if self.button_rect_2[i].left <= mouse[0] <= self.button_rect_2[i].right and self.button_rect_2[i].top <= mouse[1] <= self.button_rect_2[i].bottom:
-                    if self.character_spawn_buttons[i].can_spawn(2) == True:
-                        self.click_spawn_button(i, 2)
-
+                    self.insert_in_spawn_queue(i, 2)
     def draw_spawn_bar(self):
         self.spawn_bar1.draw()
         if self.gameplay.play_mode == 2:

@@ -101,7 +101,8 @@ class main():
                 if event.type == VIDEORESIZE:
                     self.IsResize = True
                 if event.type == MOUSEBUTTONDOWN:
-                    self.MainMenu.check_click(self.mouse)
+                    if event.button == 1:
+                        self.MainMenu.check_click(self.mouse)
             if self.MainMenu.IsQuit == True:
                 running = False
             if State.curr_state != 'Menu':
@@ -126,7 +127,8 @@ class main():
                 if event.type == VIDEORESIZE:
                     self.IsResize = True
                 if event.type == MOUSEBUTTONDOWN:
-                    gameplay_mode = self.MainMenu.play_mode_check_click(self.mouse)
+                    if event.button == 1:
+                        gameplay_mode = self.MainMenu.play_mode_check_click(self.mouse)
             if State.curr_state != 'Play mode':
                 if State.curr_state == State.states[1]:
                     if gameplay_mode == -1:
@@ -159,10 +161,10 @@ class main():
                 if event.type == VIDEORESIZE:
                     self.IsResize = True
                 if event.type == MOUSEBUTTONDOWN:
-                    Button = self.Gameplay.check_click(self.Gameplay.play_pause_button, self.mouse)
+                    if event.button == 1:
+                        Button = self.Gameplay.check_click(self.Gameplay.play_pause_button, self.mouse)
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        self.Gameplay.escape_pressed()
+                    self.Gameplay.check_press(event)
                 if event.type == pygame.USEREVENT:
                     self.Gameplay.time += 0.01
                 
