@@ -10,10 +10,10 @@ from gameplay_ui import *
 from key_binding_manager import *
 
 class gameplay():
-    def __init__(self):
+    def __init__(self, play_mode):
         pygame.init()
 
-        self.play_mode = 2 #1 la player vs computer, 2 la pvp
+        self.play_mode = play_mode #1 la player vs computer, 2 la pvp
 
         self.spawn_time = 2 #thoi gian de spawn mot con nhan vat tinh theo s
         self.spawn_queue1 = []
@@ -179,11 +179,52 @@ class gameplay():
         else:
             self.pause_time = self.pause_time + self.time - self.start_pause_time
 
+    # def reset_gameplay(self):
+    #     self.spawn_queue1 = []
+    #     self.spawn_queue2 = []
+
+    #     self.gameplay_ui = gameplay_ui(self)
+    #     if self.play_mode == 2:
+    #         tmp = Rect(0, 0, 0, 0)
+    #         tmp.center = (screen.screen.get_rect().width / 2.0, 10)
+    #         tmp.top = 10
+    #         self.play_pause_button = (tmp.left, tmp.top)
+    #     else:
+    #         self.play_pause_button = (screen.screen.get_rect().width - screen.screen.get_rect().width // 32, 10)
+
+    #     self.nexus1 = Nexus('GameplayAssets\\nexus1.png')
+    #     self.nexus2 = Nexus('GameplayAssets\\nexus2.png')
+
+    #     self.timer_font = pygame.font.Font('Fonts\\joystix_monospace.otf', 16)
+    #     self.start_time = 0.0
+    #     self.curr_time = 0.0
+    #     self.pause_time = 0.0
+    #     self.start_pause_time = 0.0
+    #     self.time = 0.0 # dung giong voi time.time()
+
+    #     self.gold_font = pygame.font.Font('Fonts\\joystix_monospace.otf', 20)
+    #     self.curr_gold_1 = 0
+    #     self.gold_income_1 = 0
+    #     self.gold_outcome_1 = 0
+    #     self.curr_gold_2 = 0
+    #     self.gold_income_2 = 0
+    #     self.gold_outcome_2 = 0
+
+    #     self.isPlay = True
+
+    #     self.spawn_point_height = self.path.get_rect().top + self.path.get_rect().height / 7.0
+
+    #     self.FPS = 60
+    #     self.box_size = (screen.screen.get_rect().width / 40 , screen.screen.get_rect().height / 20)
+    #     self.path_height = screen.screen.get_rect().height - self.path.get_rect().height + 20
+
     def enter_gameplay(self):
+        # if(cur_gameplay_mode != -1 and cur_gameplay_mode != self.play_mode):
+        #     self.reset_gameplay()
         self.screen_resize()
-        # if self.isPlay == False:
-        #     self.SwitchPlayPauseState()
-        #     self.isPlay = 1 - self.isPlay
+        if self.isPlay == False:
+            self.SwitchPlayPauseState()
+            self.isPlay = 1 - self.isPlay
 
 
     def draw_gameplay_ui(self):

@@ -181,7 +181,7 @@ class gameplay_ui():
     def spawn(self, button_num, side):
         self.character_spawn_buttons[button_num].spawn(side)
 
-    def insert_in_spawn_queue(self, button_num, side):
+    def insert_in_spawn_queue(self, button_num, side): #bat dau an vao nut de spawn
         if len(self.character_spawn_buttons) <= button_num:
             return
         if self.character_spawn_buttons[button_num].can_spawn(side) == True:
@@ -202,7 +202,9 @@ class gameplay_ui():
                 self.character_spawn_buttons[button_num].spend_gold(side)
 
     def check_click(self, mouse):
-        if len(self.character_spawn_buttons) != len(self.button_rect_1) or len(self.character_spawn_buttons) != len(self.button_rect_2):
+        if len(self.character_spawn_buttons) != len(self.button_rect_1) :
+            return
+        if self.gameplay.play_mode == 2 and len(self.character_spawn_buttons) != len(self.button_rect_2) :
             return
         for i in range(0, len(self.character_spawn_buttons)):
             if self.button_rect_1[i].left <= mouse[0] <= self.button_rect_1[i].right and self.button_rect_1[i].top <= mouse[1] <= self.button_rect_1[i].bottom:

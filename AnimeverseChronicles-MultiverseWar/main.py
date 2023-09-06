@@ -13,9 +13,13 @@ class main():
         pygame.init()
         pygame.display.set_caption('AnimeverseChronicles-MultiverseWar')
 
+        self.cur_gameplay_mode = -1
+
         self.MainMenu = mainmenu()
-        self.Gameplay = gameplay()
-        self.Gameplay.update()
+        self.Gameplay1 = gameplay(1)
+        self.Gameplay1.update()
+        self.Gameplay2 = gameplay(2)
+        self.Gameplay2.update()
         self.Settings = settings()
 
         self.mouse = pygame.mouse.get_pos()
@@ -38,7 +42,7 @@ class main():
         elif state == 'Settings':
             self.settings_loop()
         elif state == 'Play mode':
-            self.play_mode_loop()
+            self.choose_play_mode_loop()
     
     def back_state(self):
         del State.list_states[-1]
@@ -60,7 +64,8 @@ class main():
                 self.Settings.IsResize = False
                 self.MainMenu.screen_resize()
                 self.Settings.screen_resize()
-                self.Gameplay.screen_resize()
+                self.Gameplay1.screen_resize()
+                self.Gameplay2.screen_resize()
     def settings_loop(self):
         self.Settings.setting_pannel_init()
         running = True
@@ -111,7 +116,7 @@ class main():
         pygame.quit()
             
 
-    def play_mode_loop(self):
+    def choose_play_mode_loop(self):
         running = True
         while running:
             self.screen_resize()
@@ -133,25 +138,30 @@ class main():
                 if State.curr_state == State.states[1]:
                     if gameplay_mode == -1:
                         print('What the f*ck, how can it be -1. Panikkk!!!!!!!!')
-                    self.Gameplay.play_mode = gameplay_mode
+                    self.cur_gameplay_mode = gameplay_mode
                 self.set_state(State.curr_state)
                 return 
         pygame.quit()
 
     def gameplay_loop(self):
+        if self.cur_gameplay_mode == 1:
+            thisGameplay = self.Gameplay1
+        else:
+            thisGameplay = self.Gameplay2
         running = True
-        self.Gameplay.enter_gameplay()
+        thisGameplay.enter_gameplay()
+        self.cur_gameplay_mode = thisGameplay.play_mode
         while running:
             self.screen_resize()
-            self.Gameplay.update()
+            thisGameplay.update()
             self.mouse = pygame.mouse.get_pos()
-            if self.Gameplay.play_mode == 2:
-                tmp = Rect(0, 0, self.Gameplay.board_1.get_rect().width // 6, self.Gameplay.board_1.get_rect().width // 6)
+            if thisGameplay.play_mode == 2:
+                tmp = Rect(0, 0, thisGameplay.board_1.get_rect().width // 6, thisGameplay.board_1.get_rect().width // 6)
                 tmp.center = (screen.screen.get_rect().width / 2.0, 10)
                 tmp.top = 10
                 self.play_pause_button = (tmp.left, tmp.top)
             else:
-                self.Gameplay.play_pause_button = (screen.screen.get_rect().width - screen.screen.get_rect().width // 32, 10)
+                thisGameplay.play_pause_button = (screen.screen.get_rect().width - screen.screen.get_rect().width // 32, 10)
             Button = 'None'
 
             for event in pygame.event.get(): 
@@ -162,17 +172,17 @@ class main():
                     self.IsResize = True
                 if event.type == MOUSEBUTTONDOWN:
                     if event.button == 1:
-                        Button = self.Gameplay.check_click(self.Gameplay.play_pause_button, self.mouse)
+                        Button = thisGameplay.check_click(thisGameplay.play_pause_button, self.mouse)
                 if event.type == pygame.KEYDOWN:
-                    self.Gameplay.check_press(event)
+                    thisGameplay.check_press(event)
                 if event.type == pygame.USEREVENT:
-                    self.Gameplay.time += 0.01
+                    thisGameplay.time += 0.01
                 
-            self.Gameplay.draw_gameplay_ui()
+            thisGameplay.draw_gameplay_ui()
 
-            self.Gameplay.object_operation()
-            if self.Gameplay.isPlay == False:
-                self.Gameplay.draw_pause_pannel()
+            thisGameplay.object_operation()
+            if thisGameplay.isPlay == False:
+                thisGameplay.draw_pause_pannel()
             pygame.display.update()
             if Button == 'Back':
                 self.back_state()
