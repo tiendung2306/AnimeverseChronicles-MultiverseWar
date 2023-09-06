@@ -149,7 +149,7 @@ class gameplay():
 
     def check_press(self, event):
         if event.key == pygame.K_ESCAPE:
-            self.Gameplay.escape_pressed()
+            self.escape_pressed()
         if event.key == keybindingmanager.key_map['Slot 1']:
             self.gameplay_ui.insert_in_spawn_queue(0, 2)
         if event.key == keybindingmanager.key_map['Slot 2']:
