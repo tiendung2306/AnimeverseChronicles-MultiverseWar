@@ -5,6 +5,7 @@ from states import *
 from MainMenu import *
 from settings import *
 from screen import *
+from tutorials import *
 
 from collide_checker import *
 class main():
@@ -15,6 +16,7 @@ class main():
 
         self.cur_gameplay_mode = -1
 
+        self.Tutorial = tutorials()
         self.MainMenu = mainmenu()
         self.Gameplay1 = gameplay(1)
         self.Gameplay1.update()
@@ -43,6 +45,8 @@ class main():
             self.settings_loop()
         elif state == 'Play mode':
             self.choose_play_mode_loop()
+        elif state == 'Tutorial':
+            self.tutorial_loop()
     
     def back_state(self):
         del State.list_states[-1]
@@ -57,6 +61,8 @@ class main():
         elif state == 'Play mode':
             State.curr_state = State.states[0]
             self.main_menu_loop()
+        elif state == 'Tutorial':
+            self.tutorial_loop()
 
     def screen_resize(self):
         if self.IsResize == True or self.Settings.IsResize == True:
@@ -66,6 +72,7 @@ class main():
                 self.Settings.screen_resize()
                 self.Gameplay1.screen_resize()
                 self.Gameplay2.screen_resize()
+                self.Tutorial.screen_resize()
     def settings_loop(self):
         self.Settings.setting_pannel_init()
         running = True
@@ -89,6 +96,28 @@ class main():
                 self.Settings.menu.update(events)
                 self.Settings.menu.draw(screen.screen)
             pygame.display.update()
+        pygame.quit()
+
+    def tutorial_loop(self):
+        running = True
+        while running:
+            self.screen_resize()
+            screen.screen.blit(self.MainMenu.main_menu_bg, (0, 0))
+            mouse = pygame.mouse.get_pos()
+            self.Tutorial.update()
+            pygame.display.update()
+            for event in pygame.event.get(): 
+                if event.type == QUIT:
+                    running = False
+                    break
+                if event.type == VIDEORESIZE:
+                    self.IsResize = True
+                if event.type == MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        self.Tutorial.check_click(mouse)
+            if State.curr_state != 'Tutorial':
+                self.set_state(State.curr_state)
+                return 
         pygame.quit()
 
     def main_menu_loop(self):

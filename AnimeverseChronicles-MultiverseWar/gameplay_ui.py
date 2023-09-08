@@ -143,6 +143,8 @@ class gameplay_ui():
         self.character_spawn_buttons.append(button(archer, 'GameplayAssets\\archer_avatar.png', self.gameplay))
         self.character_spawn_buttons.append(button(tanker, 'GameplayAssets\\tanker_avatar.png', self.gameplay))
         self.character_spawn_buttons.append(button(wizard, 'GameplayAssets\\wizard_avatar.png', self.gameplay))
+        self.character_spawn_buttons.append(button(wizard, 'GameplayAssets\\wizard_avatar.png', self.gameplay))
+        self.character_spawn_buttons.append(button(wizard, 'GameplayAssets\\wizard_avatar.png', self.gameplay))
 
         prev_pos_width = screen.screen.get_rect().width / 7
         for i in range(0, len(self.character_spawn_buttons)):
