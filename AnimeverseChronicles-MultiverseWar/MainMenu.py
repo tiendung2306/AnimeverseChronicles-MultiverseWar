@@ -86,6 +86,8 @@ class mainmenu():
             self.IsQuit = True
         if self.setting_button_rect.left <= mouse[0] <= self.setting_button_rect.right and self.setting_button_rect.top <= mouse[1] <= self.setting_button_rect.bottom:
             State.curr_state = State.states[3]
+        if self.tutorial_button_rect.left <= mouse[0] <= self.tutorial_button_rect.right and self.tutorial_button_rect.top <= mouse[1] <= self.tutorial_button_rect.bottom:
+            State.curr_state = State.states[4]
 
     def play_mode_update(self):
         self.Screen.screen.blit(self.one_player_button, self.one_player_button_rect)

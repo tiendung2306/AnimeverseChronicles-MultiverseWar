@@ -143,6 +143,8 @@ class gameplay_ui():
         self.character_spawn_buttons.append(button(self.gameplay.archerclass, 'GameplayAssets\\archer_avatar.png', self.gameplay))
         self.character_spawn_buttons.append(button(self.gameplay.tankerclass, 'GameplayAssets\\tanker_avatar.png', self.gameplay))
         self.character_spawn_buttons.append(button(self.gameplay.wizardclass, 'GameplayAssets\\wizard_avatar.png', self.gameplay))
+        self.character_spawn_buttons.append(button(self.gameplay.gokuclass, 'GameplayAssets\\wizard_avatar.png', self.gameplay))
+        self.character_spawn_buttons.append(button(self.gameplay.wizardclass, 'GameplayAssets\\wizard_avatar.png', self.gameplay))
 
         prev_pos_width = screen.screen.get_rect().width / 7
         for i in range(0, len(self.character_spawn_buttons)):
@@ -161,7 +163,7 @@ class gameplay_ui():
     def draw_button(self):
         prev_pos_width = screen.screen.get_rect().width / 7
         for i in range(0, len(self.character_spawn_buttons)):
-            pygame.draw.rect(screen.screen, Gray62, pygame.Rect(self.button_rect_1[i].left, self.button_rect_1[i].top, screen.screen.get_rect().width / 20, screen.screen.get_rect().width / 20), border_radius=25)
+            pygame.draw.rect(screen.screen, Gray62, pygame.Rect(self.button_rect_1[i].left, self.button_rect_1[i].top, screen.screen.get_rect().width / 20, screen.screen.get_rect().width / 20), border_radius=int(screen.screen.get_rect().width / 80))
             screen.screen.blit(self.button_border, (self.button_rect_1[i].left, self.button_rect_1[i].top))
             character_rect = self.character_spawn_buttons[i].button_image_1.get_rect()
             character_rect.center = self.button_rect_1[i].center
@@ -171,7 +173,7 @@ class gameplay_ui():
         if self.gameplay.play_mode == 2:
             prev_pos_width = screen.screen.get_rect().width / 7.0 * 6.0 - self.button_border.get_rect().width
             for i in range(0, len(self.character_spawn_buttons)):
-                pygame.draw.rect(screen.screen, Gray62, pygame.Rect(self.button_rect_2[i].left, self.button_rect_2[i].top, screen.screen.get_rect().width / 20, screen.screen.get_rect().width / 20), border_radius=25)
+                pygame.draw.rect(screen.screen, Gray62, pygame.Rect(self.button_rect_2[i].left, self.button_rect_2[i].top, screen.screen.get_rect().width / 20, screen.screen.get_rect().width / 20), border_radius=int(screen.screen.get_rect().width / 80))
                 screen.screen.blit(self.button_border, (self.button_rect_2[i].left, self.button_rect_2[i].top))
                 character_rect = self.character_spawn_buttons[i].button_image_2.get_rect()
                 character_rect.center = self.button_rect_2[i].center
@@ -180,6 +182,12 @@ class gameplay_ui():
 
     def spawn(self, button_num, side):
         self.character_spawn_buttons[button_num].spawn(side)
+
+    def insert_in_spawn_queue(self, button_num, side): #bat dau an vao nut de spawn
+        if len(self.character_spawn_buttons) <= button_num:
+            return
+        if self.character_spawn_buttons[button_num].can_spawn(side) == True:
+                    self.click_spawn_button(button_num, side)
 
     def click_spawn_button(self, button_num, side):
         if side == 1:
@@ -196,18 +204,17 @@ class gameplay_ui():
                 self.character_spawn_buttons[button_num].spend_gold(side)
 
     def check_click(self, mouse):
-        if len(self.character_spawn_buttons) != len(self.button_rect_1) or len(self.character_spawn_buttons) != len(self.button_rect_2):
+        if len(self.character_spawn_buttons) != len(self.button_rect_1) :
+            return
+        if self.gameplay.play_mode == 2 and len(self.character_spawn_buttons) != len(self.button_rect_2) :
             return
         for i in range(0, len(self.character_spawn_buttons)):
             if self.button_rect_1[i].left <= mouse[0] <= self.button_rect_1[i].right and self.button_rect_1[i].top <= mouse[1] <= self.button_rect_1[i].bottom:
-                if self.character_spawn_buttons[i].can_spawn(1) == True:
-                    self.click_spawn_button(i, 1)
+                self.insert_in_spawn_queue(i, 1)
         if self.gameplay.play_mode == 2:
             for i in range(0, len(self.character_spawn_buttons)):
                 if self.button_rect_2[i].left <= mouse[0] <= self.button_rect_2[i].right and self.button_rect_2[i].top <= mouse[1] <= self.button_rect_2[i].bottom:
-                    if self.character_spawn_buttons[i].can_spawn(2) == True:
-                        self.click_spawn_button(i, 2)
-
+                    self.insert_in_spawn_queue(i, 2)
     def draw_spawn_bar(self):
         self.spawn_bar1.draw()
         if self.gameplay.play_mode == 2:

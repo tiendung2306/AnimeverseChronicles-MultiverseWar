@@ -7,12 +7,13 @@ from pause_pannel import *
 from states import *
 from screen import *
 from gameplay_ui import *
+from key_binding_manager import *
 
 class gameplay():
-    def __init__(self):
+    def __init__(self, play_mode):
         pygame.init()
 
-        self.play_mode = 2 #1 la player vs computer, 2 la pvp
+        self.play_mode = play_mode #1 la player vs computer, 2 la pvp
 
         self.spawn_time = 2 #thoi gian de spawn mot con nhan vat tinh theo s
         self.spawn_queue1 = []
@@ -115,6 +116,7 @@ class gameplay():
         info = pygame.display.Info()
         self.bg = pygame.transform.smoothscale(self.bg, (info.current_w, info.current_h))
         self.fake_bg = self.bg.copy()
+        # self.board_1_fake = pygame.transform.smoothscale(self.board_1, (info.current_w, info.current_h))
         self.path = pygame.transform.smoothscale(self.path, (self.bg.get_rect().width, screen.screen.get_rect().height // 7))
         self.board_1 = pygame.transform.smoothscale(self.board_1, (screen.screen.get_rect().width / 7, screen.screen.get_rect().width / 7 / 2.4))
         self.board_2 = pygame.transform.smoothscale(self.board_2, (screen.screen.get_rect().width / 7, screen.screen.get_rect().width / 7 / 2.4))
@@ -173,6 +175,24 @@ class gameplay():
             if self.Pause_Pannel.check_click(mouse) == self.Pause_Pannel.buttons[2]: #an vao nut back to menu
                 return 'Back'
 
+    def check_press(self, event):
+        if event.key == pygame.K_ESCAPE:
+            self.escape_pressed()
+        if event.key == keybindingmanager.key_map['Slot 1']:
+            self.gameplay_ui.insert_in_spawn_queue(0, 2)
+        if event.key == keybindingmanager.key_map['Slot 2']:
+            self.gameplay_ui.insert_in_spawn_queue(1, 2)
+        if event.key == keybindingmanager.key_map['Slot 3']:
+            self.gameplay_ui.insert_in_spawn_queue(2, 2)
+        if event.key == keybindingmanager.key_map['Slot 4']:
+            self.gameplay_ui.insert_in_spawn_queue(3, 2)
+        if event.key == keybindingmanager.key_map['Slot 5']:
+            self.gameplay_ui.insert_in_spawn_queue(4, 2)
+        if event.key == keybindingmanager.key_map['Slot 6']:
+            self.gameplay_ui.insert_in_spawn_queue(5, 2)
+        if event.key == keybindingmanager.key_map['Slot 7']:
+            self.gameplay_ui.insert_in_spawn_queue(6, 2)
+
     def escape_pressed(self):
         if self.isPlay == True: #neu game dang chay
             self.SwitchPlayPauseState()
@@ -187,12 +207,52 @@ class gameplay():
         else:
             self.pause_time = self.pause_time + self.time - self.start_pause_time
 
-    def enter_gameplay(self):
-        self.screen_resize()
-        # if self.isPlay == False:
-        #     self.SwitchPlayPauseState()
-        #     self.isPlay = 1 - self.isPlay
+    # def reset_gameplay(self):
+    #     self.spawn_queue1 = []
+    #     self.spawn_queue2 = []
 
+    #     self.gameplay_ui = gameplay_ui(self)
+    #     if self.play_mode == 2:
+    #         tmp = Rect(0, 0, 0, 0)
+    #         tmp.center = (screen.screen.get_rect().width / 2.0, 10)
+    #         tmp.top = 10
+    #         self.play_pause_button = (tmp.left, tmp.top)
+    #     else:
+    #         self.play_pause_button = (screen.screen.get_rect().width - screen.screen.get_rect().width // 32, 10)
+
+    #     self.nexus1 = Nexus('GameplayAssets\\nexus1.png')
+    #     self.nexus2 = Nexus('GameplayAssets\\nexus2.png')
+
+    #     self.timer_font = pygame.font.Font('Fonts\\joystix_monospace.otf', 16)
+    #     self.start_time = 0.0
+    #     self.curr_time = 0.0
+    #     self.pause_time = 0.0
+    #     self.start_pause_time = 0.0
+    #     self.time = 0.0 # dung giong voi time.time()
+
+    #     self.gold_font = pygame.font.Font('Fonts\\joystix_monospace.otf', 20)
+    #     self.curr_gold_1 = 0
+    #     self.gold_income_1 = 0
+    #     self.gold_outcome_1 = 0
+    #     self.curr_gold_2 = 0
+    #     self.gold_income_2 = 0
+    #     self.gold_outcome_2 = 0
+
+    #     self.isPlay = True
+
+    #     self.spawn_point_height = self.path.get_rect().top + self.path.get_rect().height / 7.0
+
+    #     self.FPS = 60
+    #     self.box_size = (screen.screen.get_rect().width / 40 , screen.screen.get_rect().height / 20)
+    #     self.path_height = screen.screen.get_rect().height - self.path.get_rect().height + 20
+
+    def enter_gameplay(self):
+        # if(cur_gameplay_mode != -1 and cur_gameplay_mode != self.play_mode):
+        #     self.reset_gameplay()
+        self.screen_resize()
+        if self.isPlay == False:
+            self.SwitchPlayPauseState()
+            self.isPlay = 1 - self.isPlay
 
 
     def draw_gameplay_ui(self):
@@ -262,3 +322,6 @@ class gameplay():
         for object in self.side2 + self.side1 + self.side0 + self.side3 :
             object.operation()
 
+class Save_game(): #day la ester egg cua game
+    def __init__(self, gameplay):
+        self.gameplay = gameplay
