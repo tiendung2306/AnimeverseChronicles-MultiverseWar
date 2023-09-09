@@ -42,9 +42,9 @@ class button():
 
     def spawn(self, side):
         if side == 1:
-            spawn(self.character_type, side, 4, self.gameplay)
+            spawn(self.character_type, side, 2, self.gameplay)
         else:
-            spawn(self.character_type, side, 35, self.gameplay)
+            spawn(self.character_type, side, 57, self.gameplay)
 
 class spawn_process():
     def __init__(self, gameplay, side):
@@ -143,7 +143,7 @@ class gameplay_ui():
         self.character_spawn_buttons.append(button(self.gameplay.archerclass, 'GameplayAssets\\archer_avatar.png', self.gameplay))
         self.character_spawn_buttons.append(button(self.gameplay.tankerclass, 'GameplayAssets\\tanker_avatar.png', self.gameplay))
         self.character_spawn_buttons.append(button(self.gameplay.wizardclass, 'GameplayAssets\\wizard_avatar.png', self.gameplay))
-        self.character_spawn_buttons.append(button(self.gameplay.gokuclass, 'GameplayAssets\\wizard_avatar.png', self.gameplay))
+        self.character_spawn_buttons.append(button(self.gameplay.gokuclass, 'GameplayAssets\\goku_avatar1.png', self.gameplay))
         self.character_spawn_buttons.append(button(self.gameplay.wizardclass, 'GameplayAssets\\wizard_avatar.png', self.gameplay))
 
         prev_pos_width = screen.screen.get_rect().width / 7

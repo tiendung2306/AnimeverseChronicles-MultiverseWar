@@ -30,7 +30,6 @@ def get_spawn_imgbox(object_type, spawn_box):
     elif object_type == "wizardclass":
         size = ( 388 / 100 , 201 / 100 )
         center_vector = ( 35 / 100 , -83 / 100 )
-    
 
     size = (size[0] * spawn_box.width, size[1] * spawn_box.width)
     center_vector = (center_vector[0] * spawn_box.width , center_vector[1] * spawn_box.width)

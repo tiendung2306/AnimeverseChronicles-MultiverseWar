@@ -117,9 +117,9 @@ class gokuclass():
         self.attack_speed_orginal = self.attack_speed
         self.attack_damage = 30.0
         self.attack_damage_orginal = self.attack_damage
-        self.health_max = 1000.0
+        self.health_max = 150.0
         self.health = self.health_max
-        self.mana_max =100.0
+        self.mana_max = 100.0
         self.mana = 0.0
 
         self.effect_list = []
