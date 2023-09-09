@@ -46,7 +46,7 @@ class N_ValueReturn_repeated_clock():
         self.counter = None
         self.times = loop_times
         self.Return = 1
-        self.status = False
+        self.status = None
         self.switch = N_time_switch(1)
         self.gameplay.side3.append(self)
 
@@ -59,7 +59,7 @@ class N_ValueReturn_repeated_clock():
     def reset(self):
         self.counter = 0
         self.Return = 1
-        self.status = False
+        self.status = None
         self.switch = N_time_switch(1)
 
     def operation(self):
@@ -103,6 +103,11 @@ class timing_clock():
         self.Return = None
         self.status = False
         self.switch.reset()
+
+    def update_lasting_time(self, new_lasting_time):
+        tmp = (self.counter - self.gameplay.curr_time) / self.lasted_time
+        self.lasted_time = new_lasting_time
+        self.counter = tmp * self.lasted_time + self.gameplay.curr_time
 
     def remove(self):
         self.gameplay.side3.remove(self)

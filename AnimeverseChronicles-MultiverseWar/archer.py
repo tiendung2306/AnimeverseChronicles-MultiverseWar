@@ -1,8 +1,7 @@
 import pygame 
 from pygame.locals import *
-from color import *
 from collide_checker import *
-from fake_object import *
+from object_function import *
 from clock import *
 from switch import *
 from list_function import *
@@ -28,10 +27,9 @@ class arrowclass():
         self.time_flag = self.archer.gameplay.curr_time 
 
         self.piercing = self.archer.piercing
-        self.speed = 10.0  # 10/100 map per second
+        self.speed = 30.0  # 10/100 map per second
         self.damage = self.archer.attack_damage
         self.special = self.archer.special_status 
-        self.status = True
 
         self.damaged_object = []
         if self.piercing :
@@ -45,84 +43,64 @@ class arrowclass():
     def resize(self):
         a = float(screen.screen.get_width()) / self.gameplay.screen[0]
         b = float(screen.screen.get_height()) /  self.gameplay.screen[1]
-        tmp_box = pygame.Rect(self.box.left * a, self.box.top *  b, self.box.width * a, self.box.height * b)
-        self.imgbox.left *= a
-        self.imgbox.top = self.archer.imgbox.top
-        self.imgbox.width = self.archer.imgbox.width
-        self.imgbox.height = self.archer.imgbox.height
-        self.box.top = tmp_box.top
-        self.box.left = tmp_box.left
-        self.box.width = tmp_box.width
-        self.box.height = tmp_box.height
+        tmp = pygame.Rect(self.imgbox.left * a, self.imgbox.top * b, self.imgbox.width * a, self.imgbox.height * b)
+        copy(self.imgbox, tmp)
+        self.operation()
+
 
     def move(self):
         self.imgbox.centerx += (self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time)  * self.side
 
+    def remove(self):
+        self.archer.arrow_list.remove(self)
 
     def collide_check(self):
-        if self.side == 1:
-            for enemy_object in self.archer.gameplay.side2:
-                if collide_checker(self,enemy_object):
-                    if list_find(self.damaged_object,enemy_object) == -1:
-                        self.damaged_object.append(enemy_object)
-                        enemy_object.get_damage = self.damage
-                        enemy_object.get_hit = True
-                        if not self.piercing:
-                            self.status = False
-        elif self.side == -1:
-            for enemy_object in self.archer.gameplay.side1:
-                if collide_checker(self,enemy_object):
-                    if list_find(self.damaged_object,enemy_object) == -1:
-                        self.damaged_object.append(enemy_object)
-                        enemy_object.get_damage = self.damage
-                        enemy_object.get_hit = True
-                        if not self.piercing:
-                            self.status = False
+        for enemy_object in self.archer.gameplay.side( - self.side):
+            if collide_checker(self,enemy_object):
+                if list_find(self.damaged_object,enemy_object) == -1:
+                    self.damaged_object.append(enemy_object)
+                    enemy_object.get_damage = self.damage
+                    enemy_object.get_hit = True
+                    return True
+        return False
+        
 
 
     def limit_check(self):
-        if self.side == 1:
-            if self.box.right >= self.x_limit:
-                self.status = False
-        elif self.side == -1:
-            if self.box.left <= self.x_limit:
-                self.status = False
-        if len(self.damaged_object) == 3 :
-            self.status = False
+        if (len(self.damaged_object) == 3) or ((self.x_limit - self.box.centerx) * self.side <= self.box.width / 2):
+            return True
 
     def operation(self):
-        self.collide_check()
-        # if self.special :
-        #     pygame.draw.rect(screen.screen,Yellow,self.box)          
-        # if self.piercing :
-        #     pygame.draw.rect(screen.screen,Black,self.box)  
-
         screen.screen.blit(pygame.transform.smoothscale(self.img.img,(self.imgbox.width,self.imgbox.height)),self.imgbox)
         copy(self.box, self.img.imgbox_to_hitbox(self.imgbox))
+        self.move()
+        if self.piercing == True:
+            if self.limit_check():
+                self.remove
+            else:
+                self.collide_check()
 
-        if self.status:
-            if self.piercing :
-                self.limit_check()
-            self.move()
-        elif self.special == False :
-            return True
-        
+        else:
+            if self.collide_check():
+                if not self.special:
+                    self.archer.mana += 10
+                self.remove()
+
+
+
 class archerclass():
-    def __init__(self, side, box_number, gameplay):
+    def __init__(self, side, gameplay):
+        self.pre_status = None
+        self.status  = None
+        self.box = pygame.Rect(0,0,0,0)
+        self.imgbox = pygame.Rect(0,0,0,0)
         self.gameplay = gameplay
-        self.size = (self.gameplay.box_size[0] / 1.25, (self.gameplay.box_size[0] / 1.25 * archer1.data[3] )/ archer1.data[2] )
-        self.box = pygame.Rect(box_number * self.gameplay.box_size[0],self.gameplay.path_height - self.size[1] * 3 / 4, self.size[0], self.size[1])
-        
         if side == 1 :
             self.side = 1
-            self.imgbox = archer1.hitbox_to_imgbox(self.box)        
-
         elif side == 2:
-            self.side = -1
-            self.imgbox = reverse(archer1).hitbox_to_imgbox(self.box)        
-        
-        self.skill_lasting_time = 5
-        self.piercing = False
+            self.side = -1          
+            
+        self.skill_lasting_time = 4.0
         self.speed = 5.0 # 5/100 map per second 
         self.attack_scope = 4 * self.gameplay.box_size[0] # 4/15 map width
         self.attack_scope_orginal = self.attack_scope
@@ -140,94 +118,136 @@ class archerclass():
 
         self.alive = True
         self.get_hit = False
+        self.check = False
+        self.collide = None
         self.special_status = False
+        self.piercing = False
+
 
         self.moving_animation = animation_player([archer1,archer2,archer3,archer4,archer5,archer6,archer7,archer8,archer9,archer10],self.side, 1, self.imgbox , self.gameplay)
-        self.attacking_animation = animation_player([archer17,archer18,archer19,archer20,archer21,archer22,archer23,archer24,archer25,archer26,archer27,archer28,archer29,archer30,archer11,archer12,archer13,archer14,archer15,archer16],self.side, 1 / self.attack_speed, self.imgbox, self.gameplay)
-        self.standstill_animation = animation_player([archer11,archer12,archer13,archer14,archer15,archer16],self.side, 1, self.imgbox, self.gameplay)
+        self.attacking_animation = one_time_animation_player([archer17,archer18,archer19,archer20,archer21,archer22,archer23,archer24,archer25,archer26,archer27,archer28,archer29,archer30],self.side, 1 , self.imgbox, self.gameplay)
+        self.standstill_animation = one_time_animation_player([archer11,archer12,archer13,archer14,archer15,archer16],self.side, 1, self.imgbox, self.gameplay)
+        self.dying_animation = one_time_animation_player([archer40], self.side, 0.8, self.imgbox, self.gameplay)
+        self.knock_back_animation = animation_player([archer31], self.side, 1, self.imgbox, self.gameplay)
+        self.flying_animation = animation_player([archer32], self.side, 1, self.imgbox, self.gameplay)
+        self.falling_animation = animation_player([archer33], self.side, 1, self.imgbox, self.gameplay)
 
         self.switcher1 = N_time_switch(1)
         self.switcher2 = N_time_switch(1)
+        self.switcher3 = N_time_switch(1)
 
 
         self.skill_countdowner = timing_clock(self.skill_lasting_time,self.gameplay)
-
-        self.special_arrow_switcher = N_time_switch(1)
+        self.attack_coundowner = timing_clock(1 / self.attack_speed, self.gameplay)
 
 
     def resize(self):
         a = float(screen.screen.get_width()) / self.gameplay.screen[0]
         b = float(screen.screen.get_height()) /  self.gameplay.screen[1]
-        tmp_box = pygame.Rect(self.box.left * a, self.box.top *  b, self.box.width * a, self.box.height * b)
-        self.size = (self.gameplay.box_size[0] / 1.25, (self.gameplay.box_size[0] / 1.25 * archer1.data[3] )/ archer1.data[2] )
-        fake_box = pygame.Rect( self.gameplay.box_size[0],self.gameplay.path_height - self.size[1] * 3 / 4, self.size[0], self.size[1])
-        fake_imgbox = archer1.hitbox_to_imgbox(fake_box)
-        self.imgbox.left *= a
-        self.imgbox.top = fake_imgbox.top
-        self.imgbox.width = fake_imgbox.width
-        self.imgbox.height = fake_imgbox.height
-        self.box.top = tmp_box.top
-        self.box.left = tmp_box.left
-        self.box.width = tmp_box.width
-        self.box.height = tmp_box.height
+        tmp = pygame.Rect(self.imgbox.left * a, self.imgbox.top * b, self.imgbox.width * a, self.imgbox.height * b)
+        copy(self.imgbox, tmp)
+        self.operation()
+
         for arrows in self.arrow_list:
             arrows.resize()
 
 
-    def status_bar(self):
+    def status_update(self):
         if self.mana >= self.mana_max:
             self.mana = 0
             self.special_status = True
-        if self.special_status :
-            if self.skill_countdowner.Return == False:
-                self.special_skill_reset() 
+        if self.special_status:
+            self.special_skill()        
+        
         pygame.draw.rect(screen.screen,Red,pygame.Rect(self.box.left + self.box.width / 4 ,self.box.top - self.box.height / 10 ,(self.box.width - self.box.width / 2) / self.health_max *self.health,self.box.height / 20))
         pygame.draw.rect(screen.screen,Blue,pygame.Rect(self.box.left + self.box.width / 4 ,self.box.top - self.box.height / 5 - self.box.height / 30 ,(self.box.width - self.box.width / 2) / self.mana_max *self.mana,self.box.height / 20))
-     
-    
+        
+
+
     def move(self):
-        self.standstill_animation.reset()
-        self.attacking_animation.reset()
-        self.imgbox.centerx += (self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time)  * self.side
+        if not self.status == self.pre_status:
+            self.moving_animation.reset()
         copy(self.box, self.moving_animation.play())
+        self.imgbox.centerx += (self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time)  * self.side
+
+
+
 
     def standstill(self):
-        copy(self.box , self.standstill_animation.play())
-        self.moving_animation.reset()
-        self.attacking_animation.reset()
+        if not self.status == self.pre_status:
+            self.standstill_animation.reset()
+        copy(self.box, self.standstill_animation.play())
+        if self.standstill_animation.status == True:
+            self.check = False
+        elif self.standstill_animation.status == False:
+            self.check = True
+            self.standstill_animation.reset()
+
     
+    def check_collide(self):
+        if self.collide == None:
+            for object in self.gameplay.side(self.side) + self.gameplay.side4 + self.gameplay.side(- self.side):
+                if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                    if same_line_checker(self, object):
+                        if not (self == object):
+                            if collide_checker(self ,object):
+                                if self.side == object.side:
+                                    self.collide = 1
+                                    object.collide = 1
 
-    def check_forward(self):
-        checker = fake_object_class(self)
-        if self.side == 1:
-            checker.box = archer1.imgbox_to_hitbox(self.imgbox)
-            checker.box.width += self.attack_scope 
-            # pygame.draw.rect(screen.screen,Red,checker.box)
-            for object in self.gameplay.side2 :
-                if collide_checker(checker,object):
-                    self.status = 1
-                    return None
-            for object in self.gameplay.side1:
-                if collide_checker(self,object):
-                        if (not (object == self)) and (object.box.right > self.box.right):
-                            self.status = 2
-                            return None
+                                else:
+                                    self.collide = 2
+                                    object.collide = 2
 
-        elif self.side == -1:
-            checker.box = reverse(archer1).imgbox_to_hitbox(self.imgbox)
-            checker.box.width += self.attack_scope
-            checker.box.centerx -= self.attack_scope 
-            # pygame.draw.rect(self.gameplay.screen,White,checker.box)
-            for object in self.gameplay.side1 :
-                if collide_checker(checker,object):
-                    self.status = 1
-                    return None
-            for object in self.gameplay.side2:
-                if collide_checker(self,object):
-                    if (not (object == self)) and (object.box.left < self.box.left) :
-                        self.status = 2
-                        return None
-        self.status = 3
+                                if not (self.box.centerx == object.box.centerx and self.index < object.index and self.side == object.side ):
+                                    self.collide = True
+                                    self.imgbox.centerx -= ( 5.0 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time) * self.side
+                                    self.box.centerx -= ( 5.0 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time)  *self.side
+                                    return
+            self.collide = False
+
+
+    def check_forward(self): #always after check_collide
+        flag = False
+        if self.collide == 2:
+            self.status = 1
+            flag = True
+
+        elif self.collide == 1:
+            for object in self.gameplay.side(- self.side) :
+                if abs(object.box.centerx  - self.box.centerx ) <= self.attack_scope + (self.box.width + object.box.width) / 2 :
+                    if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                        if same_line_checker(self, object):
+                            self.status = 1
+                            flag = True
+                            break
+            self.status = 2
+            flag = True
+        else:
+            for object in self.gameplay.side(self.side) + self.gameplay.side4 :
+                if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 2 + (self.box.width + object.box.width) / 2:
+                    if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                        if same_line_checker(self, object):
+                            if not (self == object):
+                                self.status = 2
+                                flag = True
+                                break
+
+            for object in self.gameplay.side( - self.side) :
+                if abs(object.box.centerx  - self.box.centerx ) <= self.attack_scope + (self.box.width + object.box.width) / 2 :
+                    if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                        if same_line_checker(self, object):
+                            self.status = 1
+                            flag = True
+                            break          
+        if not flag:
+            self.status = 3
+        
+        if self.status == 1 :
+            if self.attack_coundowner.Return == True:
+                self.status = 2
+
+            
         
 
     def Geting_hit(self):
@@ -237,90 +257,113 @@ class archerclass():
         if not self.special_status:
             self.mana += 10
     
-
     def die(self):
-        if self.side == 1:
-            self.gameplay.side1.remove(self)
-        elif self.side == -1:
-            self.gameplay.side2.remove(self)
+        self.alive = False
         self.moving_animation.remove()
         self.attacking_animation.remove()
         self.standstill_animation.remove()      
-        self.skill_countdowner.remove()  
-        self.alive = False
+        self.falling_animation.remove()
+        self.flying_animation.remove()
+        self.knock_back_animation.remove()
+
+        self.gameplay.side(self.side).remove(self)
+        self.side = 0
+        self.gameplay.side0.append(self)
     
     
     def attack(self):
+        if (not self.status == self.pre_status) or (not self.attack_coundowner.Return == True ) :
+            self.attacking_animation.reset() 
+            self.attack_coundowner.reset()
+            self.attack_coundowner.start()
+            
         copy(self.box, self.attacking_animation.play())
         if self.attacking_animation.clock.Return == 9:
             if self.switcher1.operation():
+                self.arrow_list.append(arrowclass(self))  
 
-                if self.special_status :
-                    self.special_skill()
-
-                    
-                else:
-                    self.arrow_list.append(arrowclass(self))  
-        elif self.attacking_animation.clock.Return == 1:     
+        elif self.attacking_animation.clock.Return == 8:
             self.switcher1.reset()
-        self.standstill_animation.reset()
-        self.moving_animation.reset()
+
+        if self.attacking_animation.status == True:
+            self.check = False
+        elif self.attacking_animation.status == False:
+            self.check = True
+            self.attacking_animation.reset() 
 
 
     
     def special_skill(self):
-        if self.special_arrow_switcher.operation():
+        if self.switcher2.operation():
             self.piercing = True
-            self.attack_damage = 20
+            self.attack_damage *= 2 
             self.attack_scope = 7 * self.gameplay.box_size[0]
-            self.arrow_list.append(arrowclass(self))  
+            self.flag = len(self.arrow_list)
 
-            self.piercing = False
-            self.attack_damage = self.attack_damage_orginal
-            self.attack_scope = self.attack_scope_orginal
-            self.attack_speed = self.attack_speed * 2
-            self.attacking_animation.update_looptime( 1 / self.attack_speed )
-            self.skill_countdowner.start()
-        else:
-            self.arrow_list.append(arrowclass(self))    
+        if len(self.arrow_list) == self.flag + 1:
+            if self.switcher3.operation():
+                self.piercing = False
+                self.attack_damage = self.attack_damage_orginal
+                self.attack_scope = self.attack_scope_orginal
+                self.attack_speed = self.attack_speed * 2
+                self.attack_coundowner.update_lasting_time(1 / self.attack_speed)
+                if 1 / self.attack_speed <= 1 :
+                    self.attacking_animation.update_looptime( 1 / self.attack_speed )
+                self.skill_countdowner.start()
 
+            if self.skill_countdowner.Return == False:
+                self.special_status = False
+                self.switcher2.reset()
+                self.switcher3.reset()
+                self.attack_speed = self.attack_speed_orginal
+                self.attacking_animation.update_looptime(1)
+                self.attack_coundowner.update_lasting_time(1 / self.attack_speed)
+                self.skill_countdowner.reset()
 
-    def special_skill_reset(self):
-        self.special_status = False
-        self.attack_speed = self.attack_speed_orginal
-        self.attacking_animation.update_looptime(1 / self.attack_speed)
-        self.skill_countdowner.reset()
-        self.special_arrow_switcher.reset()
 
 
     def operation(self):
-        if self.alive: 
-            self.status_bar()
-            self.check_forward()
+        if self.alive:
             for effect in self.effect_list:
                 effect.play()
-            if self.status == 3:
-                self.move()
-
-            elif self.status == 1:
-                self.attack()
-
-            elif self.status == 2 :
-                self.standstill()
-            
-            if self.get_hit:
-               self.Geting_hit()
-
+            if self.get_hit :
+                self.Geting_hit()
+            self.status_update()
             if self.health <= 0:
                 self.die()
+                return
             
-            for arrows in self.arrow_list:
-                if arrows.operation():
-                    self.mana += 10
-                if arrows.status == False :
-                    self.arrow_list.remove(arrows)
-            # pygame.draw.rect(screen.screen, White, self.box,1)
-            # pygame.draw.rect(screen.screen, White, self.imgbox,1)
+            elif self.status > 0:
+                self.check = True
+                if self.status == 3:
+                    self.move()
+
+                elif self.status == 1:
+                    self.attack()
+
+                elif self.status == 2 :
+                    self.standstill()
+
+                for arrows in self.arrow_list:
+                    arrows.operation()
+
+                self.pre_status = self.status
+
+            if self.status > 0:
+                if self.check:
+                    self.check_forward()
+                self.check_collide()
+                self.collide = None
+
+
+            # pygame.draw.rect(screen.screen,White,self.box,1)
+            # pygame.draw.rect(screen.screen,White,self.imgbox,1)
+        else:
+            self.dying_animation.play()
+            if self.dying_animation.status == False:
+                self.dying_animation.remove()
+                self.gameplay.side0.remove(self)
+
 
     
 

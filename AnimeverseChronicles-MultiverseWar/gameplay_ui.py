@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-from object_manager import * 
+from object_function import * 
 from screen import *
 
 class button():
@@ -139,10 +139,10 @@ class gameplay_ui():
         self.button_border = pygame.transform.smoothscale(self.button_border, (screen.screen.get_rect().width / 20, screen.screen.get_rect().width / 20))
 
     def add_button(self):
-        self.character_spawn_buttons.append(button(sword_man, 'GameplayAssets\\sword_man_avatar.png', self.gameplay))
-        self.character_spawn_buttons.append(button(archer, 'GameplayAssets\\archer_avatar.png', self.gameplay))
-        self.character_spawn_buttons.append(button(tanker, 'GameplayAssets\\tanker_avatar.png', self.gameplay))
-        self.character_spawn_buttons.append(button(wizard, 'GameplayAssets\\wizard_avatar.png', self.gameplay))
+        self.character_spawn_buttons.append(button(self.gameplay.sword_manclass, 'GameplayAssets\\sword_man_avatar.png', self.gameplay))
+        self.character_spawn_buttons.append(button(self.gameplay.archerclass, 'GameplayAssets\\archer_avatar.png', self.gameplay))
+        self.character_spawn_buttons.append(button(self.gameplay.tankerclass, 'GameplayAssets\\tanker_avatar.png', self.gameplay))
+        self.character_spawn_buttons.append(button(self.gameplay.wizardclass, 'GameplayAssets\\wizard_avatar.png', self.gameplay))
 
         prev_pos_width = screen.screen.get_rect().width / 7
         for i in range(0, len(self.character_spawn_buttons)):

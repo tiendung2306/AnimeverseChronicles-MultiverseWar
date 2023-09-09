@@ -167,7 +167,7 @@ class main():
                     self.Gameplay.time += 0.01
                 
             self.Gameplay.draw_gameplay_ui()
-
+            
             self.Gameplay.object_operation()
 
             self.Gameplay.pre_curr_time = self.Gameplay.curr_time

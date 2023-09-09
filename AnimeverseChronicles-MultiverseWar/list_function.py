@@ -13,4 +13,11 @@ def list_find(list,object):
         return -1
     
 
-
+def list_find_special(list, object,):
+    if not (len(list) == 0):
+        for i in list:
+            if i.object == object:
+                return True
+        return False
+    else:
+        return False

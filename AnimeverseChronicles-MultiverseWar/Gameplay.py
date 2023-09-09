@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
 from color import *
-from object_manager import * 
+from character import * 
 from nexus import *
 from pause_pannel import *
 from states import *
@@ -18,15 +18,31 @@ class gameplay():
         self.spawn_queue1 = []
         self.spawn_queue2 = []
 
-        self.gameplay_ui = gameplay_ui(self)
-
-        self.fake_bg_original = pygame.image.load('GameplayAssets\\mainmenubg.png')
-        self.bg_original = pygame.image.load('GameplayAssets\\bg1.jpg')
+        self.fake_bg_original = pygame.image.load('GameplayAssets\\bg1.png')
+        self.bg_original = pygame.image.load('GameplayAssets\\bg1.png')
         self.path_original = pygame.image.load('GameplayAssets\\path1.png')
         self.board_original = pygame.image.load('GameplayAssets\\board.png')
         self.settings_button_original = pygame.image.load('GameplayAssets\\settings_button.png')
         self.play_button_original = pygame.image.load('GameplayAssets\\play_button.png')
         self.pause_button_original = pygame.image.load('GameplayAssets\\pause_button.png')
+        
+        self.character_cost = {
+            archerclass : 20,
+            sword_manclass : 10,
+            tankerclass : 30,
+            wizardclass : 50,
+            gokuclass : 100
+            
+        }
+
+        #character type
+        self.sword_manclass = sword_manclass
+        self.archerclass = archerclass
+        self.tankerclass = tankerclass
+        self.wizardclass = wizardclass
+        self.gokuclass = gokuclass
+
+        self.gameplay_ui = gameplay_ui(self)
 
         self.load_all_gameplay_image()
 
@@ -39,12 +55,6 @@ class gameplay():
         else:
             self.play_pause_button = (screen.screen.get_rect().width - screen.screen.get_rect().width // 32, 10)
 
-        self.character_cost = {
-            archer : 20,
-            sword_man : 10,
-            tanker : 30,
-            wizard : 50
-        }
 
         self.timer_font = pygame.font.Font('Fonts\\joystix_monospace.otf', 16)
         self.start_time = 0.0
@@ -70,7 +80,7 @@ class gameplay():
 
         self.spawn_point_height = self.path.get_rect().top + self.path.get_rect().height / 7.0
 
-        self.box_size = (screen.screen.get_rect().width / 40 , screen.screen.get_rect().height / 20)
+        self.box_size = (screen.screen.get_rect().width / 60 , screen.screen.get_rect().height / 20)
         self.path_height = screen.screen.get_rect().height - self.path.get_rect().height 
         self.screen = screen.screen.get_size()
     #Object import:
@@ -84,6 +94,13 @@ class gameplay():
         self.nexus2 = Nexusclass(2, self)
 
 
+
+    def side(self, side):
+        if side == 1:
+            return self.side1
+        elif side == -1 :
+            return self.side2
+
     def load_all_gameplay_image(self):
         self.fake_bg = self.fake_bg_original.copy()
         self.bg = self.bg_original.copy()
@@ -96,11 +113,8 @@ class gameplay():
         self.pause_button = self.pause_button_original.copy()
 
         info = pygame.display.Info()
-        self.fake_bg = pygame.transform.smoothscale(self.fake_bg, screen.screen.get_size())
-        self.other_bg = self.bg.copy()
-        self.other_bg.set_alpha(0)
-        self.other_bg.fill((255, 255, 255))
         self.bg = pygame.transform.smoothscale(self.bg, (info.current_w, info.current_h))
+        self.fake_bg = self.bg.copy()
         self.path = pygame.transform.smoothscale(self.path, (self.bg.get_rect().width, screen.screen.get_rect().height // 7))
         self.board_1 = pygame.transform.smoothscale(self.board_1, (screen.screen.get_rect().width / 7, screen.screen.get_rect().width / 7 / 2.4))
         self.board_2 = pygame.transform.smoothscale(self.board_2, (screen.screen.get_rect().width / 7, screen.screen.get_rect().width / 7 / 2.4))
@@ -130,8 +144,8 @@ class gameplay():
         self.load_all_gameplay_image()
  
 
-        self.box_size = (screen.screen.get_rect().width / 40 , screen.screen.get_rect().height / 20)
-        self.path_height = screen.screen.get_rect().height - self.path.get_rect().height + 20
+        self.box_size = (screen.screen.get_rect().width / 60 , screen.screen.get_rect().height / 20)
+        self.path_height = screen.screen.get_rect().height - self.path.get_rect().height
 
         for object in self.side2 + self.side1:
             object.resize()
@@ -183,8 +197,6 @@ class gameplay():
 
     def draw_gameplay_ui(self):
         screen.screen.blit(self.bg , (0, 0))
-        screen.screen.blit(self.other_bg, (0,0))
-        screen.screen.blit(self.path, (0, screen.screen.get_rect().height - self.path.get_rect().height))
         # screen.screen.blit(self.nexus1.nexus_surface, (5,  screen.screen.get_rect().height - self.path.get_rect().height - self.nexus1.nexus_surface.get_rect().height + self.path.get_rect().height // 3))
         # screen.screen.blit(self.nexus2.nexus_surface, (screen.screen.get_rect().width - 5 - self.nexus2.nexus_surface.get_rect().width,  screen.screen.get_rect().height - self.path.get_rect().height - self.nexus1.nexus_surface.get_rect().height + self.path.get_rect().height // 3)) 
         screen.screen.blit(self.board_1, (-2,  -2))
@@ -245,6 +257,8 @@ class gameplay():
 
 
     def object_operation(self):
+        self.bg.blit(self.fake_bg, (0,0))
+        self.bg.blit(self.path, (0, screen.screen.get_rect().height - self.path.get_rect().height))
         for object in self.side2 + self.side1 + self.side0 + self.side3 :
             object.operation()
-        # screen.screen.blit(self.fake_screen, (0,0))
+

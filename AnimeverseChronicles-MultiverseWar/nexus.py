@@ -60,7 +60,7 @@ class Nexusclass():
     
     def display(self):
         self.status_bar()
-        screen.screen.blit(pygame.transform.smoothscale(self.img.img , (self.imgbox.width, self.imgbox.height)), self.imgbox)
+        self.gameplay.bg.blit(pygame.transform.smoothscale(self.img.img , (self.imgbox.width, self.imgbox.height)), self.imgbox)
 
  
     def Geting_hit(self):

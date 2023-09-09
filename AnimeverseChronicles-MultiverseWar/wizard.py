@@ -1,8 +1,7 @@
 import pygame 
 from pygame.locals import *
-from color import *
 from collide_checker import *
-from fake_object import *
+from object_function import *
 from clock import *
 from switch import *
 from list_function import *
@@ -25,86 +24,70 @@ class magic_ball_class():
             self.imgbox = reverse(wizard_to_magic_ball).imgbox_to_hitbox(self.imgbox)
             self.box = reverse(magic_ball1).imgbox_to_hitbox(self.imgbox)
 
-        self.spam_pointX = ( self.imgbox.left + self.imgbox.right) / 2
-        self.time_flag = self.wizard.gameplay.curr_time 
-
         self.speed = 30  # 10/100 map per second
         self.damage = self.wizard.attack_damage
-        self.status = True
         self.direct = True
+ 
 
-        self.animation_player = animation_player([magic_ball1, magic_ball2, magic_ball3, magic_ball4,magic_ball5],self.side,1,self.imgbox,self.wizard.gameplay)
-        self.switch = N_time_switch(1)
+        self.moving_animation = animation_player([magic_ball1, magic_ball2, magic_ball3, magic_ball4,magic_ball5],self.side,1,self.imgbox,self.wizard.gameplay)
+        self.explosion_animation = one_time_animation_player([magic_ball6,magic_ball7, magic_ball8, magic_ball9],self.side,0.25,self.imgbox,self.wizard.gameplay)
 
     def resize(self):
         a = float(screen.screen.get_width()) / self.gameplay.screen[0]
         b = float(screen.screen.get_height()) /  self.gameplay.screen[1]
-        tmp_box = pygame.Rect(self.box.left * a, self.box.top *  b, self.box.width * a, self.box.height * b)
-        tmp_imgbox = pygame.Rect(self.wizard.imgbox.left,self.wizard.imgbox.top,self.wizard.imgbox.width,self.wizard.imgbox.height)
-        fake_imgbox = wizard_to_magic_ball.imgbox_to_hitbox(tmp_imgbox)
-        self.imgbox.left *= a
-        self.imgbox.top = fake_imgbox.top
-        self.imgbox.width = fake_imgbox.width
-        self.imgbox.height = fake_imgbox.height
-        self.box.top = tmp_box.top
-        self.box.left = tmp_box.left
-        self.box.width = tmp_box.width
-        self.box.height = tmp_box.height
+        tmp = pygame.Rect(self.imgbox.left * a, self.imgbox.top * b, self.imgbox.width * a, self.imgbox.height * b)
+        copy(self.imgbox, tmp)
+        self.operation()
 
     def move(self):
         self.imgbox.centerx += (self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time)  * self.side
-        copy(self.box, self.animation_player.play())
+        copy(self.box, self.moving_animation.play())
 
     def explosive(self):
-        if self.switch.operation():
-            self.animation_player2 = animation_player([magic_ball6,magic_ball7, magic_ball8, magic_ball9],self.side,0.25,self.imgbox,self.wizard.gameplay)
-        self.animation_player2.play()
+        copy(self.box, self.explosion_animation.play())
+        if self.explosion_animation.status ==  False:
+            self.wizard.mana += 10
+            self.remove()
 
     def collide_check(self):
-        if self.direct:
-            if self.side == 1:
-                for enemy_object in self.wizard.gameplay.side2:
-                    if collide_checker(self,enemy_object):
-                        enemy_object.get_damage = self.damage
-                        enemy_object.get_hit = True
-                        return False
-            elif self.side == -1:
-                for enemy_object in self.wizard.gameplay.side1:
-                    if collide_checker(self,enemy_object):
-                        enemy_object.get_damage = self.damage
-                        enemy_object.get_hit = True
-                        return False
-            return True
-        else:
-            return False
+        for enemy_object in self.wizard.gameplay.side( - self.side):
+            if collide_checker(self,enemy_object):
+                enemy_object.get_damage = self.damage
+                enemy_object.get_hit = True
+                return True
+        return False
+
+
+    def remove(self):
+        self.moving_animation.remove()
+        self.explosion_animation.remove()
+        self.wizard.magicbullet_list.remove(self)
                     
 
 
     def operation(self):
-        if self.status:
+        if self.direct :
             if self.collide_check():
-                self.move()
-            else:
                 self.direct = False
-                self.explosive()
-                if self.animation_player2.clock.gameplay.curr_time >= self.animation_player2.clock.counter:
-                    if self.animation_player2.clock.Return == self.animation_player2.clock.times:
-                        self.status = False
-                        return True
+            else:
+                self.move()
+        else:
+            self.explosive()
+
+
             
 class wizardclass():
-    def __init__(self, side, box_number, gameplay):
+    def __init__(self, side, gameplay):
+        self.pre_status = None
+        self.status  = None
+        self.box = pygame.Rect(0,0,0,0)
+        self.imgbox = pygame.Rect(0,0,0,0)
         self.gameplay = gameplay
-        self.size = (self.gameplay.box_size[0] / 2, (self.gameplay.box_size[0] / 2 * wizard1.data[3] )/ wizard1.data[2] )
-        self.box = pygame.Rect(box_number * self.gameplay.box_size[0],self.gameplay.path_height - self.size[1] * 4 / 5, self.size[0], self.size[1])
         if side == 1 :
             self.side = 1
-            self.imgbox = wizard1.hitbox_to_imgbox(self.box)        
         elif side == 2:
-            self.side = -1
-            self.imgbox = reverse(wizard1).hitbox_to_imgbox(self.box)        
+            self.side = -1                  
 
-        self.skill_lasting_time = 1.5
         self.speed = 5.0 # 5/100 map per second 
         self.attack_scope = 7 * self.gameplay.box_size[0] # 4/15 map width
         self.attack_scope_orginal = self.attack_scope
@@ -115,107 +98,138 @@ class wizardclass():
         self.health_max = 100.0
         self.health = self.health_max
         self.mana_max =100.0
-        self.mana = 90
+        self.mana = 0.0
 
-        self.magicball_list = []
+        self.magicbullet_list = []
         self.effect_list = []
 
         self.alive = True
         self.get_hit = False
+        self.check = False
+        self.collide = None
         self.special_status = False
 
         self.moving_animation = animation_player([wizard1,wizard2,wizard3,wizard2],self.side, 1, self.imgbox , self.gameplay)
-        tmp_lib = [wizard4,wizard5,wizard6,wizard7,wizard8,wizard9,wizard10,wizard11]
-        for i in range(3):
-            for img in [wizard1,wizard2,wizard3,wizard2,wizard1]:
-                for counter in range(2):
-                    tmp_lib.append(img)
-    
-        self.attacking_animation = animation_player(tmp_lib,self.side, 1 / self.attack_speed, self.imgbox, self.gameplay)
-        self.standstill_animation = animation_player([wizard1,wizard2,wizard3,wizard2], self.side, 1, self.imgbox, self.gameplay)
+        self.attacking_animation = one_time_animation_player([wizard4,wizard5,wizard6,wizard7,wizard8,wizard9,wizard10,wizard11],self.side, 1 , self.imgbox, self.gameplay)
+        self.standstill_animation = one_time_animation_player([wizard1,wizard2,wizard3,wizard2], self.side, 1, self.imgbox, self.gameplay)
         self.special_skill_animation = one_time_animation_player([wizard11,wizard12,wizard13,wizard14,wizard15,wizard16,wizard17,wizard18,wizard19,wizard20,wizard21,wizard22,wizard23,wizard24,wizard25,wizard26,wizard27,wizard28], self.side, 2, self.imgbox, self.gameplay)
+        self.dying_animation = one_time_animation_player([wizard31], self.side, 0.8, self.imgbox, self.gameplay)
+        self.knock_back_animation = animation_player([wizard29], self.side, 1, self.imgbox, self.gameplay)
+        self.flying_animation = animation_player([wizard32], self.side, 1, self.imgbox, self.gameplay)
+        self.falling_animation = animation_player([wizard30], self.side, 1, self.imgbox, self.gameplay)
 
         self.switcher1 = N_time_switch(1)
         self.switcher2 = N_time_switch(1)
         self.switcher3 = N_time_switch(1)
 
+        self.attack_coundowner = timing_clock(1 / self.attack_speed, self.gameplay)
+
 
     def resize(self):
         a = float(screen.screen.get_width()) / self.gameplay.screen[0]
         b = float(screen.screen.get_height()) /  self.gameplay.screen[1]
-        tmp_box = pygame.Rect(self.box.left * a, self.box.top *  b, self.box.width * a, self.box.height * b)
-        self.size = (self.gameplay.box_size[0] / 2, (self.gameplay.box_size[0] / 2 * wizard1.data[3] )/ wizard1.data[2] )
-        fake_box = pygame.Rect( self.gameplay.box_size[0],self.gameplay.path_height - self.size[1] * 4 / 5, self.size[0], self.size[1])
-        fake_imgbox = wizard1.hitbox_to_imgbox(fake_box)
-        self.imgbox.left *= a
-        self.imgbox.top = fake_imgbox.top
-        self.imgbox.width = fake_imgbox.width
-        self.imgbox.height = fake_imgbox.height
-        self.box.top = tmp_box.top
-        self.box.left = tmp_box.left
-        self.box.width = tmp_box.width
-        self.box.height = tmp_box.height
-        for magic_ball in self.magicball_list:
-            magic_ball.resize()
+        tmp = pygame.Rect(self.imgbox.left * a, self.imgbox.top * b, self.imgbox.width * a, self.imgbox.height * b)
+        copy(self.imgbox, tmp)
+        self.operation()
+
+        for magicbullet in self.magicbullet_list:
+            magicbullet.resize()
 
 
-    def status_bar(self):
+    def status_update(self):
         if self.mana >= self.mana_max:
             self.mana = 0
             self.special_status = True
+            self.status = 4
 
         pygame.draw.rect(screen.screen,Red,pygame.Rect(self.box.left + self.box.width / 4 ,self.box.top - self.box.height / 10 ,(self.box.width - self.box.width / 2) / self.health_max *self.health,self.box.height / 20))
         pygame.draw.rect(screen.screen,Blue,pygame.Rect(self.box.left + self.box.width / 4 ,self.box.top - self.box.height / 5 - self.box.height / 30 ,(self.box.width - self.box.width / 2) / self.mana_max *self.mana,self.box.height / 20))
      
     
     def move(self):
+        if not self.status == self.pre_status:
+            self.moving_animation.reset()
         copy(self.box, self.moving_animation.play())
         self.imgbox.centerx += (self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time)  * self.side
-        self.standstill_animation.reset()
-        self.attacking_animation.reset()
-
-
+        self.check = True
 
     def standstill(self):
+        if not self.status == self.pre_status:
+            self.standstill_animation.reset()
         copy(self.box, self.standstill_animation.play())
-        self.moving_animation.reset()
-        self.attacking_animation.reset()
+        if self.standstill_animation.status == True:
+            self.check = False
+        elif self.standstill_animation.status == False:
+            self.check = True
+            self.standstill_animation.reset()
 
 
-    def check_forward(self):
-        checker = fake_object_class(self)
-        if self.side == 1:
-            checker.box = wizard1.imgbox_to_hitbox(self.imgbox)
-            checker.box.width += self.attack_scope
-            # pygame.draw.rect(self.gameplay.screen,Red,checker.box)
-            for object in self.gameplay.side2 :
-                if collide_checker(checker,object):
-                    self.status = 1
-                    return None
- 
-            for object in self.gameplay.side1 + self.gameplay.side4:
-                if collide_checker(self,object):
-                    if (not (object == self)) and (object.box.right > self.box.right):
-                        self.status = 2
-                        return None
+    def check_collide(self):
+        if self.collide == None:
+            for object in self.gameplay.side(self.side) + self.gameplay.side4 + self.gameplay.side(- self.side):
+                if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                    if same_line_checker(self, object):
+                        if not (self == object):
+                            if collide_checker(self ,object):
+                                if self.side == object.side:
+                                    self.collide = 1
+                                    object.collide = 1
+
+                                else:
+                                    self.collide = 2
+                                    object.collide = 2
+
+                                if not (self.box.centerx == object.box.centerx and self.index < object.index and self.side == object.side ):
+                                    self.collide = True
+                                    self.imgbox.centerx -= ( 5.0 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time) * self.side
+                                    self.box.centerx -= ( 5.0 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time)  *self.side
+                                    return
+            self.collide = False
 
 
-        elif self.side == -1:
-            checker.box =reverse(wizard1).imgbox_to_hitbox(self.imgbox)
-            checker.box.width += self.attack_scope
-            checker.box.centerx -= self.attack_scope 
-            # pygame.draw.rect(screen.screen,White,checker.box,1)
-            for object in self.gameplay.side1 :
-                if collide_checker(checker,object):
-                    self.status = 1
-                    return None
-                
-            for object in self.gameplay.side2 + self.gameplay.side4:
-                if collide_checker(self,object):
-                    if (not (object == self)) and (object.box.left < self.box.left) :
-                        self.status = 2
-                        return None
-        self.status = 3
+    def check_forward(self): #always after check_collide
+        flag = False
+        if self.collide == 2:
+            self.status = 1
+            flag = True
+
+        elif self.collide == 1:
+            for object in self.gameplay.side(- self.side) :
+                if abs(object.box.centerx  - self.box.centerx ) <= self.attack_scope + (self.box.width + object.box.width) / 2 :
+                    if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                        if same_line_checker(self, object):
+                            self.status = 1
+                            flag = True
+                            break
+            self.status = 2
+            flag = True
+        else:
+            for object in self.gameplay.side(self.side) + self.gameplay.side4 :
+                if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 2 + (self.box.width + object.box.width) / 2:
+                    if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                        if same_line_checker(self, object):
+                            if not (self == object):
+                                self.status = 2
+                                flag = True
+                                break
+
+            for object in self.gameplay.side( - self.side) :
+                if abs(object.box.centerx  - self.box.centerx ) <= self.attack_scope + (self.box.width + object.box.width) / 2 :
+                    if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                        if same_line_checker(self, object):
+                            self.status = 1
+                            flag = True
+                            break          
+        if not flag:
+            self.status = 3
+
+
+        if self.status == 1 :
+            if self.attack_coundowner.Return == True:
+                self.status = 2
+
+                    
+
         
 
     def Geting_hit(self):
@@ -227,53 +241,73 @@ class wizardclass():
     
 
     def die(self):
-        if self.side == 1:
-            self.gameplay.side1.remove(self)
-        elif self.side == -1:
-            self.gameplay.side2.remove(self)
+        self.alive = False
         self.moving_animation.remove()
         self.attacking_animation.remove()
         self.standstill_animation.remove()      
-        self.alive = False
+        self.falling_animation.remove()
+        self.flying_animation.remove()
+        self.knock_back_animation.remove()
+
+        self.gameplay.side(self.side).remove(self)
+        self.side = 0
+        self.gameplay.side0.append(self)
+
     
     
     def attack(self):
+        if (not self.status == self.pre_status) or (not self.attack_coundowner.Return == True ) :
+            self.attacking_animation.reset() 
+            self.attack_coundowner.reset()
+            self.attack_coundowner.start()
+            
         copy(self.box, self.attacking_animation.play())
-        # print(self.box)
         if self.attacking_animation.clock.Return == 3:
             if self.switcher1.operation():
-                self.magicball_list.append(magic_ball_class(self))  
-        elif self.attacking_animation.clock.Return == 1:     
+                self.magicbullet_list.append(magic_ball_class(self))  
+
+        elif self.attacking_animation.clock.Return == 2:
             self.switcher1.reset()
 
-        self.standstill_animation.reset()
-        self.moving_animation.reset()
+        if self.attacking_animation.status == True:
+            self.check = False
+        elif self.attacking_animation.status == False:
+            self.check = True
+
 
     
     def special_skill(self):
-        copy(self.box, self.special_skill_animation.play())
-        if self.special_skill_animation.clock.Return == 5:
-            if self.switcher2.operation():
-                checker = fake_object_class(self)
-                checker.box.width += self.attack_scope * 1.5
-                if self.side == 1:
-                    for enemy in self.gameplay.side2:
-                        if collide_checker(checker,enemy):
-                            add_effect(enemy, dizzy_effect, 5)
-                            add_effect(enemy, soul_sucking_effect, None)
-                            return
+        if not self.status == self.pre_status:
+            self.special_skill_animation.reset() 
+            
+
+        if self.special_skill_animation.status == True:
+            self.check = False
+            copy(self.box, self.special_skill_animation.play())
+            if self.special_skill_animation.clock.Return == 3:
+                if self.switcher2.operation():
+                    for object in self.gameplay.side(- self.side) :
+                        if abs(object.box.centerx  - self.box.centerx ) <= self.attack_scope * 2 + (self.box.width + object.box.width) / 2 :
+                            if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                                if same_line_checker(self, object):
+                                    add_effect(object, dizzy(object, 5))
+                                    add_effect(object, soul_sucking(object))                        
+                                    return
                     self.special_skill_reset()
 
-                elif self.side == -1:
-                    checker.box.centerx -= self.attack_scope * 1.5
-                    for enemy in self.gameplay.side1:
-                        if collide_checker(checker,enemy):
-                            add_effect(enemy, dizzy_effect, 5)
-                            add_effect(enemy, soul_sucking_effect, None)                        
-                            return
-                    self.special_skill_reset()            
-        if self.special_skill_animation.status == False:
+            elif self.special_skill_animation.clock.Return == 2 or self.special_skill_animation.clock.Return == 9:
+                self.switcher2.reset()
+
+            elif self.special_skill_animation.clock.Return == 10:
+                if self.switcher2.operation():
+                    for object in self.gameplay.side(- self.side) :
+                        if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] * 5  + (self.box.width + object.box.width) / 2 :
+                            if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                                if same_line_checker(self, object):
+                                    add_effect(object, knock_back(object, 0.5, 20))
+        else:
             self.special_skill_reset()
+            self.check = True
 
 
     def special_skill_reset(self):
@@ -282,40 +316,49 @@ class wizardclass():
         self.special_skill_animation.reset()
 
     def operation(self):
-        if self.alive: 
-            self.status_bar()
-            self.check_forward()
+        if self.alive:
             for effect in self.effect_list:
                 effect.play()
-
-            if self.status == 3:
-                self.move()
-
-            elif self.status == 1:
-                if self.special_status:
-                    self.special_skill()
-                else:
-                    self.attack()
-
-            elif self.status == 2 :
-                self.standstill()
-            
-            if self.get_hit:
-               self.Geting_hit()
-
+            if self.get_hit :
+                self.Geting_hit()
+            self.status_update()
             if self.health <= 0:
                 self.die()
+                return
             
-            for magic_ball in self.magicball_list:
-                if magic_ball.operation():
-                    self.mana += 30
-                if magic_ball.status == False :
-                    self.magicball_list.remove(magic_ball)
+            elif self.status > 0:
+                self.check = True
+                if self.status == 3:
+                    self.move()
 
+                elif self.status == 1:
+                    self.attack()
 
-            # pygame.draw.rect(screen.screen,Red,self.box,1)
+                elif self.status == 2 :
+                    self.standstill()
+                    
+                elif self.status == 4:
+                    self.special_skill()
+
+                for magicbullet in self.magicbullet_list:
+                    magicbullet.operation()
+
+            self.pre_status = self.status
+
+            if self.status > 0:
+                if self.check:
+                    self.check_forward()
+                self.check_collide()
+                self.collide = None
+            # pygame.draw.rect(screen.screen,White,self.box,1)
             # pygame.draw.rect(screen.screen,White,self.imgbox,1)
+            
 
+        else:
+            self.dying_animation.play()
+            if self.dying_animation.status == False:
+                self.dying_animation.remove()
+                self.gameplay.side0.remove(self)        
     
 
 

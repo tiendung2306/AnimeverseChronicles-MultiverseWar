@@ -24,18 +24,27 @@ def collide_checker(object1,object2):
         
 
 def collide_check_special(special_object, object):
-    if special_object.side == -1:
-        special_object.topleft = special_object.topright
-    tan1 =  (special_object.topleft[1] - object.box.centery ) / (object.box.centerx - special_object.topleft[0])
-    alpha = math.atan(tan1)
-    # print(alpha)
+    if object.box.centerx - special_object.start_point[0] == 0:
+        alpha = - math.pi / 2
+    else:
+        tan1 =  (special_object.start_point[1] - object.box.centery ) / (object.box.centerx - special_object.start_point[0])
+        alpha = math.atan(tan1)
     beta = alpha - special_object.angle * math.pi / 180
-    # print(beta)
-    distance = abs(math.sin(beta) * math.sqrt((special_object.topleft[0] - object.box.centerx)**2 +(special_object.topleft[1] - object.box.centery)**2  ))
-    # print(math.sin(beta))
-    # print(special_object.topleft[0] - object.box.centerx)
-    # print(special_object.topleft[1] - object.box.centery)
-    if distance < special_object.size[0] / 2 + object.box.width / 2:
+    distance = abs(math.sin(beta) * math.sqrt((special_object.start_point[0] - object.box.centerx)**2 +(special_object.start_point[1] - object.box.centery)**2  ))
+
+    if distance < special_object.size[1] / 2 + object.box.width / 2:
         return True
     else:
         return False
+    
+
+def same_line_checker(object1, object2):
+    box1 = object1.box
+    box2 = object2.box
+    if ((box1.top <= box2.top)and(box2.top <= box1.bottom)) or ((box1.top <= box2.bottom)and(box2.bottom <= box1.bottom)):
+        return True
+    else:
+        (box1, box2) = (box2, box1)
+        if ((box1.top <= box2.top)and(box2.top <= box1.bottom)) or ((box1.top <= box2.bottom)and(box2.bottom <= box1.bottom)):
+            return True
+    return False

@@ -4,7 +4,10 @@ from pygame.locals import *
 from clock import *
 from img_analyze import *
 from animation_player import *
-from fake_object import *
+from object_function import *
+from list_function import *
+from collide_checker import *
+
 
 class dizzy():
     def __init__(self, object, lasted_time):
@@ -33,9 +36,13 @@ class soul_sucking():
             self.animation = one_time_animation_player_special([soul1, soul2, soul3, soul4, soul5, soul6, soul6, soul6, soul7, soul8], - object.side, 1, object.box, ( - 3 / 4, -1 / 2, 1, 1), object.gameplay)
         self.clock = timing_clock(1 ,object.gameplay)
         self.object = object
+        self.switch = N_time_switch(1)
     
     def play(self):
         self.clock.start()
+        if self.switch.operation():
+            self.object.get_hit = True
+            self.object.get_damege = self.object.health * 20 / 100
         if self.clock.Return == True:
             self.animation.play()
         else:
@@ -46,52 +53,122 @@ class soul_sucking():
         self.object.effect_list.remove(self)
 
 
+
 class knock_back():
-    def __init__(self, object, level):
+    def __init__(self, object, lasting_time, knock_back_speed):
         self.object = object
         self.box = pygame.Rect(object.box.left,object.box.top,object.box.width,object.box.height)        
         if object.side == 1:
-            self.animation = one_time_animation_player_special([knock_back1,knock_back2,knock_back3,knock_back4,knock_back5,knock_back6], object.side, 0.7, self.box, (1, 0, 3, 1), object.gameplay)
+            self.animation = one_time_animation_player_special([knock_back1,knock_back2,knock_back3,knock_back4,knock_back5,knock_back6], object.side, 0.5, self.box, (1 + object.gameplay.box_size[0] / (self.box.width), 1 - object.gameplay.box_size[1] / (self.box.height)  , object.gameplay.box_size[0] / (self.box.width) , object.gameplay.box_size[1] / (self.box.height)), object.gameplay)
         elif object.side == -1:
-            self.animation = one_time_animation_player_special([knock_back1,knock_back2,knock_back3,knock_back4,knock_back5,knock_back6], object.side, 0.7, self.box, (-1, 0, 3, 1), object.gameplay)
-        self.clock = timing_clock(0.2, object.gameplay)
-        self.level = level
+            self.animation = one_time_animation_player_special([knock_back1,knock_back2,knock_back3,knock_back4,knock_back5,knock_back6], object.side, 0.5, self.box, (- object.gameplay.box_size[0] / (self.box.width), 1 - object.gameplay.box_size[1] / (self.box.height)  , object.gameplay.box_size[0] / (self.box.width) , object.gameplay.box_size[1] / (self.box.height)), object.gameplay)
+        self.clock = timing_clock(lasting_time, object.gameplay)
+        self.speed = knock_back_speed
     
     def play(self):
         self.animation.play()
         self.clock.start()
         if self.clock.Return :
-            self.object.imgbox.centerx -= (self.object.speed * self.level * screen.screen.get_rect().width / 50) * (self.object.gameplay.curr_time - self.object.gameplay.pre_curr_time)  * self.object.side
-        else:
+            copy(self.object.box, self.object.knock_back_animation.play())
+            self.object.status = -1
+            self.object.imgbox.centerx -= (self.speed * screen.screen.get_rect().width / 100) * (self.object.gameplay.curr_time - self.object.gameplay.pre_curr_time)  * self.object.side
+            for object in self.object.gameplay.side(self.object.side):
+                if collide_checker(self.object,object):
+                    if (not (object == self.object)) :
+                        ispass = False
+                        for effect in object.effect_list:
+                            if effect.__class__ == knock_back:
+                                ispass = True
+                                break
+                        if not ispass:
+                            add_effect(object, knock_back(object, self.clock.counter - self.clock.gameplay.curr_time, self.speed))
+            
+        elif self.animation.status == False:
             self.remove()
 
     def remove(self):
         self.object.effect_list.remove(self)
         self.clock.remove()
+        self.object.check_forward()
+
+
+acceleration_original = 20.0
 
 class flying():
-    def __init__(self, object, level):
+    def __init__(self, object, flying_speed):
         self.object = object
-        self.level = level
+        self.box = pygame.Rect(object.box.left,object.box.top,object.box.width,object.box.height)        
+        if object.side == 1:
+            self.animation = one_time_animation_player_special([flying1,flying2,flying3,flying4,flying5,flying6,flying7,flying8], object.side, 0.7, self.box, (1/2 - object.gameplay.box_size[0] * 3 / (self.box.width * 2), 1 - object.gameplay.box_size[1] / (self.box.height * 2)  , object.gameplay.box_size[0] * 3 / (self.box.width) , object.gameplay.box_size[1] / (self.box.height * 2)), object.gameplay)
+        elif object.side == -1:
+            self.animation = one_time_animation_player_special([flying1,flying2,flying3,flying4,flying5,flying6,flying7,flying8], object.side, 0.7, self.box, (1/2 - object.gameplay.box_size[0] * 3 / (self.box.width * 2), 1 - object.gameplay.box_size[1] / (self.box.height * 2)  , object.gameplay.box_size[0] * 3 / (self.box.width) , object.gameplay.box_size[1] / (self.box.height * 2)), object.gameplay)
+        self.speed = flying_speed
+
 
     def play(self):
-        self.object.imgbox.centery -= self.object.gameplay.box_size[1] * self.level 
-        self.remove()
+        self.animation.play()
+        copy(self.object.box, self.object.flying_animation.play())
+        self.object.status = -2
+        self.speed -= acceleration_original * (self.object.gameplay.curr_time - self.object.gameplay.pre_curr_time) 
+        self.object.imgbox.centery -= (self.speed* screen.screen.get_rect().width / 100) * (self.object.gameplay.curr_time - self.object.gameplay.pre_curr_time)  
+        if self.speed <= 0:
+            self.remove()
+            ispass = False
+            for effect in self.object.effect_list:
+                if effect.__class__ == flying or effect.__class__ == falling:
+                    ispass = True
+                    break
+            if not ispass:
+                add_effect(self.object, falling(self.object))
 
     def remove(self):
         self.object.effect_list.remove(self)
+        self.object.check_forward()
 
-dizzy_effect = 1
-soul_sucking_effect = 2
-knock_back_effect = 3
-flying_effect = 4
 
-def add_effect(object, effect,lasted_time, level):
-    if effect == dizzy_effect:
-        object.effect_list.append(dizzy(object, lasted_time))
-    elif effect == soul_sucking_effect:
-        object.effect_list.append(soul_sucking(object))
-    elif effect == knock_back_effect:
-        object.effect_list.append(knock_back(object, level))
-    elif effect == flying_effect:
-        object.effect_list.append(flying(object, level))
+
+class falling():
+    def __init__(self, object):
+        self.object = object
+        self.box = pygame.Rect(object.box.left,object.box.top,object.box.width,object.box.height)        
+        self.speed = 0
+
+
+    def play(self):
+        copy(self.object.box, self.object.falling_animation.play())
+        self.object.status = -3
+        self.speed += acceleration_original * (self.object.gameplay.curr_time - self.object.gameplay.pre_curr_time) 
+        self.object.imgbox.centery += (self.speed* screen.screen.get_rect().width / 100) * (self.object.gameplay.curr_time - self.object.gameplay.pre_curr_time)  
+        if self.object.box.bottom >= self.object.gameplay.path_height :
+            tmp = get_spawn_imgbox(self.object, pygame.Rect( 0, self.object.gameplay.path_height - self.object.gameplay.box_size[1], self.object.gameplay.box_size[0], self.object.gameplay.box_size[1]))
+            self.object.box.centery += tmp.centery - self.object.imgbox.centery
+            self.object.imgbox.centery += tmp.centery - self.object.imgbox.centery
+            self.remove()
+
+    def remove(self):
+        self.object.effect_list.remove(self)
+        self.object.check_forward()
+
+class iron_body():
+    def __init__(self, object, lasted_time):
+        self.object = object
+        self.clock = timing_clock(lasted_time ,object.gameplay)
+
+    def play(self):
+        self.clock.start()
+        if self.clock.Return == True:
+            self.animation.play()
+            self.object.status = 2
+        else:
+            self.remove()
+
+    def remove(self):
+        self.clock.remove()
+        self.object.effect_list.remove(self)
+
+def add_effect(object, effect):
+    object.effect_list.append(effect)
+
+
+
+
