@@ -8,6 +8,7 @@ from states import *
 from screen import *
 from gameplay_ui import *
 from key_binding_manager import *
+import random
 
 class gameplay():
     def __init__(self, play_mode):
@@ -19,9 +20,11 @@ class gameplay():
         self.spawn_queue1 = []
         self.spawn_queue2 = []
 
+        path_num = random.randint(1, 5)
+        # print(path_num)
         self.fake_bg_original = pygame.image.load('GameplayAssets\\bg1.png')
         self.bg_original = pygame.image.load('GameplayAssets\\bg1.png')
-        self.path_original = pygame.image.load('GameplayAssets\\path1.png')
+        self.path_original = pygame.image.load('GameplayAssets\\path' + str(path_num) + '.png')
         self.board_original = pygame.image.load('GameplayAssets\\board.png')
         self.settings_button_original = pygame.image.load('GameplayAssets\\settings_button.png')
         self.play_button_original = pygame.image.load('GameplayAssets\\play_button.png')
