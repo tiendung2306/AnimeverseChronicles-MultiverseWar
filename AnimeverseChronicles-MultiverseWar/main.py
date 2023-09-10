@@ -212,9 +212,12 @@ class main():
             thisGameplay.object_operation()
 
             thisGameplay.pre_curr_time = thisGameplay.curr_time
-
-            if thisGameplay.isPlay == False:
+            
+            if thisGameplay.isGameover == True:
+                thisGameplay.draw_gameover_panel()
+            elif thisGameplay.isPlay == False:
                 thisGameplay.draw_pause_pannel()
+            
             pygame.display.update()
             if Button == 'Back':
                 self.back_state()

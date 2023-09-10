@@ -77,6 +77,8 @@ class Nexusclass():
             self.gameplay.side2.remove(self)
         self.alive = False
 
+    def check_gameover(self):
+        return not(self.alive)
 
     def operation(self):
             if self.alive:

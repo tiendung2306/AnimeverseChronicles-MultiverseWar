@@ -8,6 +8,7 @@ from states import *
 from screen import *
 from gameplay_ui import *
 from key_binding_manager import *
+from gameover_panel import *
 import random
 
 class gameplay():
@@ -77,10 +78,13 @@ class gameplay():
         self.gold_outcome_2 = 0
 
         self.isPlay = True
+        self.isGameover = False
+        self.Gameover_status = 0 #0 la hoa`, 1 la player 1 thua, 2 la player 2 thua
         self.fade = pygame.Surface((screen.screen.get_rect().width, screen.screen.get_rect().height))
         self.fade.fill((0,0,0))
         self.fade.set_alpha(200)
         self.Pause_Pannel = pause_pannel()
+        self.Gameover_panel = gameover_panel(self)
 
         self.spawn_point_height = self.path.get_rect().top + self.path.get_rect().height / 7.0
 
@@ -142,6 +146,7 @@ class gameplay():
 
     def screen_resize(self):
         self.Pause_Pannel.screen_resize()
+        self.Gameover_panel.screen_resize()
         self.fade = pygame.Surface((screen.screen.get_rect().width, screen.screen.get_rect().height))
         self.fade.fill((0,0,0))
         self.fade.set_alpha(200)
@@ -169,11 +174,11 @@ class gameplay():
                 self.isPlay = 1 - self.isPlay
                 return 'None'
         else: #neu game dang duoc pause
-            if self.Pause_Pannel.check_click(mouse) == self.Pause_Pannel.buttons[0]: #an vao nut continue
+            if self.isGameover == False and self.Pause_Pannel.check_click(mouse) == self.Pause_Pannel.buttons[0]: #an vao nut continue
                 self.SwitchPlayPauseState()
                 self.isPlay = 1 - self.isPlay
                 return 'None'
-            if self.Pause_Pannel.check_click(mouse) == self.Pause_Pannel.buttons[1]: #an vao nut settings
+            if self.isGameover == False and  self.Pause_Pannel.check_click(mouse) == self.Pause_Pannel.buttons[1]: #an vao nut settings
                 return 'Settings'
             if self.Pause_Pannel.check_click(mouse) == self.Pause_Pannel.buttons[2]: #an vao nut back to menu
                 return 'Back'
@@ -317,7 +322,30 @@ class gameplay():
         self.gold_text2_rect = self.gold_text2.get_rect()
         self.gold_text2_rect.center = (screen.screen.get_rect().width - self.board_2.get_rect().width // 2, self.board_2.get_rect().height // 3)
 
+        player1_gameover = self.nexus1.check_gameover()
+        player2_gameover = self.nexus2.check_gameover()
+        if player1_gameover and player2_gameover:
+            self.isGameover = True
+            self.Gameover_status = 0 #hoa`
+            if self.isPlay == True:
+                self.SwitchPlayPauseState()
+                self.isPlay = 1 - self.isPlay
+        elif player1_gameover:
+            self.isGameover = True
+            self.Gameover_status = 1 #player 1 thua
+            if self.isPlay == True:
+                self.SwitchPlayPauseState()
+                self.isPlay = 1 - self.isPlay
+        elif player2_gameover:
+            self.isGameover = True
+            self.Gameover_status = 2 #player 2 thua
+            if self.isPlay == True:
+                self.SwitchPlayPauseState()
+                self.isPlay = 1 - self.isPlay
 
+    def draw_gameover_panel(self):
+        self.set_fade()
+        self.Gameover_panel.update()
 
     def object_operation(self):
         self.bg.blit(self.fake_bg, (0,0))
