@@ -289,7 +289,7 @@ class gameplay():
         self.set_fade()
         self.Pause_Pannel.update()
 
-    def update(self): #update cac thong so cua game, chay theo tung frame cua gamplay_loop
+    def update(self): #update cac thong so cua game, chay theo tung frame cua gameplay_loop
         #timer process
         if self.isPlay == True:
             self.curr_time = self.time - self.start_time - self.pause_time

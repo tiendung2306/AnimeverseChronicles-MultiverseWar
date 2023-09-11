@@ -25,7 +25,7 @@ class Nexusclass():
             self.gameplay.side2.append(self)
             self.box = pygame.Rect(screen.screen.get_size()[0] - self.size[0], self.gameplay.path_height - self.size[1] * 9 / 10, self.size[0], self.size[1])     
             self.side = -1
-            self.imgbox = reverse(nexus).hitbox_to_imgbox(self.box)   
+            self.imgbox = reverse(nexus).hitbox_to_imgbox(self.box)
             self.img = nexus.reverse
 
 

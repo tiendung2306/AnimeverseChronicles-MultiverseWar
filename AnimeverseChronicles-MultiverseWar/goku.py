@@ -69,7 +69,6 @@ class kame_class():
 
 
     def collide_check(self):
-
         if self.side == 1:
             for enemy_object in self.gameplay.side2:
                 if collide_check_special(self, enemy_object):
@@ -225,7 +224,7 @@ class gokuclass():
             self.status = 2
             flag = True
         else:
-            for object in self.gameplay.side(self.side) + self.gameplay.side4 :
+            for object in self.gameplay.side(self.side) + self.gameplay.side4:
                 if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 2 + (self.box.width + object.box.width) / 2:
                     if (object.box.centerx - self.box.centerx) * self.side >= 0:
                         if same_line_checker(self, object):

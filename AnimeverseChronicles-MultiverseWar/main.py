@@ -147,6 +147,7 @@ class main():
 
     def choose_play_mode_loop(self):
         running = True
+        self.MainMenu.play_mode_state = 0
         while running:
             self.screen_resize()
             screen.screen.blit(self.MainMenu.main_menu_bg, (0, 0))
@@ -167,6 +168,15 @@ class main():
                 if State.curr_state == State.states[1]:
                     if gameplay_mode == -1:
                         print('What the f*ck, how can it be -1. Panikkk!!!!!!!!')
+                    if gameplay_mode == 3:
+                        gameplay_mode = 1
+                        self.Gameplay1 = gameplay(1)
+                        self.Gameplay1.update()
+                    if gameplay_mode == 4:
+                        gameplay_mode = 2
+                        self.Gameplay2 = gameplay(2)
+                        self.Gameplay2.update()
+                    
                     self.cur_gameplay_mode = gameplay_mode
                 self.set_state(State.curr_state)
                 return 
@@ -205,7 +215,7 @@ class main():
                 if event.type == pygame.KEYDOWN:
                     thisGameplay.check_press(event)
                 if event.type == pygame.USEREVENT:
-                    thisGameplay.time += 0.01
+                    thisGameplay.time += 0.0104
                 
             thisGameplay.draw_gameplay_ui()
             
