@@ -12,18 +12,18 @@ from color import *
 a = b = c = d = 0
 Flag = True
 flag2 = False
-counter = 32
-img = pygame.image.load("GameplayAssets\\tanker({}).png".format(counter))
+counter = 1
+img = pygame.image.load("GameplayAssets\\explosion_stage_3({}).png".format(counter))
 WIN = pygame.display.set_mode(img.get_size())
 while Flag:
     WIN.fill(Black)
     WIN.blit(img,(0,0))
     for event in pygame.event.get():
         if event.type == KEYDOWN:
-            print("tanker{}".format(counter),"= analyzed_img(","GameplayAssets\\tanker({}).png".format(counter),",",a,",",b,",",c - a,",",d - b,")")
+            print("explosion_stage_3{}".format(counter),"= analyzed_img(","GameplayAssets\\explosion_stage_3({}).png".format(counter),",",a,",",b,",",c - a,",",d - b,")")
             
             counter += 1
-            img = pygame.image.load("GameplayAssets\\tanker({}).png".format(counter))
+            img = pygame.image.load("GameplayAssets\\explosion_stage_3({}).png".format(counter))
             if event.key == 9:
                 Flag = False
             # if event.key == 32 :
@@ -44,6 +44,9 @@ while Flag:
         pygame.draw.rect(WIN,Yellow,hcn2)
     pygame.draw.rect(WIN,Yellow,pygame.Rect(a,b,c - a,d - b),1)
     pygame.display.update()
+text = ""
+for i in range(53,57):
+    text_i = "naruto{}, ".format(i)
+    text = text + text_i
 
-for i in range(1,9):
-    print("flying",i)
+print(text)

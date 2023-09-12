@@ -1,34 +1,22 @@
 import pygame
 from img_analyze import *
 from screen import *
+from object_function import *
 
 class Nexusclass():
     def __init__(self, side , gameplay):
-        # self.screen = pygame.display.get_surface()
-        # self.nexus_surface_original = pygame.image.load(filename)
-        # self.nexus_surface = self.nexus_surface_original.copy()
-
-        # pre_nexus_height = self.nexus_surface.get_rect().height
-        # pre_nexus_width = self.nexus_surface.get_rect().width
-        # new_nexus_width = self.screen.get_rect().width // 10
-        # self.nexus_surface = pygame.transform.smoothscale(self.nexus_surface, (new_nexus_width, new_nexus_width / pre_nexus_width * pre_nexus_height))
         self.gameplay = gameplay
-        self.size = (self.gameplay.box_size[0] * 2, self.gameplay.box_size[0] * 2 * nexus.data[3] / nexus.data[2] )
-        if side == 1 :
-            self.gameplay.side1.append(self)
-            self.box = pygame.Rect(self.size[0] / 2, self.gameplay.path_height - self.size[1] * 9 / 10, self.size[0], self.size[1])     
+        if side == 1:
             self.side = 1
-            self.imgbox = nexus.hitbox_to_imgbox(self.box)        
             self.img = nexus
-
         elif side == 2:
-            self.gameplay.side2.append(self)
-            self.box = pygame.Rect(screen.screen.get_size()[0] - self.size[0], self.gameplay.path_height - self.size[1] * 9 / 10, self.size[0], self.size[1])     
             self.side = -1
-            self.imgbox = reverse(nexus).hitbox_to_imgbox(self.box)   
             self.img = nexus.reverse
-
-
+        self.gameplay.side(self.side).append(self)
+        rect = pygame.Rect(0,0,self.gameplay.box_size[0], self.gameplay.box_size[1])
+        rect.center = (screen.screen.get_rect().centerx - self.side * self.gameplay.box_size[0] * 27, self.gameplay.path_height - self.gameplay.box_size[1] / 2)
+        self.imgbox = get_spawn_imgbox(self, rect)
+        self.box = self.img.imgbox_to_hitbox(self.imgbox)
         self.health_max = 500.0
         self.health =  self.health_max
         self.mana_max = 100.0
@@ -41,15 +29,12 @@ class Nexusclass():
         self.get_hit = False
 
     def resize(self):  
-        self.size = (self.gameplay.box_size[0] * 2, self.gameplay.box_size[0] * 2 * nexus.data[3] / nexus.data[2] )
-        if self.side == 1 :
-            self.box = pygame.Rect(self.size[0] / 2, self.gameplay.path_height - self.size[1] * 9 / 10, self.size[0], self.size[1])     
-            self.imgbox = nexus.hitbox_to_imgbox(self.box)        
-
-        elif self.side == -1:
-            self.box = pygame.Rect(screen.screen.get_size()[0] - self.size[0] * 3 / 2, self.gameplay.path_height - self.size[1] * 9 / 10, self.size[0], self.size[1])     
-            self.imgbox = reverse(nexus).hitbox_to_imgbox(self.box)   
-        self.display()
+        a = float(screen.screen.get_width()) / self.gameplay.screen[0]
+        b = float(screen.screen.get_height()) /  self.gameplay.screen[1]
+        tmp = pygame.Rect(self.imgbox.left * a, self.imgbox.top * b, self.imgbox.width * a, self.imgbox.height * b)
+        copy(self.imgbox, tmp)
+        self.box = self.img.imgbox_to_hitbox(self.imgbox)
+        self.operation()  
 
     def status_bar(self):
         if self.mana >= self.mana_max:
@@ -85,21 +70,8 @@ class Nexusclass():
                 if self.get_hit :
                     self.Geting_hit()
                 self.display()
-                #     return None
-                # self.check_forward()
-                # for effect in self.effect_list:
-                #     effect.play()
+            else:
+                self.gameplay.end = True
 
-                # if self.status == 3:
-                #     self.move()
-
-                # elif self.status == 1:
-                #     self.attack()
-
-                # elif self.status == 2 :
-                #     self.standstill()s
-
-
-
-                pygame.draw.rect(screen.screen,White,self.box,1)
-                pygame.draw.rect(screen.screen,Red,self.imgbox,1)
+                # pygame.draw.rect(screen.screen,White,self.box,1)
+                # pygame.draw.rect(screen.screen,Red,self.imgbox,1)

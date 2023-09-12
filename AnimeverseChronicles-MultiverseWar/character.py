@@ -6,5 +6,5 @@ from sword_man import *
 from tanker import *
 from wizard import *
 from goku import *
-
+from naruto import *
 

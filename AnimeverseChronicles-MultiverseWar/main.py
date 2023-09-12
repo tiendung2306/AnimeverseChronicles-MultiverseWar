@@ -34,6 +34,7 @@ class main():
 
         self.set_state(State.curr_state) #Goi ra main menu state
 
+
     def set_state(self, state):
         State.list_states.append(state)
         State.curr_state = state

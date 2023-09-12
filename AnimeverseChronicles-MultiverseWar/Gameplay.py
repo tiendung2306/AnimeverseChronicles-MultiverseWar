@@ -45,6 +45,8 @@ class gameplay():
         self.tankerclass = tankerclass
         self.wizardclass = wizardclass
         self.gokuclass = gokuclass
+        self.nexusclass = Nexusclass
+        self.narutoclass = narutoclass
 
         self.gameplay_ui = gameplay_ui(self)
 
@@ -67,6 +69,7 @@ class gameplay():
         self.pause_time = 0.0
         self.start_pause_time = 0.0
         self.time = 0.0 # dung giong voi time.time()
+        self.end = False
 
         self.gold_font = pygame.font.Font('Fonts\\joystix_monospace.otf', 20)
         self.curr_gold_1 = 0
@@ -85,7 +88,7 @@ class gameplay():
         self.spawn_point_height = self.path.get_rect().top + self.path.get_rect().height / 7.0
 
         self.box_size = (screen.screen.get_rect().width / 60 , screen.screen.get_rect().height / 20)
-        self.path_height = screen.screen.get_rect().height - self.path.get_rect().height 
+        self.path_height = screen.screen.get_rect().height - self.path.get_rect().height * 7 / 10
         self.screen = screen.screen.get_size()
     #Object import:
         self.side1 = []
@@ -150,7 +153,7 @@ class gameplay():
  
 
         self.box_size = (screen.screen.get_rect().width / 60 , screen.screen.get_rect().height / 20)
-        self.path_height = screen.screen.get_rect().height - self.path.get_rect().height
+        self.path_height = screen.screen.get_rect().height - self.path.get_rect().height * 7 / 10
 
         for object in self.side2 + self.side1:
             object.resize()
