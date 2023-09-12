@@ -33,7 +33,10 @@ class settings():
         if flag == False:
             self.resolution_tmp_lists.append(screen.curr_monitor_resolution)
         for x in self.resolution_tmp_lists:
-            self.resolution_lists.append((str(x[0]) + ' x ' + str(x[1]), x))
+            if x == screen.curr_monitor_resolution:
+                self.resolution_lists.append((str(x[0]) + ' x ' + str(x[1]) + '*', x))
+            else:
+                self.resolution_lists.append((str(x[0]) + ' x ' + str(x[1]), x))
 
     def load_all_text(self):
         self.buttons_font = pygame.font.Font('Fonts\\BigSpace-rPKx.ttf', 64)
@@ -88,7 +91,10 @@ class settings():
         self.menu = pygame_menu.Menu('', screen.screen.get_rect().width / 12.0 * 11.0, screen.screen.get_rect().height / 12.0 * 11.0, theme=self.mytheme)
         self.menu.add.dropselect('Display Mode: ', [('Fullscreen', 0), ('Windowed', 1)], default=1-self.IsFullScreen, onchange=self.set_display_mode, font_size=30, selection_option_font_size=30, selection_color=pygame.color.Color(0,0,128))
         curr_resolution = (screen.screen.get_rect().width, screen.screen.get_rect().height)
-        curr_state = (str(curr_resolution[0]) + ' x ' + str(curr_resolution[1]), curr_resolution)
+        if curr_resolution == screen.curr_monitor_resolution:
+            curr_state = (str(curr_resolution[0]) + ' x ' + str(curr_resolution[1]) + '*', curr_resolution)
+        else:
+            curr_state = (str(curr_resolution[0]) + ' x ' + str(curr_resolution[1]), curr_resolution)
         try:
             self.resolution_lists.index(curr_state)
         except:

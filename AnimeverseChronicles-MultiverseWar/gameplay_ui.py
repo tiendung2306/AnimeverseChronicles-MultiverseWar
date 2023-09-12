@@ -12,18 +12,38 @@ class button():
         self.button_image_2 = self.button_image_original.copy()
         self.button_image_2 = pygame.transform.flip(self.button_image_2, True, False)
 
+        self.button_num = -1
+        self.key_icon_filename = '1_Key_Light.png'
+        self.key_icon_original = pygame.image.load('GameplayAssets\\keyboard_and_mouse_icons\\Light\\' + self.key_icon_filename)
+        self.mouse_click_icon_original = pygame.image.load('GameplayAssets\\keyboard_and_mouse_icons\\Light\\Mouse_Left_Key_Light.png')
+
+    def load_key_icon_image(self):
+        self.key_icon = self.key_icon_original.copy()
+        self.key_icon = pygame.transform.smoothscale(self.key_icon, (screen.screen.get_rect().width / 75, self.key_icon.get_rect().height / (self.key_icon.get_rect().width / screen.screen.get_rect().width * 75)))
+
     def load_image(self):
         self.button_image_1 = self.button_image_original.copy()
         self.button_image_2 = self.button_image_original.copy()
         self.button_image_2 = pygame.transform.flip(self.button_image_2, True, False)
         self.button_image_1 = pygame.transform.smoothscale(self.button_image_1, (screen.screen.get_rect().width / 16, screen.screen.get_rect().height / 16))
         self.button_image_2 = pygame.transform.smoothscale(self.button_image_2, (screen.screen.get_rect().width / 16, screen.screen.get_rect().height / 16))
+        
+        self.load_key_icon_image()
+        self.mouse_click_icon = self.mouse_click_icon_original.copy()
+        self.mouse_click_icon = pygame.transform.smoothscale(self.mouse_click_icon, (screen.screen.get_rect().width / 85, self.mouse_click_icon.get_rect().height / (self.mouse_click_icon.get_rect().width / screen.screen.get_rect().width * 85)))
 
-    def draw_button(self, pos, side):
+    def draw_button(self, button_num, pos, side):
+        if self.button_num == -1:
+            self.button_num = button_num
+            self.key_icon_filename = str(self.button_num) + '_Key_Light.png'
+            self.key_icon_original = pygame.image.load('GameplayAssets\\keyboard_and_mouse_icons\\Light\\' + self.key_icon_filename)
+            self.load_key_icon_image()
         if side == 1:
             screen.screen.blit(self.button_image_1, pos)
+            screen.screen.blit(self.mouse_click_icon, (pos[0] + self.button_image_1.get_rect().width / 7.95, screen.screen.get_rect().height / 97))
         else:
             screen.screen.blit(self.button_image_2, pos)
+            screen.screen.blit(self.key_icon, (pos[0] + self.button_image_2.get_rect().width - 2*self.button_image_2.get_rect().width / 5.0, screen.screen.get_rect().height / 190))
 
     def can_spawn(self, side):
         if side == 1:
@@ -167,7 +187,7 @@ class gameplay_ui():
             screen.screen.blit(self.button_border, (self.button_rect_1[i].left, self.button_rect_1[i].top))
             character_rect = self.character_spawn_buttons[i].button_image_1.get_rect()
             character_rect.center = self.button_rect_1[i].center
-            self.character_spawn_buttons[i].draw_button((character_rect.left, character_rect.top), 1)
+            self.character_spawn_buttons[i].draw_button(i + 1, (character_rect.left, character_rect.top), 1)
             prev_pos_width = prev_pos_width + self.button_border.get_rect().width + screen.screen.get_rect().width / 250
             
         if self.gameplay.play_mode == 2:
@@ -177,10 +197,10 @@ class gameplay_ui():
                 screen.screen.blit(self.button_border, (self.button_rect_2[i].left, self.button_rect_2[i].top))
                 character_rect = self.character_spawn_buttons[i].button_image_2.get_rect()
                 character_rect.center = self.button_rect_2[i].center
-                self.character_spawn_buttons[i].draw_button((character_rect.left, character_rect.top), 2)
+                self.character_spawn_buttons[i].draw_button(i + 1, (character_rect.left, character_rect.top), 2)
                 prev_pos_width = prev_pos_width - self.button_border.get_rect().width - screen.screen.get_rect().width / 250
 
-    def spawn(self, button_num, side):
+    def spawn(self, button_num, side): #spawn tuong
         self.character_spawn_buttons[button_num].spawn(side)
 
     def insert_in_spawn_queue(self, button_num, side): #bat dau an vao nut de spawn

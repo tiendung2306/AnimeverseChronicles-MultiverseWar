@@ -15,6 +15,8 @@ class tutorials():
 
         self.text = "Thang nao co tien\nThi nap tien vao donate cho tao\nIt thi 5 qua trung\nNhieu thi 1 qua ten lua"
 
+        self.bank_qr_original = pygame.image.load('GameplayAssets\\BankQR.png')
+
         self.load()
 
     def load(self):
@@ -26,6 +28,11 @@ class tutorials():
         self.back_button_rect = self.back_button.get_rect()
         self.back_button_rect.center = (screen.screen.get_rect().width / 2.0, screen.screen.get_rect().height / 5.0 * 4.0)
 
+        self.bank_qr = self.bank_qr_original.copy()
+        self.bank_qr = pygame.transform.smoothscale(self.bank_qr, (screen.screen.get_rect().width / 5, self.bank_qr.get_rect().height / (self.bank_qr.get_rect().width / (screen.screen.get_rect().width / 5))))
+        self.bank_qr_rect = self.bank_qr.get_rect()
+        self.bank_qr_rect.center = (screen.screen.get_rect().width / 5.0 * 4.0, screen.screen.get_rect().height / 2)
+
     def check_click(self, mouse):
         if self.back_button_rect.left <= mouse[0] <= self.back_button_rect.right and self.back_button_rect.top <= mouse[1] <= self.back_button_rect.bottom:
             State.curr_state = State.states[0]
@@ -33,6 +40,7 @@ class tutorials():
     def update(self):
         self.print_multiline(screen.screen.get_rect().width / 2.5, screen.screen.get_rect().height / 2.5, self.font, self.text, self.color, self.font_size)
         screen.screen.blit(self.back_button, self.back_button_rect)
+        screen.screen.blit(self.bank_qr, self.bank_qr_rect)
 
     def print_multiline(self, posX, posY, font, text : str, fontColour, fontsize):
         # posX = (screen.screen.get_rect().width * 1/8)

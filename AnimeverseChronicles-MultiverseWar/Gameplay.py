@@ -127,9 +127,9 @@ class gameplay():
         self.path = pygame.transform.smoothscale(self.path, (self.bg.get_rect().width, screen.screen.get_rect().height // 7))
         self.board_1 = pygame.transform.smoothscale(self.board_1, (screen.screen.get_rect().width / 7, screen.screen.get_rect().width / 7 / 2.4))
         self.board_2 = pygame.transform.smoothscale(self.board_2, (screen.screen.get_rect().width / 7, screen.screen.get_rect().width / 7 / 2.4))
-        self.settings_button = pygame.transform.smoothscale(self.settings_button, (self.board_1.get_rect().width // 6, self.board_1.get_rect().width // 6))
-        self.play_button = pygame.transform.smoothscale(self.play_button, (self.board_1.get_rect().width // 6, self.board_1.get_rect().width // 6))
-        self.pause_button = pygame.transform.smoothscale(self.pause_button, (self.board_1.get_rect().width // 6, self.board_1.get_rect().width // 6))
+        self.settings_button = pygame.transform.smoothscale(self.settings_button, (self.board_1.get_rect().width // 5, self.board_1.get_rect().width // 5))
+        self.play_button = pygame.transform.smoothscale(self.play_button, (self.board_1.get_rect().width // 5, self.board_1.get_rect().width // 5))
+        self.pause_button = pygame.transform.smoothscale(self.pause_button, (self.board_1.get_rect().width // 5, self.board_1.get_rect().width // 5))
 
 
         if self.play_mode == 2:
