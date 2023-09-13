@@ -15,7 +15,7 @@ class Nexusclass():
         self.index = 0
         self.gameplay.side(self.side).append(self)
         rect = pygame.Rect(0,0,self.gameplay.box_size[0], self.gameplay.box_size[1])
-        rect.center = (screen.screen.get_rect().centerx - self.side * self.gameplay.box_size[0] * 20, self.gameplay.path_height - self.gameplay.box_size[1] / 2)
+        rect.center = (screen.screen.get_rect().centerx - self.side * self.gameplay.box_size[0] * 28, self.gameplay.path_height - self.gameplay.box_size[1] / 2)
         self.box = pygame.Rect(0,0,0,0)
         self.imgbox = pygame.Rect(0,0,0,0)
         get_spawn_display(self, rect)

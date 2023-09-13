@@ -37,8 +37,8 @@ class gameplay():
             sword_manclass : 10,
             tankerclass : 30,
             wizardclass : 50,
-            gokuclass : 100
-            
+            gokuclass : 100,
+            narutoclass : 150
         }
 
         #character type
@@ -98,7 +98,7 @@ class gameplay():
 
         self.spawn_point_height = self.path.get_rect().top + self.path.get_rect().height / 7.0
 
-        self.box_size = (screen.screen.get_rect().width / 45 , screen.screen.get_rect().height / 15)
+        self.box_size = (screen.screen.get_rect().width / 60 , screen.screen.get_rect().height / 20)
         self.path_height = screen.screen.get_rect().height - self.path.get_rect().height * 7 / 10
         self.screen = screen.screen.get_size()
     #Object import:
@@ -111,8 +111,8 @@ class gameplay():
         self.nexus1 = Nexusclass(1, self)
         self.nexus2 = Nexusclass(2, self)
 
-        spawn(narutoclass, 1, 20, self)
-        spawn(tankerclass, 2, 36, self)
+        # spawn(narutoclass, 1, 20, self)
+        # spawn(tankerclass, 2, 36, self)
         # spawn(tankerclass, 2, 37, self)
         # spawn(tankerclass, 2, 38, self)
         # spawn(tankerclass, 2, 39, self)
@@ -171,7 +171,7 @@ class gameplay():
         self.load_all_gameplay_image()
  
 
-        self.box_size = (screen.screen.get_rect().width / 45 , screen.screen.get_rect().height / 15)
+        self.box_size = (screen.screen.get_rect().width / 60 , screen.screen.get_rect().height / 20)
         self.path_height = screen.screen.get_rect().height - self.path.get_rect().height * 7 / 10
 
         for object in self.side2 + self.side1:
