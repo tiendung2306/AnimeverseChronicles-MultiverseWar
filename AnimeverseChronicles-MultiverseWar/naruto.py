@@ -126,7 +126,8 @@ class cloneclass():
         self.imgbox = pygame.Rect(0,0,0,0)
         self.gameplay = naruto.gameplay
         self.side = naruto.side
-        
+        # self.__class__ = naruto.__class__
+
         self.speed = 5.0 # 5/100 map per second 
         self.attack_scope = 1 * self.gameplay.box_size[0] # 4/15 map width
         self.attack_speed = 1/3 # attack(s) pers second
@@ -464,7 +465,7 @@ class narutoclass():
         
         self.special_skill_animation = one_time_animation_player(tmp_lib, self.side, 5.52, self.imgbox, self.gameplay)
         self.standstill_animation = one_time_animation_player([naruto68, naruto69, naruto70],self.side, 0.58, self.imgbox, self.gameplay)  
-        # self.dying_animation = one_time_animation_player([naruto71,naruto73,naruto74], self.side, 0.3, self.imgbox, self.gameplay)
+        self.dying_animation = one_time_animation_player([naruto71,naruto73,naruto74], self.side, 0.3, self.imgbox, self.gameplay)
         self.knock_back_animation = animation_player([naruto71], self.side, 1, self.imgbox, self.gameplay)
         self.flying_animation = animation_player([naruto74], self.side, 1, self.imgbox, self.gameplay)
         self.falling_animation = animation_player([naruto72], self.side, 1, self.imgbox, self.gameplay)

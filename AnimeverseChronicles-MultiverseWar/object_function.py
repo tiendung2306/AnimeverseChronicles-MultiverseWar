@@ -46,6 +46,9 @@ def get_spawn_imgbox(object, spawn_box):
     elif object.__class__ == object.gameplay.narutoclass:
         size = ( 685 / 100 , 585 / 100 )
         center_vector = ( 21 / 100 , -216 / 100 )
+    elif object.__class__ == object.gameplay.cloneclass:
+        size = ( 685 / 100 , 585 / 100 )
+        center_vector = ( 21 / 100 , -216 / 100 )
 
     size = (size[0] * spawn_box.width, size[1] * spawn_box.width)
     center_vector = (center_vector[0] * object.side * spawn_box.width , center_vector[1] * spawn_box.width)

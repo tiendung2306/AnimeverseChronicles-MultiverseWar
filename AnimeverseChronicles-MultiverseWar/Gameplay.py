@@ -49,6 +49,7 @@ class gameplay():
         self.gokuclass = gokuclass
         self.nexusclass = Nexusclass
         self.narutoclass = narutoclass
+        self.cloneclass = cloneclass
 
         self.gameplay_ui = gameplay_ui(self)
 
