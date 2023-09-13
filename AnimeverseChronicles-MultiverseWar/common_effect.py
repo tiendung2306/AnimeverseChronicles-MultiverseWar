@@ -89,7 +89,8 @@ class knock_back():
                 self.object.special_skill_reset()
                 self.object.special_status = False     
             self.object.status = -1
-            self.object.imgbox.centerx -= (self.speed * screen.screen.get_rect().width / 100) * (self.object.gameplay.curr_time - self.object.gameplay.pre_curr_time)  * self.object.side
+            if self.object.box.right < self.object.gameplay.nexus2.box.left and self.object.box.left > self.object.gameplay.nexus1.box.right:
+                self.object.imgbox.centerx -= (self.speed * screen.screen.get_rect().width / 100) * (self.object.gameplay.curr_time - self.object.gameplay.pre_curr_time)  * self.object.side
             for object in self.object.gameplay.side(self.object.side):
                 if collide_checker(self.object,object):
                     if (not (object == self.object)) :
@@ -178,7 +179,7 @@ class falling():
 
 
     def remove(self):
-        tmp = get_spawn_imgbox(self.object.__class__, pygame.Rect( 0, self.object.gameplay.path_height - self.object.gameplay.box_size[1], self.object.gameplay.box_size[0], self.object.gameplay.box_size[1]))
+        tmp = get_spawn_imgbox(self.object, pygame.Rect( 0, self.object.gameplay.path_height - self.object.gameplay.box_size[1], self.object.gameplay.box_size[0], self.object.gameplay.box_size[1]))
         self.object.box.centery += tmp.centery - self.object.imgbox.centery
         self.object.imgbox.centery += tmp.centery - self.object.imgbox.centery
         self.object.effect_list.remove(self)
@@ -193,14 +194,9 @@ class iron_body():
     def __init__(self, object, lasted_time):
         self.object = object
         self.clock = timing_clock(lasted_time ,object.gameplay)
-        self.switcher = N_time_switch(1)
         self.type = 1
 
     def play(self):
-        if self.switcher.operation():
-            tmp = get_spawn_imgbox(self.object.__class__, pygame.Rect( 0, self.object.gameplay.path_height - self.object.gameplay.box_size[1], self.object.gameplay.box_size[0], self.object.gameplay.box_size[1]))   
-            if self.object.imgbox.bottom < tmp.bottom and self.object.status < 0:
-                self.remove()
         self.clock.start()
         if self.clock.Return == True:
             for effect in self.object.effect_list:

@@ -448,7 +448,9 @@ explosion_stage_2_3 = analyzed_img( "GameplayAssets\\explosion_stage_2(3).png " 
 explosion_stage_3_1 = analyzed_img( "GameplayAssets\\explosion_stage_3(1).png " , 77 , 111 , 538 , 361 )
 explosion_stage_3_2 = analyzed_img( "GameplayAssets\\explosion_stage_3(2).png " , 77 , 111 , 538 , 361 )
 
+breaking_ground1 = analyzed_img("GameplayAssets\\breaking_ground(1).png" , 38 , 357 , 629 , 135 )
+breaking_ground2 = analyzed_img("GameplayAssets\\breaking_ground(2).png" , 5 , 230 , 685 , 256 )
+breaking_ground3 = analyzed_img("GameplayAssets\\breaking_ground(3).png" , 9 , 120 , 645 , 367 )
 
-
-
+shuriken_explosion = analyzed_img("GameplayAssets\\shuriken_explosion.png ", 195 , 307 , 184 , 184 )
 

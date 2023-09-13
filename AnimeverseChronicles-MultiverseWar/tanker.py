@@ -69,7 +69,6 @@ class tankerclass():
 
         
     def status_update(self):
-        self.collide = None 
         self.pre_status = self.status
 
         if self.pre_status == 1:
@@ -109,25 +108,26 @@ class tankerclass():
     
     def check_collide(self):
         if self.iscollide_check:
-            if self.collide == None:
-                for object in self.gameplay.side(self.side) + self.gameplay.side4 + self.gameplay.side(- self.side):
-                    if (object.box.centerx - self.box.centerx) * self.side >= 0:
-                        if same_line_checker(self, object):
-                            if not (self == object):
-                                if collide_checker(self ,object):
-                                    if self.side == object.side:
+            for object in self.gameplay.side(self.side) + self.gameplay.side4 + self.gameplay.side(- self.side):
+                if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                    if same_line_checker(self, object):
+                        if not (self == object):
+                            if collide_checker(self ,object):
+                                self.collide = True
+                                if self.side == object.side:
+                                    if self.index > object.index :
                                         self.collide = 1
-                                        object.collide = 1
-
-                                    else:
-                                        self.collide = 2
-                                        object.collide = 2
-
-                                    if not (self.box.centerx == object.box.centerx and self.index < object.index and self.side == object.side ):
-                                        self.collide = True
-                                        self.imgbox.centerx -= ( 5.0 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time) * self.side
-                                        self.box.centerx -= ( 5.0 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time)  *self.side
+                                        if self.box.right < self.gameplay.nexus2.box.left and self.box.left > self.gameplay.nexus1.box.right:
+                                            self.imgbox.centerx -= ( 5.0 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time) * self.side
+                                            self.box.centerx -= ( 5.0 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time) * self.side
                                         return
+
+                                else:
+                                    self.collide = 2
+                                    if self.box.right < self.gameplay.nexus2.box.left and self.box.left > self.gameplay.nexus1.box.right:
+                                        self.imgbox.centerx -= ( 5.0 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time) * self.side
+                                        self.box.centerx -= ( 5.0 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time) * self.side
+                                    return
                 self.collide = False
 
 
@@ -151,12 +151,12 @@ class tankerclass():
             else:
                 for object in self.gameplay.side(self.side) + self.gameplay.side4 :
                     if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 2  + 5 *(self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time) + (self.box.width + object.box.width) / 2:
-                        if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                        if (object.box.centerx - self.box.centerx) * self.side > 0:
                             if same_line_checker(self, object):
                                 if abs(object.box.centerx  - self.box.centerx ) >= self.gameplay.box_size[0] / 2  + (self.box.width + object.box.width) / 2:
-                                        self.imgbox.centerx += 5 *(self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time) * self.side
-                                        self.box.centerx += 5 *(self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time)  *self.side
-                                        self.status = 4
+                                        self.imgbox.centerx +=  (5 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time) * self.side
+                                        self.box.centerx +=  (5 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time)  *self.side
+                                        self.status = 2
                                         flag = True
                                 elif not (self == object):
                                     self.status = 2
@@ -168,8 +168,8 @@ class tankerclass():
                         if (object.box.centerx - self.box.centerx) * self.side >= 0:
                             if same_line_checker(self, object):
                                 if abs(object.box.centerx  - self.box.centerx ) >= self.gameplay.box_size[0] / 2  + (self.box.width + object.box.width) / 2:
-                                        self.imgbox.centerx += 5 *(self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time) * self.side
-                                        self.box.centerx += 5 *(self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time) * self.side 
+                                        self.imgbox.centerx +=  (5 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time) * self.side
+                                        self.box.centerx +=  (5 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time) * self.side 
                                         self.status = 4
                                         flag = True
                                 else:
@@ -321,8 +321,8 @@ class tankerclass():
             self.status_update()
 
 
-            # pygame.draw.rect(screen.screen,White,self.box,1)
-            # pygame.draw.rect(screen.screen,White,self.imgbox,1)
+            pygame.draw.rect(screen.screen,White,self.box,1)
+            pygame.draw.rect(screen.screen,White,self.imgbox,1)
         else:
             self.dying()
 

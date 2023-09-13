@@ -32,7 +32,7 @@ class kame_class():
         self.radius = self.size[0] / 2
 
         self.status = True
-        self.damage = 50
+        self.damage = 50.0
         self.damaged_list = []
 
         self.switch = N_time_switch(1)
@@ -63,21 +63,14 @@ class kame_class():
 
     def collide_check(self):
 
-        if self.side == 1:
-            for enemy_object in self.gameplay.side2:
-                if collide_check_special(self, enemy_object):
-                    if not list_find_special(self.damaged_list, enemy_object):
-                        self.damaged_list.append(getting_hit_object(enemy_object))
-                        enemy_object.get_hit = True
-                        enemy_object.get_damage = self.damage
+        for enemy_object in self.gameplay.side( - self.side):
+            if collide_check_special(self, enemy_object):
+                if not list_find_special(self.damaged_list, enemy_object):
+                    self.damaged_list.append(getting_hit_object(enemy_object))
+                    enemy_object.get_hit = True
+                    enemy_object.get_damage = self.damage
 
-        elif self.side == -1:
-            for enemy_object in self.gameplay.side1:
-                if collide_check_special(self, enemy_object):
-                    if not list_find_special(self.damaged_list, enemy_object):
-                        self.damaged_list.append(getting_hit_object(enemy_object))
-                        enemy_object.get_hit = True
-                        enemy_object.get_damage = self.damage
+
         for damaged_object in self.damaged_list:
             if damaged_object.clock.Return == False:
                 self.damaged_list.remove(damaged_object)
@@ -199,27 +192,27 @@ class gokuclass():
 
     def check_collide(self):
         if self.iscollide_check:
-            if self.collide == None:
-                for object in self.gameplay.side(self.side) + self.gameplay.side4 + self.gameplay.side(- self.side):
-                    if (object.box.centerx - self.box.centerx) * self.side >= 0:
-                        if same_line_checker(self, object):
-                            if not (self == object):
-                                if collide_checker(self ,object):
-                                    if self.side == object.side:
+            for object in self.gameplay.side(self.side) + self.gameplay.side4 + self.gameplay.side(- self.side):
+                if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                    if same_line_checker(self, object):
+                        if not (self == object):
+                            if collide_checker(self ,object):
+                                self.collide = True
+                                if self.side == object.side:
+                                    if self.index > object.index :
                                         self.collide = 1
-                                        object.collide = 1
-
-                                    else:
-                                        self.collide = 2
-                                        object.collide = 2
-
-                                    if not (self.box.centerx == object.box.centerx and self.index < object.index and self.side == object.side ):
-                                        self.collide = True
-                                        self.imgbox.centerx -= ( 5.0 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time) * self.side
-                                        self.box.centerx -= ( 5.0 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time)  *self.side
+                                        if self.box.right < self.gameplay.nexus2.box.left and self.box.left > self.gameplay.nexus1.box.right:
+                                            self.imgbox.centerx -= ( 5.0 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time) * self.side
+                                            self.box.centerx -= ( 5.0 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time) * self.side
                                         return
-                self.collide = False
 
+                                else:
+                                    self.collide = 2
+                                    if self.box.right < self.gameplay.nexus2.box.left and self.box.left > self.gameplay.nexus1.box.right:
+                                        self.imgbox.centerx -= ( 5.0 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time) * self.side
+                                        self.box.centerx -= ( 5.0 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time) * self.side
+                                    return
+                self.collide = False
 
     def check_forward(self): #always after check_collide
         if self.mana >= self.mana_max:
@@ -248,8 +241,8 @@ class gokuclass():
                         if (object.box.centerx - self.box.centerx) * self.side >= 0:
                             if same_line_checker(self, object):
                                 if abs(object.box.centerx  - self.box.centerx ) >= self.gameplay.box_size[0] / 2  + (self.box.width + object.box.width) / 2:
-                                        self.imgbox.centerx += 5 *(self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time) * self.side
-                                        self.box.centerx += 5 *(self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time)  *self.side
+                                        self.imgbox.centerx +=  (5 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time) * self.side
+                                        self.box.centerx +=  (5 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time)  *self.side
                                         self.status = 2
                                         flag = True
                                 elif not (self == object):
@@ -262,8 +255,8 @@ class gokuclass():
                         if (object.box.centerx - self.box.centerx) * self.side >= 0:
                             if same_line_checker(self, object):
                                 if abs(object.box.centerx  - self.box.centerx ) >= self.gameplay.box_size[0] / 2  + (self.box.width + object.box.width) / 2:
-                                        self.imgbox.centerx += 5 *(self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time) * self.side
-                                        self.box.centerx += 5 *(self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time) * self.side 
+                                        self.imgbox.centerx +=  (5 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time) * self.side
+                                        self.box.centerx +=  (5 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time)  *self.side
                                         self.status = 2
                                         flag = True
                                 else:
@@ -291,7 +284,9 @@ class gokuclass():
                             self.standsill_reset()
                         elif self.pre_status == 3:
                             self.move_reset()
-                
+                        elif self.pre_status == 4:
+                            self.special_skill_reset()
+
 
     def Geting_hit(self):
         self.get_hit = False
@@ -352,7 +347,9 @@ class gokuclass():
             add_effect(self, iron_body(self, 2.25))
             
         self.animation_player = self.special_skill_animation
-        if self.special_skill_animation.clock.Return == 4:
+        if self.special_skill_animation.clock.Return == 3:
+            self.switcher2.reset()
+        elif self.special_skill_animation.clock.Return == 4:
             if self.switcher2.operation():
                 for object in self.gameplay.side(- self.side) :
                     if abs(object.box.centerx  - self.box.centerx ) <= self.attack_scope * 1.5 + (self.box.width + object.box.width) / 2 :
