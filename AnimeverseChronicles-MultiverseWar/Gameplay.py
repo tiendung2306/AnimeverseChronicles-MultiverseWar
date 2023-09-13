@@ -9,6 +9,7 @@ from screen import *
 from gameplay_ui import *
 from key_binding_manager import *
 from gameover_panel import *
+from list_function import*
 import random
 
 class gameplay():
@@ -46,6 +47,8 @@ class gameplay():
         self.tankerclass = tankerclass
         self.wizardclass = wizardclass
         self.gokuclass = gokuclass
+        self.nexusclass = Nexusclass
+        self.narutoclass = narutoclass
 
         self.gameplay_ui = gameplay_ui(self)
 
@@ -74,6 +77,7 @@ class gameplay():
         self.pause_time = 0.0
         self.start_pause_time = 0.0
         self.time = 0.0 # dung giong voi time.time()
+        self.end = False
 
         self.gold_font = pygame.font.Font('Fonts\\joystix_monospace.otf', 20)
         self.curr_gold_1 = 0
@@ -94,8 +98,8 @@ class gameplay():
 
         self.spawn_point_height = self.path.get_rect().top + self.path.get_rect().height / 7.0
 
-        self.box_size = (screen.screen.get_rect().width / 60 , screen.screen.get_rect().height / 20)
-        self.path_height = screen.screen.get_rect().height - self.path.get_rect().height 
+        self.box_size = (screen.screen.get_rect().width / 45 , screen.screen.get_rect().height / 15)
+        self.path_height = screen.screen.get_rect().height - self.path.get_rect().height * 7 / 10
         self.screen = screen.screen.get_size()
     #Object import:
         self.side1 = []
@@ -106,6 +110,13 @@ class gameplay():
 
         self.nexus1 = Nexusclass(1, self)
         self.nexus2 = Nexusclass(2, self)
+
+        spawn(narutoclass, 1, 20, self)
+        spawn(tankerclass, 2, 36, self)
+        # spawn(tankerclass, 2, 37, self)
+        # spawn(tankerclass, 2, 38, self)
+        # spawn(tankerclass, 2, 39, self)
+        # spawn(tankerclass, 2, 40, self)
 
 
 
@@ -160,8 +171,8 @@ class gameplay():
         self.load_all_gameplay_image()
  
 
-        self.box_size = (screen.screen.get_rect().width / 60 , screen.screen.get_rect().height / 20)
-        self.path_height = screen.screen.get_rect().height - self.path.get_rect().height
+        self.box_size = (screen.screen.get_rect().width / 45 , screen.screen.get_rect().height / 15)
+        self.path_height = screen.screen.get_rect().height - self.path.get_rect().height * 7 / 10
 
         for object in self.side2 + self.side1:
             object.resize()
@@ -356,9 +367,11 @@ class gameplay():
     def object_operation(self):
         self.bg.blit(self.fake_bg, (0,0))
         self.bg.blit(self.path, (0, screen.screen.get_rect().height - self.path.get_rect().height))
-        for object in self.side2 + self.side1 + self.side0 + self.side3 :
+        for object in self.side2 + self.side1 :
             object.operation()
-
+        list_operation(self.side0)
+        for object in self.side3 :
+            object.operation()
 class Save_game(): #day la ester egg cua game
     def __init__(self, gameplay):
         self.gameplay = gameplay
