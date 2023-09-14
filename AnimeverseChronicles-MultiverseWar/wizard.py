@@ -93,12 +93,12 @@ class wizardclass():
         self.attack_scope_orginal = self.attack_scope
         self.attack_speed = 1/5 # arrow(s) pers second
         self.attack_speed_orginal = self.attack_speed
-        self.attack_damage = 10.0
+        self.attack_damage = 0.0
         self.attack_damage_orginal = self.attack_damage
-        self.health_max = 100.0
+        self.health_max = 100000.0
         self.health = self.health_max
         self.mana_max =100.0
-        self.mana = 90.0
+        self.mana = 0.0
 
         self.magicbullet_list = []
         self.effect_list = []
@@ -111,6 +111,7 @@ class wizardclass():
         self.special_status = False
 
         self.moving_animation = animation_player([wizard1,wizard2,wizard3,wizard2],self.side, 1, self.imgbox , self.gameplay)
+        self.walking_animation = animation_player([wizard1,wizard2,wizard3,wizard2], self.side, 1, self.imgbox, self.gameplay)
         self.attacking_animation = one_time_animation_player([wizard4,wizard5,wizard6,wizard7,wizard8,wizard9,wizard10,wizard11],self.side, 1 , self.imgbox, self.gameplay)
         self.standstill_animation = one_time_animation_player([wizard1,wizard2,wizard3,wizard2], self.side, 1, self.imgbox, self.gameplay)
         self.special_skill_animation = one_time_animation_player([wizard11,wizard12,wizard13,wizard14,wizard15,wizard16,wizard17,wizard18,wizard19,wizard20,wizard21,wizard22,wizard23,wizard24,wizard25,wizard26,wizard27,wizard28], self.side, 2, self.imgbox, self.gameplay)
@@ -173,9 +174,10 @@ class wizardclass():
         self.animation_player = self.moving_animation
         self.imgbox.centerx += (self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time)  * self.side
         
-    def move_reset(self):
-        self.moving_animation.reset()
-
+    def walk(self):
+        self.animation_player = self.walking_animation
+        self.imgbox.centerx += (5.0 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time)  * self.side
+   
     def standstill(self):
         self.animation_player = self.standstill_animation
 
@@ -213,47 +215,51 @@ class wizardclass():
             self.mana = 0
             self.special_status = True
             self.status = 4 
+            ispass = True
+        else:
+            ispass = False
+        
+        if not ispass:
+            if self.ischeck :
+                flag = False
+                if self.collide == 2:
+                    self.status = 1
+                    flag = True
 
-        if self.ischeck :
-            flag = False
-            if self.collide == 2:
-                self.status = 1
-                flag = True
-
-            elif self.collide == 1:
-                for object in self.gameplay.side(- self.side) :
-                    if abs(object.box.centerx  - self.box.centerx ) <= self.attack_scope + (self.box.width + object.box.width) / 2 :
-                        if (object.box.centerx - self.box.centerx) * self.side >= 0:
-                            if same_line_checker(self, object):
-                                self.status = 1
-                                flag = True
-                                break
-                self.status = 2
-                flag = True
-            else:
-                for object in self.gameplay.side(self.side) + self.gameplay.side4 :
-                    if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 2 + (self.box.width + object.box.width) / 2:
-                        if (object.box.centerx - self.box.centerx) * self.side >= 0:
-                            if same_line_checker(self, object):
-                                if not (self == object):
-                                    self.status = 2
+                elif self.collide == 1:
+                    for object in self.gameplay.side(- self.side) :
+                        if abs(object.box.centerx  - self.box.centerx ) <= self.attack_scope + (self.box.width + object.box.width) / 2 :
+                            if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                                if same_line_checker(self, object):
+                                    self.status = 1
                                     flag = True
                                     break
-
-                for object in self.gameplay.side( - self.side) :
-                    if abs(object.box.centerx  - self.box.centerx ) <= self.attack_scope + (self.box.width + object.box.width) / 2 :
-                        if (object.box.centerx - self.box.centerx) * self.side >= 0:
-                            if same_line_checker(self, object):
-                                self.status = 1
-                                flag = True
-                                break          
-            if not flag:
-                self.status = 3
-
-
-            if self.status == 1 :
-                if self.attack_coundowner.Return == True:
                     self.status = 2
+                    flag = True
+                else:
+                    for object in self.gameplay.side(self.side) + self.gameplay.side4 :
+                        if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 2 + (self.box.width + object.box.width) / 2:
+                            if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                                if same_line_checker(self, object):
+                                    if not (self == object):
+                                        self.status = 2
+                                        flag = True
+                                        break
+
+                    for object in self.gameplay.side( - self.side) :
+                        if abs(object.box.centerx  - self.box.centerx ) <= self.attack_scope + (self.box.width + object.box.width) / 2 :
+                            if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                                if same_line_checker(self, object):
+                                    self.status = 1
+                                    flag = True
+                                    break          
+                if not flag:
+                    self.status = 3
+
+
+                if self.status == 1 :
+                    if self.attack_coundowner.Return == True:
+                        self.status = 2
             
 
         if self.status > 0:
@@ -264,8 +270,6 @@ class wizardclass():
                             self.attack_reset()
                         elif self.pre_status == 2:
                             self.standsill_reset()
-                        elif self.pre_status == 3:
-                            self.move_reset()
                         elif self.pre_status == 4:
                             self.special_skill_reset()
                             self.special_status = False
@@ -351,14 +355,17 @@ class wizardclass():
 
     def operation(self):
         if self.alive:
-            for effect in self.effect_list:
+            def play(effect):
                 effect.play()
+            list_browser(self.effect_list, play)
             
             self.check_collide()
             self.check_forward()
-            
             if self.status == 3:
                 self.move()
+
+            if self.status == 5:
+                self.walk()
 
             elif self.status == 1:
                 self.attack()

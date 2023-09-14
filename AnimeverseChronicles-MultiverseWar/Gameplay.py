@@ -373,6 +373,10 @@ class gameplay():
         list_operation(self.side0)
         for object in self.side3 :
             object.operation()
+
+
+
+
 class Save_game(): #day la ester egg cua game
     def __init__(self, gameplay):
         self.gameplay = gameplay
