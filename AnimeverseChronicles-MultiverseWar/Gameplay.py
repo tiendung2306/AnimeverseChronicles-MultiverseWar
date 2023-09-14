@@ -33,8 +33,8 @@ class gameplay():
         self.pause_button_original = pygame.image.load('GameplayAssets\\pause_button.png')
         
         self.character_cost = {
-            archerclass : 20,
             sword_manclass : 10,
+            archerclass : 20,
             tankerclass : 30,
             wizardclass : 50,
             gokuclass : 100,
@@ -64,12 +64,12 @@ class gameplay():
         else:
             self.play_pause_button = (screen.screen.get_rect().width - screen.screen.get_rect().width // 32, 10)
 
-
+        #level
         self.curr_level1 = 1
         self.curr_level2 = 1
         self.character_level_max = [5, 5, 5, 5, 3, 2]
         self.character_level1 = [1, 1, 1, 1, 1]
-        self.character_level1 = [1, 1, 1, 1, 1]
+        self.character_level2 = [1, 1, 1, 1, 1]
 
         self.timer_font = pygame.font.Font('Fonts\\joystix_monospace.otf', 16)
         self.start_time = 0.0
