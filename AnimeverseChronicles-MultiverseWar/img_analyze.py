@@ -386,8 +386,8 @@ naruto38 = analyzed_img( "GameplayAssets\\naruto(38).png " , 165 , 337 , 326 , 1
 naruto39 = analyzed_img( "GameplayAssets\\naruto(39).png " , 278 , 310 , 112 , 222 )
 naruto40 = analyzed_img( "GameplayAssets\\naruto(40).png " , 278 , 310 , 112 , 222 )
 naruto41 = analyzed_img( "GameplayAssets\\naruto(41).png " , 278 , 310 , 112 , 222 )
-naruto42 = analyzed_img( "GameplayAssets\\naruto(42).png " , 289 , 314 , 92 , 221 )
-naruto43 = analyzed_img( "GameplayAssets\\naruto(43).png " , 289 , 314 , 92 , 221 )
+naruto42 = analyzed_img( "GameplayAssets\\naruto(42).png " , 289 , 314 , 112 , 221 )
+naruto43 = analyzed_img( "GameplayAssets\\naruto(43).png " , 289 , 314 , 112 , 221 )
 naruto44 = analyzed_img( "GameplayAssets\\naruto(44).png " , 265 , 332 , 106 , 194 )
 naruto45 = analyzed_img( "GameplayAssets\\naruto(45).png " , 265 , 332 , 106 , 194 )
 naruto46 = analyzed_img( "GameplayAssets\\naruto(46).png " , 272 , 385 , 94 , 135 )
@@ -426,7 +426,7 @@ naruto78 = analyzed_img( "GameplayAssets\\naruto(35).png " , 165 , 337 , 326 , 1
 naruto79 = analyzed_img( "GameplayAssets\\naruto(79).png " , 165 , 337 , 326 , 191 )
 naruto80 = analyzed_img( "GameplayAssets\\naruto(80).png " , 165 , 337 , 326 , 191 )
 naruto81 = analyzed_img( "GameplayAssets\\naruto(81).png " , 165 , 337 , 326 , 191 )
-naruto82 = analyzed_img( "GameplayAssets\\naruto(82).png " , 165 , 337 , 326 , 191 )
+naruto82 = analyzed_img( "GameplayAssets\\naruto(82).png " , 289 , 314 , 112 , 221 )
 
 
 rasenshuriken1 = analyzed_img( "GameplayAssets\\rasenshuriken(1).png " , 363 , 351 , 320 , 135 )

@@ -107,7 +107,7 @@ class archerclass():
             
         self.skill_lasting_time = 4.0
         self.speed = 5.0 # 5/100 map per second 
-        self.attack_scope = 4 * self.gameplay.box_size[0] # 4/15 map width
+        self.attack_scope = 7 * self.gameplay.box_size[0] # 4/15 map width
         self.attack_scope_orginal = self.attack_scope
         self.attack_speed = 1/2 # arrow(s) pers second
         self.attack_speed_orginal = self.attack_speed
@@ -132,6 +132,7 @@ class archerclass():
 
         self.animation_player = None
         self.moving_animation = animation_player([archer1,archer2,archer3,archer4,archer5,archer6,archer7,archer8,archer9,archer10],self.side, 1, self.imgbox , self.gameplay)
+        self.walking_animation = animation_player([archer11,archer12,archer13,archer14,archer15,archer16],self.side, 1, self.imgbox, self.gameplay)
         self.attacking_animation = one_time_animation_player([archer17,archer18,archer19,archer20,archer21,archer22,archer23,archer24,archer25,archer26,archer27,archer28,archer29,archer30],self.side, 1 , self.imgbox, self.gameplay)
         self.standstill_animation = one_time_animation_player([archer11,archer12,archer13,archer14,archer15,archer16],self.side, 1, self.imgbox, self.gameplay)
         self.dying_animation = one_time_animation_player([archer40], self.side, 0.8, self.imgbox, self.gameplay)
@@ -190,8 +191,9 @@ class archerclass():
         self.animation_player = self.moving_animation
         self.imgbox.centerx += (self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time)  * self.side
 
-    def move_reset(self):
-        self.moving_animation.reset()
+    def walk(self):
+        self.animation_player = self.walking_animation
+        self.imgbox.centerx += (5.0 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time)  * self.side
 
 
     def standstill(self):
@@ -226,56 +228,72 @@ class archerclass():
 
 
     def check_forward(self): #always after check_collide
+
         if self.ischeck :
+
             flag = False
             if self.collide == 2:
                 self.status = 1
                 flag = True
 
             elif self.collide == 1:
+                ispass = False
                 for object in self.gameplay.side(- self.side) :
                     if abs(object.box.centerx  - self.box.centerx ) <= self.attack_scope + (self.box.width + object.box.width) / 2 :
                         if (object.box.centerx - self.box.centerx) * self.side >= 0:
                             if same_line_checker(self, object):
                                 self.status = 1
                                 flag = True
+                                ispass = True
                                 break
-                self.status = 2
-                flag = True
+                if not ispass:
+                    self.status = 2
+                    flag = True
             else:
-                for object in self.gameplay.side(self.side) + self.gameplay.side4 :
-                    if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 2  + 5 *(self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time) + (self.box.width + object.box.width) / 2:
-                        if (object.box.centerx - self.box.centerx) * self.side >= 0:
-                            if same_line_checker(self, object):
-                                if abs(object.box.centerx  - self.box.centerx ) >= self.gameplay.box_size[0] / 2  + (self.box.width + object.box.width) / 2:
-                                        self.imgbox.centerx +=  (5 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time) * self.side
-                                        self.box.centerx +=  (5 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time)  *self.side
-                                        self.status = 4
-                                        flag = True
-                                elif not (self == object):
-                                    self.status = 2
-                                    flag = True
-                                    break
-
+                ispass = False
                 for object in self.gameplay.side( - self.side) :
-                    if abs(object.box.centerx  - self.box.centerx ) <= self.attack_scope  + 5 *(self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time) + (self.box.width + object.box.width) / 2 :
+                    if abs(object.box.centerx  - self.box.centerx ) <= self.attack_scope + (self.box.width + object.box.width) / 2:
                         if (object.box.centerx - self.box.centerx) * self.side >= 0:
                             if same_line_checker(self, object):
-                                if abs(object.box.centerx  - self.box.centerx ) >= self.attack_scope  + (self.box.width + object.box.width) / 2:
-                                        self.imgbox.centerx +=  (5 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time) * self.side
-                                        self.box.centerx +=  (5 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time)  *self.side 
-                                        self.status = 4
+                                self.status = 1
+                                flag = True
+                                ispass = True
+                                break
+                if not ispass:
+                    for object in self.gameplay.side(self.side) + self.gameplay.side4 :
+                        if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 2 + (self.box.width + object.box.width) / 2 :
+                            if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                                if same_line_checker(self, object):
+                                    if not (self == object):
+                                        self.status = 2
                                         flag = True
-                                else:
-                                    self.status = 1
-                                    flag = True
-                                    break         
+                                        break         
             if not flag:
                 self.status = 3
+
+            if self.status == 3 and (not self.pre_status == 3):
+                ispass = False
+                for object in self.gameplay.side( - self.side) :
+                    if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 2 + (self.speed * screen.screen.get_rect().width / 100) * 0.5  + (self.box.width + object.box.width) / 2:
+                        if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                            if same_line_checker(self, object):
+                                self.status = 5
+                                ispass = True
+                                break
+                if not ispass:
+                    for object in self.gameplay.side(self.side) + self.gameplay.side4 :
+                        if abs(object.box.centerx  - self.box.centerx ) <= self.attack_scope + (self.speed * screen.screen.get_rect().width / 100) * 0.5  + (self.box.width + object.box.width) / 2 :
+                            if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                                if same_line_checker(self, object):
+                                    if not (self == object):
+                                        if not  object.status == 3:
+                                            self.status = 5
+                                            break           
+            
             
             if self.status == 1 :
                 if self.attack_coundowner.Return == True:
-                    self.status = 2
+                    self.status = 2            
 
         if self.mana >= self.mana_max:
             self.mana = 0
@@ -289,9 +307,8 @@ class archerclass():
                             self.attack_reset()
                         elif self.pre_status == 2:
                             self.standsill_reset()
-                        elif self.pre_status == 3:
-                            self.move_reset()
-
+        if self.special_status and self.status < 0:
+            self.special_skill_reset()
 
     def Geting_hit(self):
         self.get_hit = False
@@ -374,14 +391,18 @@ class archerclass():
 
     def operation(self):
         if self.alive:
-            for effect in self.effect_list:
+            def play(effect):
                 effect.play()
-            
+            list_browser(self.effect_list, play)
+
             self.check_collide()
             self.check_forward()
             
             if self.status == 3:
                 self.move()
+
+            if self.status == 5:
+                self.walk()
 
             elif self.status == 1:
                 self.attack()

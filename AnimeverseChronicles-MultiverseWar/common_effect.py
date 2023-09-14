@@ -31,11 +31,7 @@ class dizzy():
 
     def remove(self):
         self.clock.remove()
-        self.object.effect_list.remove(self)
-        for effect in  self.object.effect_list:
-            if effect.type < 0 :
-                return
-        self.object.check_forward()
+        reomve(self)
 
 
 class soul_sucking():
@@ -106,13 +102,9 @@ class knock_back():
             self.remove()
 
     def remove(self):
-        self.object.effect_list.remove(self)
         self.clock.remove()
-        for effect in  self.object.effect_list:
-            if effect.type < 0 :
-                return
-        self.object.ischeck = True
-        self.object.check_forward()
+        reomve(self)
+
 
 acceleration_original = 20.0
 
@@ -149,12 +141,7 @@ class flying():
                 add_effect(self.object, falling(self.object))
 
     def remove(self):
-        self.object.effect_list.remove(self)
-        for effect in  self.object.effect_list:
-            if effect.type < 0 :
-                return
-        self.object.ischeck = True
-        self.object.check_forward()
+        reomve(self)
 
 
 class falling():
@@ -182,12 +169,7 @@ class falling():
         tmp = get_spawn_imgbox(self.object, pygame.Rect( 0, self.object.gameplay.path_height - self.object.gameplay.box_size[1], self.object.gameplay.box_size[0], self.object.gameplay.box_size[1]))
         self.object.box.centery += tmp.centery - self.object.imgbox.centery
         self.object.imgbox.centery += tmp.centery - self.object.imgbox.centery
-        self.object.effect_list.remove(self)
-        for effect in  self.object.effect_list:
-            if effect.type < 0 :
-                return
-        self.object.ischeck = True
-        self.object.check_forward()
+        reomve(self)
 
 
 class iron_body():
@@ -199,9 +181,10 @@ class iron_body():
     def play(self):
         self.clock.start()
         if self.clock.Return == True:
-            for effect in self.object.effect_list:
-                if effect.type < 0:
+            def remove(effect):
+                if effect.type < 0: 
                     effect.remove()
+            list_browser(self.object.effect_list, remove)
                     
         else:
             self.remove()
@@ -217,4 +200,8 @@ def add_effect(object, effect):
 
 
 
-
+def reomve(effect):
+    effect.object.effect_list.remove(effect)
+    if effect.object.pre_status < 0 :
+        effect.object.ischeck = True
+        effect.object.check_forward()    

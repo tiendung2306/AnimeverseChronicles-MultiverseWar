@@ -27,5 +27,15 @@ def list_operation(list):
     for object in list:
         tmp_list.append(object)
     for object in tmp_list:
-        object.operation()
+        if list_find(list,object):
+            object.operation()
     
+
+
+def list_browser(list, method):
+    tmp_list = []
+    for effect in list:
+        tmp_list.append(effect)
+    for effect in tmp_list:
+        if not list_find(list,effect) == -1 :
+            method(effect)

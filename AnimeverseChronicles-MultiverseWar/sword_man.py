@@ -41,6 +41,7 @@ class sword_manclass():
         self.special_status = False
 
         self.moving_animation = animation_player([sword_man1,sword_man2,sword_man3,sword_man4,sword_man5,sword_man6,sword_man7,sword_man8,sword_man9,sword_man10], self.side,1, self.imgbox , self.gameplay)
+        self.walking_animation = animation_player([sword_man11,sword_man12,sword_man13,sword_man14,sword_man15,sword_man16,sword_man17,sword_man18],self.side, 1, self.imgbox, self.gameplay)  
         self.attacking_animation = one_time_animation_player([sword_man31,sword_man32,sword_man33,sword_man34,sword_man35,sword_man36,sword_man37,sword_man38], self.side, 0.5 , self.imgbox, self.gameplay)
         self.special_skill_animation = one_time_animation_player([sword_man19,sword_man20,sword_man21,sword_man22,sword_man23,sword_man24,sword_man25,sword_man26,sword_man27,sword_man28,sword_man29,sword_man30], self.side, 1, self.imgbox, self.gameplay)
         self.standstill_animation = one_time_animation_player([sword_man11,sword_man12,sword_man13,sword_man14,sword_man15,sword_man16,sword_man17,sword_man18],self.side, 1, self.imgbox, self.gameplay)  
@@ -99,9 +100,10 @@ class sword_manclass():
     def move(self):
         self.animation_player = self.moving_animation
         self.imgbox.centerx += (self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time)  * self.side
-        
-    def move_reset(self):
-        self.moving_animation.reset()
+
+    def walk(self):
+        self.animation_player = self.walking_animation
+        self.imgbox.centerx += (5 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time)  * self.side
 
     def standstill(self):
         self.animation_player = self.standstill_animation
@@ -142,57 +144,70 @@ class sword_manclass():
             self.special_status = True
 
         if self.ischeck :
+
             flag = False
             if self.collide == 2:
                 self.status = 1
                 flag = True
 
             elif self.collide == 1:
+                ispass = False
                 for object in self.gameplay.side(- self.side) :
-                    if abs(object.box.centerx  - self.box.centerx ) <= self.attack_scope + (self.box.width + object.box.width) / 2 :
+                    if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 3 + (self.box.width + object.box.width) / 2 :
                         if (object.box.centerx - self.box.centerx) * self.side >= 0:
                             if same_line_checker(self, object):
                                 self.status = 1
                                 flag = True
+                                ispass = True
                                 break
-                self.status = 2
-                flag = True
+                if not ispass:
+                    self.status = 2
+                    flag = True
             else:
-                for object in self.gameplay.side(self.side) + self.gameplay.side4 :
-                    if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 2  + 5 *(self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time) + (self.box.width + object.box.width) / 2:
-                        if (object.box.centerx - self.box.centerx) * self.side >= 0:
-                            if same_line_checker(self, object):
-                                if abs(object.box.centerx  - self.box.centerx ) >= self.gameplay.box_size[0] / 2  + (self.box.width + object.box.width) / 2:
-                                        self.imgbox.centerx +=  (5 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time) * self.side
-                                        self.box.centerx +=  (5 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time)  *self.side
-                                        self.status = 2
-                                        flag = True
-                                elif not (self == object):
-                                    self.status = 2
-                                    flag = True
-                                    break
-
+                ispass = False
                 for object in self.gameplay.side( - self.side) :
-                    if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 2  + 5 *(self.speed * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time) + (self.box.width + object.box.width) / 2 :
+                    if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 3 + (self.box.width + object.box.width) / 2:
                         if (object.box.centerx - self.box.centerx) * self.side >= 0:
                             if same_line_checker(self, object):
-                                if abs(object.box.centerx  - self.box.centerx ) >= self.gameplay.box_size[0] / 2  + (self.box.width + object.box.width) / 2:
-                                        self.imgbox.centerx +=  (5 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time) * self.side
-                                        self.box.centerx +=  (5 * screen.screen.get_rect().width / 100) * (self.gameplay.curr_time - self.gameplay.pre_curr_time)  *self.side
+                                self.status = 1
+                                flag = True
+                                ispass = True
+                                break
+                if not ispass:
+                    for object in self.gameplay.side(self.side) + self.gameplay.side4 :
+                        if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 2 + (self.box.width + object.box.width) / 2 :
+                            if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                                if same_line_checker(self, object):
+                                    if not (self == object):
                                         self.status = 2
                                         flag = True
-                                else:
-                                    self.status = 1
-                                    flag = True
-                                    break          
+                                        break         
             if not flag:
                 self.status = 3
+
+            if self.status == 3 and (not self.pre_status == 3):
+                ispass = False
+                for object in self.gameplay.side( - self.side) :
+                    if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 2 + (self.speed * screen.screen.get_rect().width / 100) * 0.5  + (self.box.width + object.box.width) / 2:
+                        if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                            if same_line_checker(self, object):
+                                self.status = 5
+                                ispass = True
+                                break
+                if not ispass:
+                    for object in self.gameplay.side(self.side) + self.gameplay.side4 :
+                        if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 3 + (self.speed * screen.screen.get_rect().width / 100) * 0.5  + (self.box.width + object.box.width) / 2 :
+                            if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                                if same_line_checker(self, object):
+                                    if not (self == object):
+                                        if not  object.status == 3:
+                                            self.status = 5
+                                            break        
+            
             
             if self.status == 1 :
                 if self.attack_coundowner.Return == True:
-                    self.status = 2
-                elif self.special_status:
-                    self.status = 4
+                    self.status = 2            
             
 
         if self.status > 0:
@@ -203,10 +218,11 @@ class sword_manclass():
                             self.attack_reset()
                         elif self.pre_status == 2:
                             self.standsill_reset()
-                        elif self.pre_status == 3:
-                            self.move_reset()
                         elif self.pre_status == 4:
                             self.special_skill_reset()
+        if self.special_status and self.status < 0:
+            self.special_skill_reset()
+
 
     def Geting_hit(self):
         self.get_hit = False
@@ -290,14 +306,18 @@ class sword_manclass():
 
     def operation(self):
         if self.alive:
-            for effect in self.effect_list:
+            def play(effect):
                 effect.play()
+            list_browser(self.effect_list, play)
             
             self.check_collide()
             self.check_forward()
             
             if self.status == 3:
                 self.move()
+
+            if self.status == 5:
+                self.walk()
 
             elif self.status == 1:
                 self.attack()
