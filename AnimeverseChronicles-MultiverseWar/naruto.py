@@ -132,7 +132,8 @@ class cloneclass():
         self.imgbox = pygame.Rect(0,0,0,0)
         self.gameplay = naruto.gameplay
         self.side = naruto.side
-        # self.__class__ = naruto.__class__
+        self.name = "Clone"
+        self.level = naruto.level
 
         self.speed = 5.0 # 5/100 map per second 
         self.attack_scope = 1 * self.gameplay.box_size[0] # 4/15 map width
@@ -335,6 +336,7 @@ class cloneclass():
 
     def dying(self):
         if self.switcher4.operation():
+            self.spawn_animation.remove()
             self.moving_animation.remove()
             self.attacking_animation.remove()
             self.standstill_animation.remove()      
@@ -350,7 +352,7 @@ class cloneclass():
         
         self.dying_animation.play()
         if self.dying_animation.clock.Return < 3:
-            screen.screen.blit(pygame.transform.scale(self.img.img, (self.imgbox.width, self.imgbox.height)), self.imgbox)
+            self.gameplay.bg.blit(pygame.transform.scale(self.img.img, (self.imgbox.width, self.imgbox.height)), self.imgbox)
 
         if self.dying_animation.status == False:
             self.dying_animation.remove()
@@ -435,7 +437,10 @@ class cloneclass():
             # pygame.draw.rect(screen.screen,White,self.box,1)
             # pygame.draw.rect(screen.screen,White,self.imgbox,1)
         elif self.alive == False:
-            if self.animation_player == None:
+            if not  self.spawn_animation.status == False:
+                self.gameplay.side0.remove(self)
+                self.animation_player = self.standstill_animation
+                self.gameplay.side(self.side).append(self)
                 self.animation_player = self.standstill_animation
             self.dying()
 
@@ -598,6 +603,7 @@ class narutoclass():
             self.mana = 0
             self.special_status = True
             self.status = 4
+            add_effect(self, iron_body(self, 5.52))
             ispass = True
         else:
             ispass = False
@@ -751,12 +757,15 @@ class narutoclass():
         self.gameplay.side0.append(tmp)
         copy(tmp.imgbox, self.imgbox)
         tmp.imgbox.centerx += position * self.gameplay.box_size[0]
-        
+        tmp.box = naruto18.imgbox_to_hitbox(tmp.imgbox)
+        if tmp.box.right < tmp.gameplay.nexus2.box.left and tmp.box.left > tmp.gameplay.nexus1.box.right:
+            pass
+        else:
+            tmp.imgbox.centerx -= position * self.gameplay.box_size[0]
+
 
 
     def special_skill(self):
-        if self.switcher3.operation():
-            add_effect(self, iron_body(self, 5.52))
         self.animation_player = self.special_skill_animation
         if self.special_skill_animation.clock.Return == 3 :
             self.switcher1.reset()
@@ -798,7 +807,6 @@ class narutoclass():
         self.special_skill_animation.reset() 
         self.switcher1.reset()
         self.switcher2.reset()
-        self.switcher3.reset()
         for switch in self.switcher_list:
             switch.reset()
 
@@ -841,8 +849,8 @@ class narutoclass():
             self.display()
             self.status_update()
 
-            pygame.draw.rect(screen.screen,White,self.box,1)
-            pygame.draw.rect(screen.screen,White,self.imgbox,1)
+            # pygame.draw.rect(screen.screen,White,self.box,1)
+            # pygame.draw.rect(screen.screen,White,self.imgbox,1)
         else:
             self.dying()
 

@@ -2,6 +2,8 @@ import pygame
 from pygame.locals import *
 from object_function import * 
 from screen import *
+from img_analyze import *
+from animation_player import *
 
 class button():
     def __init__(self, character_name, image_filename, gameplay):
@@ -77,9 +79,9 @@ class button():
 
     def spawn(self, side):
         if side == 1:
-            spawn(self.character_type, side, 3, self.gameplay)
+            spawn(self.character_type, side, 4, self.gameplay)
         elif side == 2:
-            spawn(self.character_type, side, 56, self.gameplay)
+            spawn(self.character_type, side, self.gameplay.number_of_box - 5, self.gameplay)
 
 class spawn_process():
     def __init__(self, gameplay, side):
@@ -297,6 +299,7 @@ class gameplay_ui():
                     self.click_spawn_button(button_num, side)
 
     def click_spawn_button(self, button_num, side):
+        spawning(side, self.gameplay)
         if side == 1:
             if len(self.gameplay.spawn_queue1) == 0:
                 self.spawn_bar1.start_fill_process_bar()
@@ -369,3 +372,28 @@ class gameplay_ui():
                 self.button_rect_2[i].left = prev_pos_width
                 self.button_rect_2[i].top = screen.screen.get_rect().height / 300
                 prev_pos_width = prev_pos_width - self.button_border.get_rect().width - screen.screen.get_rect().width / 250
+
+class spawning():
+    def __init__(self, side, gameplay):
+        self.gameplay = gameplay
+        self.box = pygame.Rect(0,0,gameplay.box_size[0], gameplay.box_size[1] / 2 )
+        if side == 1:
+            self.box.center = (4 * gameplay.box_size[0], gameplay.path_height - gameplay.box_size[1] / 4)
+        else:
+            self.box.center = ((gameplay.number_of_box - 4) * gameplay.box_size[0], gameplay.path_height - gameplay.box_size[1] / 4)
+        self.imgbox = spawn1.hitbox_to_imgbox(self.box)        
+        self.animation = animation_player([spawn1, spawn2, spawn3, spawn4, spawn5, spawn6], side ,0.65,self.imgbox ,gameplay)
+        gameplay.side0.append(self)
+        self.clock = timing_clock(gameplay.spawn_time, gameplay)
+        self.clock.start()
+
+    def remove(self):
+        self.animation.remove()
+        self.clock.remove()
+        self.gameplay.side0.remove(self)
+        
+    def operation(self):
+        if self.clock.Return:
+            self.animation.play()
+        else:
+            self.remove()

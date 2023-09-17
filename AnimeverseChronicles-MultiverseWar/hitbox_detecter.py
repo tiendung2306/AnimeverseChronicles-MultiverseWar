@@ -13,17 +13,17 @@ a = b = c = d = 0
 Flag = True
 flag2 = False
 counter = 1
-img = pygame.image.load("GameplayAssets\\shuriken_explosion.png".format(counter))
+img = pygame.image.load("GameplayAssets\\healling_effect({}).png".format(counter))
 WIN = pygame.display.set_mode(img.get_size())
 while Flag:
     WIN.fill(Black)
     WIN.blit(img,(0,0))
     for event in pygame.event.get():
         if event.type == KEYDOWN:
-            print("shuriken_explosion.png{}".format(counter),"= analyzed_img(","GameplayAssets\\shuriken_explosion.png({}).png".format(counter),",",a,",",b,",",c - a,",",d - b,")")
+            print("healling_effect({}).png".format(counter),"= analyzed_img(","GameplayAssets\\healling_effect({}).png".format(counter),",",a,",",b,",",c - a,",",d - b,")")
             
             counter += 1
-            img = pygame.image.load("GameplayAssets\\shuriken_explosion.png({}).png".format(counter))
+            img = pygame.image.load("GameplayAssets\\healling_effect({}).png".format(counter))
             if event.key == 9:
                 Flag = False
             # if event.key == 32 :
@@ -45,7 +45,7 @@ while Flag:
     pygame.draw.rect(WIN,Yellow,pygame.Rect(a,b,c - a,d - b),1)
     pygame.display.update()
 text = ""
-for i in range(1,4):
-    text_i = "shuriken_explosion.png{}, ".format(i)
+for i in range(1,7):
+    text_i = "spawn{}, ".format(i)
     text = text + text_i
 print(text)

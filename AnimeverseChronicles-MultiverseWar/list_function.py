@@ -34,8 +34,21 @@ def list_operation(list):
 
 def list_browser(list, method):
     tmp_list = []
-    for effect in list:
-        tmp_list.append(effect)
-    for effect in tmp_list:
-        if not list_find(list,effect) == -1 :
-            method(effect)
+    for element in list:
+        tmp_list.append(element)
+    for element in tmp_list:
+        if not list_find(list,element) == -1 :
+            method(element)
+
+
+def list_browser_reverse(list, method):
+    tmp_list = []
+    for element in list:
+        tmp_list.append(element)
+
+    i = len(tmp_list) - 1
+    while i >= 0 :
+        if not list_find(list,tmp_list[i]) == -1 :
+            method(tmp_list[i])
+        i -= 1
+

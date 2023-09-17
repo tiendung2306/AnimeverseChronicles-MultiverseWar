@@ -98,7 +98,7 @@ class wizardclass():
         self.health_max = 100.0
         self.health = self.health_max
         self.mana_max =100.0
-        self.mana = 0.0
+        self.mana = 90.0
 
         self.magicbullet_list = []
         self.effect_list = []
@@ -336,7 +336,7 @@ class wizardclass():
                                 return
                 self.special_skill_animation.status = False
 
-        elif self.special_skill_animation.clock.Return == 2 or self.special_skill_animation.clock.Return == 9:
+        elif self.special_skill_animation.clock.Return == 2 or self.special_skill_animation.clock.Return == 9 or self.special_skill_animation.clock.Return == 11:
             self.switcher2.reset()
 
         elif self.special_skill_animation.clock.Return == 10:
@@ -347,7 +347,14 @@ class wizardclass():
                             if same_line_checker(self, object):
                                 add_effect(object, knock_back(object, 0.5, 20))
 
-
+        elif self.special_skill_animation.clock.Return == 12:
+            if self.switcher2.operation():
+                for object in self.gameplay.side( self.side) :
+                    if abs(object.box.centerx  - self.box.centerx ) <= screen.screen.get_width() + (self.box.width + object.box.width) / 2 :
+                        if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                            if same_line_checker(self, object):
+                                if not object == self:
+                                    add_effect(object, heal(object, 10))
 
 
     def special_skill_reset(self):

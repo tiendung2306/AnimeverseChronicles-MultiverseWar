@@ -15,11 +15,11 @@ class Nexusclass():
         self.index = 0
         self.gameplay.side(self.side).append(self)
         rect = pygame.Rect(0,0,self.gameplay.box_size[0], self.gameplay.box_size[1])
-        rect.center = (screen.screen.get_rect().centerx - self.side * self.gameplay.box_size[0] * 28, self.gameplay.path_height - self.gameplay.box_size[1] / 2)
+        rect.center = (screen.screen.get_rect().centerx - self.side * self.gameplay.box_size[0] * (self.gameplay.number_of_box / 2 - 4 ) , self.gameplay.path_height - self.gameplay.box_size[1] / 2)
         self.box = pygame.Rect(0,0,0,0)
         self.imgbox = pygame.Rect(0,0,0,0)
         get_spawn_display(self, rect)
-        self.health_max = 500.0
+        self.health_max = 1000000.0
         self.health =  self.health_max
         self.mana_max = 100.0
         self.mana = 0
@@ -48,8 +48,8 @@ class Nexusclass():
     def display(self):
         self.status_bar()
         self.gameplay.bg.blit(pygame.transform.smoothscale(self.img.img , (self.imgbox.width, self.imgbox.height)), self.imgbox)
-        pygame.draw.rect(screen.screen,White,self.box,1)
-        pygame.draw.rect(screen.screen,Red,self.imgbox,1)
+        # pygame.draw.rect(screen.screen,White,self.box,1)
+        # pygame.draw.rect(screen.screen,Red,self.imgbox,1)
 
  
     def Geting_hit(self):

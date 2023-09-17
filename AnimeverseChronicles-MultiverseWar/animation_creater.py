@@ -27,8 +27,8 @@ import time
 
 WIN = pygame.display.set_mode((1000,1000))
 img_iib = []
-for i in range(1,4):
-    img = pygame.image.load("GameplayAssets\\breaking_ground({}).png".format(i))
+for i in range(1,5):
+    img = pygame.image.load("GameplayAssets\\healling_effect({}).png".format(i))
     img_iib.append(img)
 
 

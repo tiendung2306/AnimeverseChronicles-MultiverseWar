@@ -10,6 +10,7 @@ from gameplay_ui import *
 from key_binding_manager import *
 from gameover_panel import *
 from list_function import*
+from object_function import *
 import random
 
 class gameplay():
@@ -24,8 +25,8 @@ class gameplay():
 
         path_num = random.randint(1, 5)
         # print(path_num)
-        self.fake_bg_original = pygame.image.load('GameplayAssets\\bg1.png')
-        self.bg_original = pygame.image.load('GameplayAssets\\bg1.png')
+        # self.fake_bg_original = pygame.image.load('GameplayAssets\\bg1.png')
+        self.bg_original = pygame.image.load('GameplayAssets\\bg({}).jpg'.format(path_num))
         self.path_original = pygame.image.load('GameplayAssets\\path' + str(path_num) + '.png')
         self.board_original = pygame.image.load('GameplayAssets\\board.png')
         self.settings_button_original = pygame.image.load('GameplayAssets\\settings_button.png')
@@ -101,7 +102,8 @@ class gameplay():
 
         self.spawn_point_height = self.path.get_rect().top + self.path.get_rect().height / 7.0
 
-        self.box_size = (screen.screen.get_rect().width / 60 , screen.screen.get_rect().height / 20)
+        self.number_of_box = 45
+        self.box_size = (screen.screen.get_rect().width / self.number_of_box , screen.screen.get_rect().height * 3 / self.number_of_box)
         self.path_height = screen.screen.get_rect().height - self.path.get_rect().height * 7 / 10
         self.screen = screen.screen.get_size()
     #Object import:
@@ -121,7 +123,7 @@ class gameplay():
         # spawn(tankerclass, 2, 39, self)
         # spawn(tankerclass, 2, 40, self)
 
-
+        self.selected_object = None
 
     def side(self, side):
         if side == 1:
@@ -130,7 +132,7 @@ class gameplay():
             return self.side2
 
     def load_all_gameplay_image(self):
-        self.fake_bg = self.fake_bg_original.copy()
+        self.fake_bg = self.bg_original.copy()
         self.bg = self.bg_original.copy()
         self.path = self.path_original.copy()
         self.board_1 = self.board_original.copy()
@@ -174,7 +176,7 @@ class gameplay():
         self.load_all_gameplay_image()
  
 
-        self.box_size = (screen.screen.get_rect().width / 60 , screen.screen.get_rect().height / 20)
+        self.box_size = (screen.screen.get_rect().width / self.number_of_box , screen.screen.get_rect().height * 3 / self.number_of_box)
         self.path_height = screen.screen.get_rect().height - self.path.get_rect().height * 7 / 10
 
         for object in self.side2 + self.side1:
@@ -389,16 +391,205 @@ class gameplay():
         self.set_fade()
         self.Gameover_panel.update()
 
+    def draw_character_panel(self, mouse_position):
+        if self.selected_object == None:
+            draw_panel = False
+            (a,b) = mouse_position
+            selected_list = []
+            distance_list = []
+            for object in self.side1 + self.side2 :
+                if not object.index == 0:
+                    distance = math.sqrt((a - object.box.centerx) ** 2 + (b - object.box.centery) ** 2)
+                    if distance < self.box_size[1] * 4:
+                        character_outline_box = pygame.Rect(0,0,self.box_size[0], self.box_size[1])
+                        character_outline_box.center = object.box.center
+                        if character_outline_box.top < b and b < character_outline_box.bottom and character_outline_box.left < a and a < character_outline_box.right :
+                            selected_list.append(object)
+                            distance_list.append(distance)
+                            draw_panel = True
+                            screen.screen.blit(pygame.transform.smoothscale(pygame.image.load("GameplayAssets\character_box.png"), self.box_size) , character_outline_box)
+                        else:
+                            pygame.draw.rect(screen.screen, White, character_outline_box, 1, 10)
+            if draw_panel:              
+                selected_distance = max(distance_list)
+                selected_object = selected_list[list_find(distance_list, selected_distance)]
+
+                object = selected_object
+                if self.right_click == True:
+                    self.selected_object = object
+
+        else:
+            if self.selected_object.alive == True:
+                object = self.selected_object
+                draw_panel = True
+                if self.right_click == True:
+                    character_outline_box = pygame.Rect(0,0,self.box_size[0], self.box_size[1])
+                    character_outline_box.center = object.box.center
+                    (a,b) = mouse_position
+                    if not (character_outline_box.top < b and b < character_outline_box.bottom and character_outline_box.left < a and a < character_outline_box.right) :
+                        draw_panel = False
+                        self.selected_object = None
+            elif self.selected_object.alive == False:
+                self.selected_object = None
+                draw_panel = False
+
+        if draw_panel:
+
+            panel_center = (object.box.centerx, object.box.centery - self.box_size[1] * 4)
+            panel_width = self.box_size[0] * 15
+
+            scale = panel_width / 600
+
+            panel = pygame.Rect(0,0,panel_width,panel_width /2)
+            panel.center = panel_center
+            boder = 20 * scale
+            board = pygame.Rect(0,0,panel.width - boder * 2, panel.height - boder * 2)
+            board.center = panel_center
+
+            character_box = pygame.Rect(0 , 0 , 155 * scale , 235 * scale)
+            character_box.center = board.center
+            character_blit_box = pygame.Rect(0, 0 , 114 * scale , 197 * scale)
+            character_blit_box.center = board.center
+
+            pygame.draw.rect(screen.screen,Gray, panel, border_radius = 10)
+            pygame.draw.rect(screen.screen,Black, board,border_radius = 10) 
+
+            img = object.animation_player.img_lib[object.animation_player.clock.Return - 1].img
+            imgbox = get_spawn_imgbox( object, character_blit_box)
+            img = pygame.transform.smoothscale(img, (imgbox.width, imgbox.height))
+            img_area = (board.left - imgbox.left, board.top - imgbox.top, board.width, board.height)
+            screen.screen.blit(img, board.topleft, img_area)
+
+            def class_display(class_name):
+                tmp = pygame.font.Font('Fonts\\AznKnucklesTrial-z85pa.otf', int(31 * scale)).render(class_name,True,White) #co chu phair ngi=uyennnnnn
+                screen.screen.blit(tmp, ((board.left + character_box.left) / 2.0 - tmp.get_width() / 2.0, character_box.top))
+
+            def text_display(text, font_size, topleft, color):
+                tmp = pygame.font.Font('Fonts\\AznKnucklesTrial-z85pa.otf', font_size).render(text,True,color) #co chu phair ngi=uyennnnnn
+                screen.screen.blit(tmp, topleft)
+            def bar_display(data1,data2, center, color):
+                hcn1 = pygame.Rect(0,0,167 * scale,11 * scale)
+                hcn2 = pygame.Rect(0,0,167 * scale - 2, 11 * scale - 2)
+                hcn1.center = hcn2.center = center
+                pygame.draw.rect(screen.screen, Gray, hcn1,border_radius = 12)
+                if data1 < 0:
+                    data1 = 0
+                elif data1 >=  data2:
+                        data1 = data2
+
+                hcn3 = pygame.Rect(0,0,hcn2.width * data1 / data2, 11 - 2 * 1)
+                hcn3.topleft = hcn2.topleft
+                pygame.draw.rect(screen.screen, Black, hcn2,border_radius = 12)
+                pygame.draw.rect(screen.screen, color, hcn3, border_top_left_radius = 12, border_bottom_left_radius = 12)
+
+
+            class_display(object.name)
+            text_display("Bacsic statics :", int(16 * scale), (panel.left + 35 * scale ,panel.top + 72 * scale), White)
+
+            text_display("Health : {} / {}".format(object.health, object.health_max), int(14 * scale), (panel.left + 35 * scale ,panel.top + 93 * scale), White)
+            if object.health >= 50:
+                bar_display(object.health,object.health_max,(panel.left + 117 * scale ,panel.top + 121 * scale), Green)
+            else:
+                bar_display(object.health,object.health_max,(panel.left + 117 * scale ,panel.top + 121 * scale), Red)
+
+            text_display("Mana : {} / {}".format(object.mana, object.mana_max), int(14 * scale), (panel.left + 35 * scale ,panel.top + 138 * scale), White)
+            bar_display(object.mana,object.mana_max, (panel.left + 117 * scale ,panel.top + (121 + 45) * scale), Blue)
+
+            text_display("Damage : {} / 100".format(object.attack_damage), int(14 * scale), (panel.left + 35 * scale ,panel.top + (93 + 45 * 2) * scale), White)
+            bar_display(object.attack_damage,100, (panel.left + 117 * scale ,panel.top + (121 + 45 * 2) * scale), Yellow)
+
+            text_display("Attack speed : {} sec per attack".format(round(object.attack_speed, 2)), int(14 * scale), (panel.left + 35 * scale ,panel.top + (93 + 45 * 3) * scale), White)
+            if object.attack_coundowner.counter == None:
+                bar_display(1,1, (panel.left + 117 * scale ,panel.top + (121 + 45 * 3) * scale), Silver)
+            else:
+                bar_display(object.attack_coundowner.counter - self.curr_time,1 / object.attack_speed, (panel.left + 117 * scale ,panel.top + (121 + 45 * 3) * scale), Silver)
+
+            text_display("Level : {}".format(object.level),int(18 * scale), (panel.left + 394 * scale, character_box.top), White)
+            
+            text_display("Status :",   int(18 * scale), (panel.left + 394 * scale ,panel.top + 72 * scale), White)
+            color = White
+            if object.special_status or object.status == 4:
+                text = "Special"
+                color = Red_Orange
+            elif object.status == 1:
+                text = "Attacking"
+                color = Red
+            elif object.status == 2 or object.status == 5 :
+                ispass = False
+                for effect in object.effect_list:
+                    if effect.__class__ == dizzy:
+                        text = "Soul_sucking"
+                        ispass = True
+                        color = Purple
+                        break
+
+                    elif effect.__class__ == soul_sucking:
+                        text = "Stunning"
+                        ispass = True
+                        color = Purple
+                        break
+                if not ispass:
+                    text = "Standing"
+            elif object.status ==  6 or object.status == 5.5:
+                text = "Defending"    
+            elif object.status == 3:
+                text = "Moving"
+            elif object.status == -1:
+                text = "Knock back"
+                color = Purple
+            elif object.status == -2:
+                text = "On Air"
+                color = Purple
+            elif object.status == -3:
+                text = "Falling"
+                color = Purple
+            text_display(text, int(16 * scale), (panel.left + 435 * scale,panel.top + 112 * scale), color) 
+
+            text_display("Effect :",   int(18 * scale), (panel.left + 394 * scale,panel.top + 158 * scale), White)
+            checked_effect_list = []
+            for effect in object.effect_list:
+                if list_find(checked_effect_list, effect.__class__) == -1:
+                    checked_effect_list.append(effect.__class__)
+                    if effect.__class__ == dizzy:
+                        text = "Dizzy"
+                        color = Purple
+                    elif effect.__class__ == soul_sucking:
+                        text = "Soul Sucking"
+                        color = Purple
+                    elif effect.__class__ == knock_back:
+                        text = "Knock Back"               
+                        color = Purple
+                    elif effect.__class__ == flying:
+                        text = "Flying"
+                        color = Purple
+                    elif effect.__class__ == falling:
+                        text = "Falling"
+                        color = Purple
+                    elif effect.__class__ == iron_body:
+                        text = "Iron Body"
+                        color = Yellow
+                    elif effect.__class__ == heal:
+                        text = "Heal"
+                        color = Green
+                    elif effect.__class__ == shield:
+                        text = " shield"
+                        color = Gray
+                    text_display(text,int(16 * scale),(panel.left + 435 *  scale ,panel.top + (177 + 20 * len(checked_effect_list) )* scale), color)
+                
+            
+
+
     def object_operation(self):
         self.bg.blit(self.fake_bg, (0,0))
         self.bg.blit(self.path, (0, screen.screen.get_rect().height - self.path.get_rect().height))
-        for object in self.side2 + self.side1 :
-            object.operation()
-        list_operation(self.side0)
-        for object in self.side3 :
-            object.operation()
-
-
+        self.nexus1.operation()
+        self.nexus2.operation()
+        def operation(object):
+            if not  object.__class__ == self.nexusclass:
+                object.operation()
+        list_browser(self.side1 , operation)
+        list_browser(self.side2 , operation)
+        list_browser(self.side0 + self.side3 , operation)
 
 
 class Save_game(): #day la ester egg cua game

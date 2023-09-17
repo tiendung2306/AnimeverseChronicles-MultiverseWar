@@ -220,6 +220,7 @@ class gokuclass():
         if self.mana >= self.mana_max:
             self.mana = 0
             self.special_status = True
+            add_effect(self, iron_body(self, 2.25 + 1 / self.attack_speed))
 
         if self.ischeck :
 
@@ -356,7 +357,6 @@ class gokuclass():
         if self.switcher3.operation():
             self.attack_coundowner.reset()
             self.attack_coundowner.start()
-            add_effect(self, iron_body(self, 2.25))
             
         self.animation_player = self.special_skill_animation
         if self.special_skill_animation.clock.Return == 3:
@@ -367,12 +367,13 @@ class gokuclass():
                     if abs(object.box.centerx  - self.box.centerx ) <= self.attack_scope *1.5 + (self.box.width + object.box.width) / 2 :
                         if (object.box.centerx - self.box.centerx) * self.side >= 0:
                             if same_line_checker(self, object):
-                                self.target = object
-                                add_effect(object, knock_back(object,self.special_skill_animation.clock.repeat_time * 3, 100))
-                                object.get_hit = True
-                                object.get_damage = self.attack_damage
-                                return
-                self.special_skill_animation.status = False
+                                if not object.__class__ == self.gameplay.nexusclass:
+                                    self.target = object
+                                    add_effect(object, knock_back(object,self.special_skill_animation.clock.repeat_time * 3, 100))
+                                    object.get_hit = True
+                                    object.get_damage = self.attack_damage
+                                    return
+                self.target = None
 
         elif self.special_skill_animation.clock.Return == 5:
             self.switcher2.reset()
@@ -381,20 +382,59 @@ class gokuclass():
             if self.switcher2.operation():
                 self.tmp = fake_object_class(self)
                 tmp = (self.box.centerx - self.imgbox.centerx, self.box.centery - self.imgbox.centery)
-                self.imgbox.centerx = self.target.imgbox.centerx - self.gameplay.box_size[0] / 3 * self.side
-                self.box.center = (self.imgbox.centerx + tmp[0], self.imgbox.centery + tmp[1])
+                if self.target == None:
+                    if self.box.right + 10 * self.gameplay.box_size[0] < self.gameplay.nexus2.box.left and self.box.left > self.gameplay.nexus1.box.right + 10 * self.gameplay.box_size[0]:   
+                        self.imgbox.centerx += 10 * self.gameplay.box_size[0] *  self.side
+                        self.box.center = (self.imgbox.centerx + tmp[0], self.imgbox.centery + tmp[1])
+                    else:
+                        self.imgbox.center  = self.gameplay.side(- self.side)[0].box.center
+                        self.imgbox.centerx -= (self.gameplay.side(- self.side)[0].box.width  / 2 + self.attack_scope * 1.5) * self.side
+                        self.box.center = (self.imgbox.centerx + tmp[0], self.imgbox.centery + tmp[1])
+                else:  
+                    if self.target.alive == False:
+                        if self.box.right + 10 * self.gameplay.box_size[0] < self.gameplay.nexus2.box.left and self.box.left > self.gameplay.nexus1.box.right + 10 * self.gameplay.box_size[0]:   
+                            self.imgbox.centerx += 10 * self.gameplay.box_size[0] *  self.side
+                            self.box.center = (self.imgbox.centerx + tmp[0], self.imgbox.centery + tmp[1])
+                        else:
+                            self.imgbox.center  = self.gameplay.side(- self.side)[0].box.center
+                            self.imgbox.centerx -= (self.gameplay.side(- self.side)[0].box.width  / 2 + self.attack_scope * 1.5) * self.side
+                            self.box.center = (self.imgbox.centerx + tmp[0], self.imgbox.centery + tmp[1])
+                    else:
+                        self.box.centerx = self.target.box.centerx - self.gameplay.box_size[0] / 3 * self.side
+                        self.imgbox.center = (self.box.centerx - tmp[0], self.box.centery - tmp[1])
 
         elif self.special_skill_animation.clock.Return == 9:
             self.switcher2.reset()
 
         elif self.special_skill_animation.clock.Return == 10:
             if self.switcher2.operation():
-                if self.target.alive == True:
-                    add_effect(self.target, flying(self.target, 20))
-                    self.target.get_hit = True
-                    self.target.get_damage = self.attack_damage
+                if self.target == None:
+                    for object in self.gameplay.side(- self.side) :
+                        if abs(object.box.centerx  - self.box.centerx ) <= self.attack_scope *1.5 + (self.box.width + object.box.width) / 2 :
+                            if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                                if same_line_checker(self, object):
+                                    if not object.__class__ == self.gameplay.nexusclass:
+                                        self.target = object
+                                        add_effect(self.target, flying(self.target, 20))
+                                        self.target.get_hit = True
+                                        self.target.get_damage = self.attack_damage
+                                        return
                 else:
-                    self.special_skill_animation.status = False
+                    if self.target.alive == False:
+                        for object in self.gameplay.side(- self.side) :
+                            if abs(object.box.centerx  - self.box.centerx ) <= self.attack_scope *1.5 + (self.box.width + object.box.width) / 2 :
+                                if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                                    if same_line_checker(self, object):
+                                        if not object.__class__ == self.gameplay.nexusclass:
+                                            self.target = object
+                                            add_effect(self.target, flying(self.target, 20))
+                                            self.target.get_hit = True
+                                            self.target.get_damage = self.attack_damage
+                                            return
+                    else:
+                        add_effect(self.target, flying(self.target, 20))
+                        self.target.get_hit = True
+                        self.target.get_damage = self.attack_damage
                 
 
         elif self.special_skill_animation.clock.Return == 11:
@@ -404,7 +444,7 @@ class gokuclass():
             if self.switcher2.operation():
                 tmp = (self.box.centerx - self.imgbox.centerx, self.box.centery - self.imgbox.centery)
                 self.imgbox.centery -= 4.5 * self.gameplay.box_size[1]
-                self.imgbox.centerx -= self.gameplay.box_size[0] * self.side
+                self.imgbox.centerx -=  2 * self.gameplay.box_size[0] * self.side
                 self.box.center = (self.imgbox.centerx + tmp[0], self.imgbox.centery + tmp[1])
                 self.kame = kame_class(self)
 
