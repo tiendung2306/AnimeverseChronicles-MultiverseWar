@@ -276,8 +276,6 @@ class tankerclass():
                                 object.get_damage = self.attack_damage
         elif self.attacking_animation.clock.Return == 4 or self.attacking_animation.clock.Return == 7 :
             self.switcher1.reset()
-
-
             
 
     def attack_reset(self):
@@ -295,7 +293,7 @@ class tankerclass():
         if self.switcher2.operation():
             self.damage_reduce = self.damage_reduce_special
             self.skill_countdowner.start()
-            self.effect = shield(self, 30, 100)
+            self.effect = shield(self, 3, 40)
             add_effect(self,self.effect)
 
         if self.skill_countdowner.Return == False:
