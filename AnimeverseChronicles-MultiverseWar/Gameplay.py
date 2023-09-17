@@ -66,7 +66,7 @@ class gameplay():
         self.curr_level1 = 1
         self.curr_level2 = 1
         self.character_level_max = [5, 5, 5, 5, 3, 2]
-        self.character_level1 = [1, 1, 1, 1, 1, 1]
+        self.character_level1 = [1, 1, 1, 1, 1, 1] # ung voi cac con lan luot tu trai sang theo thu tu spawn
         self.character_level2 = [1, 1, 1, 1, 1, 1]
 
         self.timer_font = pygame.font.Font('Fonts\\joystix_monospace.otf', 16)
