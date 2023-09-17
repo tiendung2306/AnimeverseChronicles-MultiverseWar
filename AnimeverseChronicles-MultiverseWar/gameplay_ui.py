@@ -12,6 +12,9 @@ class button():
         self.button_image_2 = self.button_image_original.copy()
         self.button_image_2 = pygame.transform.flip(self.button_image_2, True, False)
 
+        self.level_up_button_original = pygame.image.load('GameplayAssets\\level_up_button1.png').convert_alpha()
+        self.level_up_button = self.level_up_button_original.copy()
+
         self.button_num = -1
         self.key_icon_filename = '1_Key_Light.png'
         self.key_icon_original = pygame.image.load('GameplayAssets\\keyboard_and_mouse_icons\\Light\\' + self.key_icon_filename)
@@ -27,12 +30,16 @@ class button():
         self.button_image_2 = pygame.transform.flip(self.button_image_2, True, False)
         self.button_image_1 = pygame.transform.smoothscale(self.button_image_1, (screen.screen.get_rect().width / 16, screen.screen.get_rect().height / 16))
         self.button_image_2 = pygame.transform.smoothscale(self.button_image_2, (screen.screen.get_rect().width / 16, screen.screen.get_rect().height / 16))
-        
+
+        self.level_up_button = self.level_up_button_original.copy()
+        self.level_up_button = pygame.transform.smoothscale(self.level_up_button, (screen.screen.get_rect().width / 22, self.level_up_button.get_rect().height / self.level_up_button.get_rect().width * screen.screen.get_rect().height / 22))
+        self.level_up_button.set_alpha(55)
+        self.level_up_button_rect = pygame.Rect(0, 0, screen.screen.get_rect().width / 22, self.level_up_button.get_rect().height / self.level_up_button.get_rect().width * screen.screen.get_rect().height / 22)
         self.load_key_icon_image()
         self.mouse_click_icon = self.mouse_click_icon_original.copy()
         self.mouse_click_icon = pygame.transform.smoothscale(self.mouse_click_icon, (screen.screen.get_rect().width / 85, self.mouse_click_icon.get_rect().height / (self.mouse_click_icon.get_rect().width / screen.screen.get_rect().width * 85)))
 
-    def draw_button(self, button_num, pos, side):
+    def draw_button(self, button_num, pos, side, pos1):
         if self.button_num == -1:
             self.button_num = button_num
             self.key_icon_filename = str(self.button_num) + '_Key_Light.png'
@@ -40,9 +47,17 @@ class button():
             self.load_key_icon_image()
         if side == 1:
             screen.screen.blit(self.button_image_1, pos)
+            if self.gameplay.islevel_up1 == True and self.gameplay.character_level1[button_num - 1] < self.gameplay.character_level_max[button_num - 1]:
+                self.level_up_button_rect.center = (pos1[0], pos1[1] - screen.screen.get_rect().height / 200)
+                screen.screen.blit(self.level_up_button, self.level_up_button_rect)
+                # self.gameplay.islevel_up = False
             screen.screen.blit(self.mouse_click_icon, (pos[0] + self.button_image_1.get_rect().width / 7.95, screen.screen.get_rect().height / 97))
         else:
             screen.screen.blit(self.button_image_2, pos)
+            if self.gameplay.islevel_up2 == True and self.gameplay.character_level2[button_num - 1] < self.gameplay.character_level_max[button_num - 1]:
+                self.level_up_button_rect.center = (pos1[0], pos1[1] - screen.screen.get_rect().height / 200)
+                screen.screen.blit(self.level_up_button, self.level_up_button_rect)
+                # self.gameplay.islevel_up = False
             screen.screen.blit(self.key_icon, (pos[0] + self.button_image_2.get_rect().width - 2*self.button_image_2.get_rect().width / 5.0, screen.screen.get_rect().height / 190))
 
     def can_spawn(self, side):
@@ -135,6 +150,59 @@ class spawn_process():
     def start_fill_process_bar(self):
         self.start_spawn_time = self.gameplay.curr_time   
 
+class lvl_up_button():
+    def __init__(self, gameplay, side):
+        self.gameplay = gameplay
+        self.side = side
+        self.button_image_original = pygame.image.load('GameplayAssets\\level_up_button.png')
+        self.button_image_1 = self.button_image_original.copy()
+        self.button_image_2 = self.button_image_original.copy()
+        # self.button_image_2 = pygame.transform.flip(self.button_image_2, True, False)
+
+        self.level_font = pygame.font.Font('Fonts\\Minecraft.ttf', 14)
+
+        self.level1 = self.level_font.render('Lv: ' + str(self.gameplay.curr_level1), True, Black)
+        self.level2 = self.level_font.render('Lv: ' + str(self.gameplay.curr_level2), True, Black)
+        
+    def load_image(self):
+        self.button_image_1 = self.button_image_original.copy()
+        self.button_image_2 = self.button_image_original.copy()
+        # self.button_image_2 = pygame.transform.flip(self.button_image_2, True, False)
+        self.button_image_1 = pygame.transform.smoothscale(self.button_image_1, (screen.screen.get_rect().width / 23, self.button_image_1.get_rect().height / self.button_image_1.get_rect().width * screen.screen.get_rect().height / 23))
+        self.button_image_2 = pygame.transform.smoothscale(self.button_image_2, (screen.screen.get_rect().width / 23, self.button_image_2.get_rect().height / self.button_image_2.get_rect().width * screen.screen.get_rect().height / 23))
+        self.button_image_1_rect = self.button_image_1.get_rect()
+        self.button_image_1_rect.left = screen.screen.get_rect().width / 250
+        self.button_image_1_rect.top = screen.screen.get_rect().height / 8.25
+        self.button_image_2_rect = self.button_image_2.get_rect()
+        self.button_image_2_rect.right = screen.screen.get_rect().width - screen.screen.get_rect().width / 250
+        self.button_image_2_rect.top = screen.screen.get_rect().height / 8.25
+
+        self.level1_rect = self.level1.get_rect()
+        self.level1_rect.center = self.button_image_1_rect.center
+        self.level1_rect.top = self.button_image_1_rect.bottom + screen.screen.get_rect().height / 500
+        self.level2_rect = self.level2.get_rect()
+        self.level2_rect.center = self.button_image_2_rect.center
+        self.level2_rect.top = self.button_image_2_rect.bottom + screen.screen.get_rect().height / 500
+
+    def draw(self):
+        if self.side == 1:
+            screen.screen.blit(self.button_image_1, self.button_image_1_rect)
+            screen.screen.blit(self.level1, self.level1_rect)
+        elif self.gameplay.play_mode == 2:
+            screen.screen.blit(self.button_image_2, self.button_image_2_rect)
+            screen.screen.blit(self.level2, self.level2_rect)
+
+    def check_click(self, mouse):
+        if self.side == 1:
+            if self.button_image_1_rect.left <= mouse[0] <= self.button_image_1_rect.right and self.button_image_1_rect.top <= mouse[1] <= self.button_image_1_rect.bottom:
+                self.gameplay.level_up(self.side)
+                self.level1 = self.level_font.render('Lv: ' + str(self.gameplay.curr_level1), True, Black)
+        if self.side == 2 and self.gameplay.play_mode == 2:
+            if self.button_image_2_rect.left <= mouse[0] <= self.button_image_2_rect.right and self.button_image_2_rect.top <= mouse[1] <= self.button_image_2_rect.bottom:
+                self.gameplay.level_up(self.side)
+                self.level2 = self.level_font.render('Lv: ' + str(self.gameplay.curr_level2), True, Black)
+            
+
 class gameplay_ui():
     def __init__(self, gameplay):
         self.gameplay = gameplay
@@ -148,6 +216,11 @@ class gameplay_ui():
         self.spawn_bar1 = spawn_process(self.gameplay, 1)
         self.spawn_bar2 = spawn_process(self.gameplay, 2)
 
+        self.lvl_up_button1 = lvl_up_button(self.gameplay, 1)
+        self.lvl_up_button2 = lvl_up_button(self.gameplay, 2)
+
+        self.level_font = pygame.font.Font('Fonts\\Minecraft.ttf', 12)
+
         self.add_button()
         self.load_image()
         self.draw_button()
@@ -157,6 +230,8 @@ class gameplay_ui():
             x.load_image()
         self.button_border = self.button_border_original.copy()
         self.button_border = pygame.transform.smoothscale(self.button_border, (screen.screen.get_rect().width / 20, screen.screen.get_rect().width / 20))
+        self.lvl_up_button1.load_image()
+        self.lvl_up_button2.load_image()
 
     def add_button(self):
         self.character_spawn_buttons.append(button(self.gameplay.sword_manclass, 'GameplayAssets\\sword_man_avatar.png', self.gameplay))
@@ -181,14 +256,18 @@ class gameplay_ui():
                 prev_pos_width = prev_pos_width - self.button_border.get_rect().width - screen.screen.get_rect().width / 250
 
     def draw_button(self):
+        #ve nut spawn
         prev_pos_width = screen.screen.get_rect().width / 7
         for i in range(0, len(self.character_spawn_buttons)):
             pygame.draw.rect(screen.screen, Gray62, pygame.Rect(self.button_rect_1[i].left, self.button_rect_1[i].top, screen.screen.get_rect().width / 20, screen.screen.get_rect().width / 20), border_radius=int(screen.screen.get_rect().width / 80))
             screen.screen.blit(self.button_border, (self.button_rect_1[i].left, self.button_rect_1[i].top))
             character_rect = self.character_spawn_buttons[i].button_image_1.get_rect()
             character_rect.center = self.button_rect_1[i].center
-            self.character_spawn_buttons[i].draw_button(i + 1, (character_rect.left, character_rect.top), 1)
+            self.character_spawn_buttons[i].draw_button(i + 1, (character_rect.left, character_rect.top), 1, self.button_rect_1[i].center)
             prev_pos_width = prev_pos_width + self.button_border.get_rect().width + screen.screen.get_rect().width / 250
+
+            level = self.level_font.render('Lv: ' + str(self.gameplay.character_level1[i]), True, Black)
+            screen.screen.blit(level, (self.button_rect_1[i].center[0] - screen.screen.get_rect().width / 250, self.button_rect_1[i].top + screen.screen.get_rect().height / 150))
             
         if self.gameplay.play_mode == 2:
             prev_pos_width = screen.screen.get_rect().width / 7.0 * 6.0 - self.button_border.get_rect().width
@@ -197,8 +276,16 @@ class gameplay_ui():
                 screen.screen.blit(self.button_border, (self.button_rect_2[i].left, self.button_rect_2[i].top))
                 character_rect = self.character_spawn_buttons[i].button_image_2.get_rect()
                 character_rect.center = self.button_rect_2[i].center
-                self.character_spawn_buttons[i].draw_button(i + 1, (character_rect.left, character_rect.top), 2)
+                self.character_spawn_buttons[i].draw_button(i + 1, (character_rect.left, character_rect.top), 2, self.button_rect_2[i].center)
                 prev_pos_width = prev_pos_width - self.button_border.get_rect().width - screen.screen.get_rect().width / 250
+
+                level = self.level_font.render('Lv: ' + str(self.gameplay.character_level2[i]), True, Black)
+                screen.screen.blit(level, (self.button_rect_2[i].center[0] - screen.screen.get_rect().width / 100, self.button_rect_2[i].top + screen.screen.get_rect().height / 150))
+
+        #ve nut lvl_up nha chinh
+        self.lvl_up_button1.draw()
+        self.lvl_up_button2.draw()
+        
 
     def spawn(self, button_num, side): #spawn tuong
         self.character_spawn_buttons[button_num].spawn(side)
@@ -230,11 +317,23 @@ class gameplay_ui():
             return
         for i in range(0, len(self.character_spawn_buttons)):
             if self.button_rect_1[i].left <= mouse[0] <= self.button_rect_1[i].right and self.button_rect_1[i].top <= mouse[1] <= self.button_rect_1[i].bottom:
-                self.insert_in_spawn_queue(i, 1)
+                if self.gameplay.islevel_up1 == True:
+                    if self.gameplay.character_level_up(i + 1, 1) == True:
+                        self.gameplay.islevel_up1 = False
+                else:
+                    self.insert_in_spawn_queue(i, 1)
         if self.gameplay.play_mode == 2:
             for i in range(0, len(self.character_spawn_buttons)):
                 if self.button_rect_2[i].left <= mouse[0] <= self.button_rect_2[i].right and self.button_rect_2[i].top <= mouse[1] <= self.button_rect_2[i].bottom:
-                    self.insert_in_spawn_queue(i, 2)
+                    if self.gameplay.islevel_up2 == True:
+                        if self.gameplay.character_level_up(i + 1, 2) == True:
+                            self.gameplay.islevel_up2 = False
+                    else:
+                        self.insert_in_spawn_queue(i, 2)
+
+        self.lvl_up_button1.check_click(mouse)
+        self.lvl_up_button2.check_click(mouse)
+
     def draw_spawn_bar(self):
         self.spawn_bar1.draw()
         if self.gameplay.play_mode == 2:

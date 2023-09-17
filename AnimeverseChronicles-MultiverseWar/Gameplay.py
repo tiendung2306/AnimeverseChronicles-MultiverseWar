@@ -51,10 +51,6 @@ class gameplay():
         self.narutoclass = narutoclass
         self.cloneclass = cloneclass
 
-        self.gameplay_ui = gameplay_ui(self)
-
-        self.load_all_gameplay_image()
-
 
         if self.play_mode == 2:
             tmp = Rect(0, 0, 0, 0)
@@ -65,11 +61,13 @@ class gameplay():
             self.play_pause_button = (screen.screen.get_rect().width - screen.screen.get_rect().width // 32, 10)
 
         #level
+        self.islevel_up1 = False
+        self.islevel_up2 = False
         self.curr_level1 = 1
         self.curr_level2 = 1
         self.character_level_max = [5, 5, 5, 5, 3, 2]
-        self.character_level1 = [1, 1, 1, 1, 1]
-        self.character_level2 = [1, 1, 1, 1, 1]
+        self.character_level1 = [1, 1, 1, 1, 1, 1]
+        self.character_level2 = [1, 1, 1, 1, 1, 1]
 
         self.timer_font = pygame.font.Font('Fonts\\joystix_monospace.otf', 16)
         self.start_time = 0.0
@@ -96,6 +94,10 @@ class gameplay():
         self.fade.set_alpha(200)
         self.Pause_Pannel = pause_pannel()
         self.Gameover_panel = gameover_panel(self)
+
+        self.gameplay_ui = gameplay_ui(self)
+
+        self.load_all_gameplay_image()
 
         self.spawn_point_height = self.path.get_rect().top + self.path.get_rect().height / 7.0
 
@@ -306,6 +308,28 @@ class gameplay():
     def draw_pause_pannel(self):
         self.set_fade()
         self.Pause_Pannel.update()
+
+    def character_level_up(self, character_num, side):
+        if side == 1:
+            if self.character_level1[character_num - 1] < self.character_level_max[character_num - 1]:
+                self.character_level1[character_num - 1] += 1
+                return True
+            else:
+                return False
+        else:
+            if self.character_level2[character_num - 1] < self.character_level_max[character_num - 1]:
+                self.character_level2[character_num - 1] += 1
+                return True
+            else:
+                return False
+
+    def level_up(self, side):
+        if side == 1:
+            self.curr_level1 += 1
+            self.islevel_up1 = True
+        else:
+            self.curr_level2 += 1
+            self.islevel_up2 = True
 
     def update(self): #update cac thong so cua game, chay theo tung frame cua gameplay_loop
         #timer process
