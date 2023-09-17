@@ -31,7 +31,7 @@ class dizzy():
 
     def remove(self):
         self.clock.remove()
-        reomve(self)
+        remove(self)
 
 
 class soul_sucking():
@@ -103,7 +103,7 @@ class knock_back():
 
     def remove(self):
         self.clock.remove()
-        reomve(self)
+        remove(self)
 
 
 acceleration_original = 20.0
@@ -141,7 +141,7 @@ class flying():
                 add_effect(self.object, falling(self.object))
 
     def remove(self):
-        reomve(self)
+        remove(self)
 
 
 class falling():
@@ -169,14 +169,55 @@ class falling():
         tmp = get_spawn_imgbox(self.object, pygame.Rect( 0, self.object.gameplay.path_height - self.object.gameplay.box_size[1], self.object.gameplay.box_size[0], self.object.gameplay.box_size[1]))
         self.object.box.centery += tmp.centery - self.object.imgbox.centery
         self.object.imgbox.centery += tmp.centery - self.object.imgbox.centery
-        reomve(self)
+        remove(self)
 
+class shield():
+    def __init__(self, object, lasted_time, damage_reduce_percent):
+        self.object = object
+        self.animation = animation_player_special([shield_animation1,shield_animation2,shield_animation3,shield_animation4,shield_animation5,shield_animation6,shield_animation7], object.side ,0.6, self.object.box, ( - 1 , 1/4, 3,  1/2), object.gameplay)
+        self.clock = timing_clock(lasted_time ,object.gameplay)
+        self.reduce = damage_reduce_percent
+        self.type = 1
+
+    def play(self):
+        self.clock.start()
+        if self.clock.Return == True:
+            self.animation.play()
+            self.object.damage_reduce = self.reduce
+        else:
+            self.remove()
+
+    def remove(self):
+        self.clock.remove()
+        remove(self)
+
+class heal():
+    def __init__(self, object, health):
+        self.object = object
+        self.animation = one_time_animation_player_special([healling_effect1, healling_effect2, healling_effect3, healling_effect4], object.side , 0.8, self.object.box, ( - 1 / 2 , 0, 2,  1), object.gameplay)
+        self.heal = health
+        self.type = 1
+        self.switcher = N_time_switch(1)
+
+    def play(self):
+        self.animation.play()
+        if self.switcher.operation():
+            self.object.health += self.heal
+            if self.object.health > self.object.health_max:
+                self.object.health -= self.heal
+                
+        if self.animation.status == False:
+            self.remove()
+
+    def remove(self):
+        remove(self)
 
 class iron_body():
     def __init__(self, object, lasted_time):
         self.object = object
         self.clock = timing_clock(lasted_time ,object.gameplay)
         self.type = 1
+        self.play()
 
     def play(self):
         self.clock.start()
@@ -200,7 +241,7 @@ def add_effect(object, effect):
 
 
 
-def reomve(effect):
+def remove(effect):
     effect.object.effect_list.remove(effect)
     if effect.object.pre_status < 0 :
         effect.object.ischeck = True

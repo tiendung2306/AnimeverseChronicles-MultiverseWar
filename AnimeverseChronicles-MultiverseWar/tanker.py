@@ -7,6 +7,7 @@ from switch import *
 from animation_player import *
 from screen import *
 from list_function import*
+from common_effect import*
 
 
 class tankerclass():
@@ -92,6 +93,7 @@ class tankerclass():
             elif self.defending_animation.status == False:
                 self.ischeck = True
                 self.defend_reset()
+
 
     def display(self):
         copy(self.box, self.animation_player.play())
@@ -225,9 +227,6 @@ class tankerclass():
                         elif self.pre_status == 4:
                             self.defend_reset()
 
-        if self.special_status and self.status < 0:
-            self.special_skill_reset()
-                
 
 
 
@@ -296,6 +295,11 @@ class tankerclass():
         if self.switcher2.operation():
             self.damage_reduce = self.damage_reduce_special
             self.skill_countdowner.start()
+            self.effect = shield(self, 30, 100)
+            add_effect(self,self.effect)
+
+        if self.skill_countdowner.Return == False:
+            self.special_skill_reset()
 
     def special_skill_reset(self):
         self.damage_reduce = 0
@@ -345,8 +349,8 @@ class tankerclass():
             self.status_update()
 
 
-            pygame.draw.rect(screen.screen,White,self.box,1)
-            pygame.draw.rect(screen.screen,White,self.imgbox,1)
+            # pygame.draw.rect(screen.screen,White,self.box,1)
+            # pygame.draw.rect(screen.screen,White,self.imgbox,1)
         else:
             self.dying()
 

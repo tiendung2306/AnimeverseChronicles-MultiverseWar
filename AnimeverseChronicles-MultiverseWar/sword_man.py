@@ -7,6 +7,7 @@ from switch import *
 from list_function import *
 from animation_player import *
 from screen import *
+from common_effect import *
 
 
 class sword_manclass():
@@ -208,6 +209,8 @@ class sword_manclass():
             if self.status == 1 :
                 if self.attack_coundowner.Return == True:
                     self.status = 2            
+                elif self.special_status:
+                    self.status = 4
             
 
         if self.status > 0:
@@ -289,7 +292,7 @@ class sword_manclass():
                     if abs(object.box.centerx  - self.box.centerx ) <= self.attack_scope + (self.box.width + object.box.width) / 2 :
                         if (object.box.centerx - self.box.centerx) * self.side >= 0:
                             if same_line_checker(self, object):
-                                self.health += (self.health_max - self.health) / 5
+                                add_effect(self, heal(self, self.health * 20.0 / 100))
                                 object.get_hit = True
                                 object.get_damage = self.attack_damage
         elif self.special_skill_animation.clock.Return == 2 or self.special_skill_animation.clock.Return == 7:
@@ -309,7 +312,7 @@ class sword_manclass():
             def play(effect):
                 effect.play()
             list_browser(self.effect_list, play)
-            
+
             self.check_collide()
             self.check_forward()
             

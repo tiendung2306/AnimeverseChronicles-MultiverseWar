@@ -204,6 +204,7 @@ class main():
                 thisGameplay.play_pause_button = (screen.screen.get_rect().width - screen.screen.get_rect().width // 32, 10)
             Button = 'None'
 
+            thisGameplay.right_click = False
             for event in pygame.event.get(): 
                 if event.type == QUIT:
                     running = False
@@ -213,6 +214,7 @@ class main():
                 if event.type == MOUSEBUTTONDOWN:
                     if event.button == 1:
                         Button = thisGameplay.check_click(thisGameplay.play_pause_button, self.mouse)
+                        thisGameplay.right_click = True
                 if event.type == pygame.KEYDOWN:
                     thisGameplay.check_press(event)
                 if event.type == pygame.USEREVENT:
@@ -221,6 +223,8 @@ class main():
             thisGameplay.draw_gameplay_ui()
             
             thisGameplay.object_operation()
+
+            thisGameplay.draw_character_panel(self.mouse)
 
             thisGameplay.pre_curr_time = thisGameplay.curr_time
             

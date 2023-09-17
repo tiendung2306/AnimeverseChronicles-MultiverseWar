@@ -105,9 +105,10 @@ class timing_clock():
         self.switch.reset()
 
     def update_lasting_time(self, new_lasting_time):
-        tmp = (self.counter - self.gameplay.curr_time) / self.lasted_time
-        self.lasted_time = new_lasting_time
-        self.counter = tmp * self.lasted_time + self.gameplay.curr_time
+        if not self.counter == None:
+            tmp = (self.counter - self.gameplay.curr_time) / self.lasted_time
+            self.lasted_time = new_lasting_time
+            self.counter = tmp * self.lasted_time + self.gameplay.curr_time
 
     def remove(self):
         self.gameplay.side3.remove(self)

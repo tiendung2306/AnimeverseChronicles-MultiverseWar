@@ -69,7 +69,7 @@ class analyzed_img():
         return pygame.Rect(imgbox.left + x, imgbox.top + y,rong,dai)
 
 
-nexus = analyzed_img("GameplayAssets\\nexus.png",85 , 46 , 160 , 531)
+nexus = analyzed_img("GameplayAssets\\nexus.png", 309 , 15 , 106 , 572)
 # sword_man1_1  = analyzed_img("GameplayAssets\\sword_man1(1).png", 77 , 153 , 163 , 464)
 # sword_man1_2  = analyzed_img("GameplayAssets\\sword_man1(2).png", 88 , 154 , 156 , 477)
 # sword_man1_3  = analyzed_img("GameplayAssets\\sword_man1(3).png", 79 , 123 , 131 , 495)
@@ -124,6 +124,10 @@ sword_man40 = analyzed_img("GameplayAssets\sword_man(40).png", 246 , 354 , 122 ,
 sword_man41 = analyzed_img("GameplayAssets\sword_man(41).png", 246 , 354 , 122 , 239)
 sword_man50 = analyzed_img("GameplayAssets\sword_man(50).png", 246 , 354 , 122 , 239)
 
+healling_effect1 = analyzed_img("GameplayAssets\healling_effect(1).png" , 31 , 33 , 202 , 222 )
+healling_effect2 = analyzed_img("GameplayAssets\healling_effect(2).png" , 31 , 33 , 202 , 222 )
+healling_effect3 = analyzed_img("GameplayAssets\healling_effect(3).png" , 31 , 33 , 202 , 222 )
+healling_effect4 = analyzed_img("GameplayAssets\healling_effect(4).png" , 31 , 33 , 202 , 222 )
 
 # archer1_1 = analyzed_img("GameplayAssets\\archer1(1).png", 66 , 40 , 60 , 164)
 # archer1_2 = analyzed_img("GameplayAssets\\archer1(2).png", 67 , 40 , 58 , 170)
@@ -223,6 +227,14 @@ tanker35 = analyzed_img("GameplayAssets\\tanker(35).png", 410 , 186 , 0 , 0)
 tanker36 = analyzed_img("GameplayAssets\\tanker(36).png", 410 , 186 , 0 , 0)
 tanker37 = analyzed_img("GameplayAssets\\tanker(37).png", 410 , 186 , 0 , 0)
 tanker38 = analyzed_img("GameplayAssets\\tanker(38).png", 410 , 186 , 0 , 0)
+
+shield_animation1 = analyzed_img("GameplayAssets\shield_animation(1).png" , 151 , 267 , 311 , 150 )
+shield_animation2 = analyzed_img("GameplayAssets\shield_animation(2).png" , 151 , 267 , 311 , 150 )
+shield_animation3 = analyzed_img("GameplayAssets\shield_animation(3).png" , 151 , 267 , 311 , 150 )
+shield_animation4 = analyzed_img("GameplayAssets\shield_animation(4).png" , 151 , 267 , 311 , 150 )
+shield_animation5 = analyzed_img("GameplayAssets\shield_animation(5).png" , 151 , 267 , 311 , 150 )
+shield_animation6 = analyzed_img("GameplayAssets\shield_animation(6).png" , 151 , 267 , 311 , 150 )
+shield_animation7 = analyzed_img("GameplayAssets\shield_animation(7).png" , 151 , 267 , 311 , 150 )
 
 nexus1 = analyzed_img("GameplayAssets\\nexus1.png", 111 , 328 , 517 , 582)
 nexus2 = analyzed_img("GameplayAssets\\nexus2.png", 186 , 209 , 457 , 769)
@@ -454,3 +466,11 @@ breaking_ground3 = analyzed_img("GameplayAssets\\breaking_ground(3).png" , 9 , 1
 
 shuriken_explosion = analyzed_img("GameplayAssets\\shuriken_explosion.png ", 195 , 307 , 184 , 184 )
 
+spawn1 = analyzed_img("GameplayAssets\spawn(1).png ", 219, 1 , 167 , 215)
+spawn2 = analyzed_img("GameplayAssets\spawn(2).png ", 219, 1 , 167 , 215)
+spawn3 = analyzed_img("GameplayAssets\spawn(3).png ", 219, 1 , 167 , 215)
+spawn4 = analyzed_img("GameplayAssets\spawn(4).png ", 219, 1 , 167 , 215)
+spawn5 = analyzed_img("GameplayAssets\spawn(5).png ", 219, 1 , 167 , 215)
+spawn6 = analyzed_img("GameplayAssets\spawn(6).png ", 219, 1 , 167 , 215)
+spawn7 = analyzed_img("GameplayAssets\spawn(7).png ", 219, 1 , 167 , 215)
+spawn8 = analyzed_img("GameplayAssets\spawn(8).png ", 219, 1 , 167 , 215)
