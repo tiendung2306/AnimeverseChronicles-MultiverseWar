@@ -334,7 +334,6 @@ class wizardclass():
                                 add_effect(object, dizzy(object, 5))
                                 add_effect(object, soul_sucking(object))                        
                                 return
-                self.special_skill_animation.status = False
 
         elif self.special_skill_animation.clock.Return == 2 or self.special_skill_animation.clock.Return == 9 or self.special_skill_animation.clock.Return == 11:
             self.switcher2.reset()

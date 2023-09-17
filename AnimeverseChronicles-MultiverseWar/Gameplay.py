@@ -498,7 +498,7 @@ class gameplay():
             text_display("Damage : {} / 100".format(object.attack_damage), int(14 * scale), (panel.left + 35 * scale ,panel.top + (93 + 45 * 2) * scale), White)
             bar_display(object.attack_damage,100, (panel.left + 117 * scale ,panel.top + (121 + 45 * 2) * scale), Yellow)
 
-            text_display("Attack speed : {} sec per attack".format(round(object.attack_speed, 2)), int(14 * scale), (panel.left + 35 * scale ,panel.top + (93 + 45 * 3) * scale), White)
+            text_display("Attack speed : {} sec per attack".format(round(1 / object.attack_speed, 2)), int(14 * scale), (panel.left + 35 * scale ,panel.top + (93 + 45 * 3) * scale), White)
             if object.attack_coundowner.counter == None:
                 bar_display(1,1, (panel.left + 117 * scale ,panel.top + (121 + 45 * 3) * scale), Silver)
             else:

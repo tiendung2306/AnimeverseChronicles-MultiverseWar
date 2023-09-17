@@ -27,7 +27,7 @@ class rasenshuriken():
         self.side = naruto.side
         
         self.speed = 15.0 # 5/100 map per second 
-        self.x_limit = (self.naruto.box.centerx + (self.gameplay.box_size[0] * 20) * self.side )/ screen.screen.get_width()
+        self.x_limit = (self.naruto.box.centerx + (screen.screen.get_width() / 4.0) * self.side ) / screen.screen.get_width()
         self.lasting_time = ( self.x_limit * screen.screen.get_width() - self.box.centerx ) * self.side / (self.speed * screen.screen.get_rect().width / 100) 
         self.damage = 3.0
         self.damaged_list = []
@@ -437,7 +437,7 @@ class cloneclass():
             # pygame.draw.rect(screen.screen,White,self.box,1)
             # pygame.draw.rect(screen.screen,White,self.imgbox,1)
         elif self.alive == False:
-            if not  self.spawn_animation.status == False:
+            if (not  self.spawn_animation.status == False) or self.spawn_animation.status == None :
                 self.gameplay.side0.remove(self)
                 self.animation_player = self.standstill_animation
                 self.gameplay.side(self.side).append(self)
@@ -517,6 +517,7 @@ class narutoclass():
 
         self.attack_coundowner = timing_clock(1 / self.attack_speed, self.gameplay)
         self.clock = N_ValueReturn_repeated_clock(0.1 , 5 , self.gameplay)
+        add_effect(self, iron_body(self, 1000))
 
     def status_update(self):
         self.collide = None 
