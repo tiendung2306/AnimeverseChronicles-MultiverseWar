@@ -29,7 +29,7 @@ class rasenshuriken():
         self.speed = 15.0 # 5/100 map per second 
         self.x_limit = (self.naruto.box.centerx + (self.gameplay.box_size[0] * 20) * self.side )/ screen.screen.get_width()
         self.lasting_time = ( self.x_limit * screen.screen.get_width() - self.box.centerx ) * self.side / (self.speed * screen.screen.get_rect().width / 100) 
-        self.damage = 50.0
+        self.damage = 3.0
         self.damaged_list = []
         self.effectted_list = []
 

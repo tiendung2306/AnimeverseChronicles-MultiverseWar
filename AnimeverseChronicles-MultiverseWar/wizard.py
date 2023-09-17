@@ -95,7 +95,7 @@ class wizardclass():
         self.attack_speed_orginal = self.attack_speed
         self.attack_damage = 0.0
         self.attack_damage_orginal = self.attack_damage
-        self.health_max = 100000.0
+        self.health_max = 100.0
         self.health = self.health_max
         self.mana_max =100.0
         self.mana = 0.0
