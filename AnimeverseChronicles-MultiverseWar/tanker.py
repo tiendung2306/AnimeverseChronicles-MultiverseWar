@@ -10,6 +10,49 @@ from list_function import*
 from common_effect import*
 
 
+tanker1 = analyzed_img("GameplayAssets\\tanker\\tanker(1).png", 229 , 60 , 85 , 222)
+tanker2 = analyzed_img("GameplayAssets\\tanker\\tanker(2).png", 229 , 60 , 85 , 222)
+tanker3 = analyzed_img("GameplayAssets\\tanker\\tanker(3).png", 229 , 60 , 85 , 222)
+tanker4 = analyzed_img("GameplayAssets\\tanker\\tanker(4).png", 229 , 60 , 85 , 222)
+tanker5 = analyzed_img("GameplayAssets\\tanker\\tanker(5).png", 223 , 59 , 76 , 220)
+tanker6 = analyzed_img("GameplayAssets\\tanker\\tanker(6).png", 223 , 59 , 76 , 220)
+tanker7 = analyzed_img("GameplayAssets\\tanker\\tanker(7).png", 223 , 59 , 76 , 220)
+tanker8 = analyzed_img("GameplayAssets\\tanker\\tanker(8).png", 236 , 60 , 73 , 222)
+tanker9 = analyzed_img("GameplayAssets\\tanker\\tanker(9).png", 224 , 62 , 69 , 216)
+tanker10 = analyzed_img("GameplayAssets\\tanker\\tanker(10).png", 218 , 62 , 84 , 221)
+tanker11 = analyzed_img("GameplayAssets\\tanker\\tanker(11).png", 221 , 61 , 96 , 220)
+tanker12 = analyzed_img("GameplayAssets\\tanker\\tanker(12).png", 219 , 62 , 76 , 216)
+tanker13 = analyzed_img("GameplayAssets\\tanker\\tanker(13).png", 261 , 72 , 70 , 205)
+tanker14 = analyzed_img("GameplayAssets\\tanker\\tanker(14).png", 261 , 72 , 70 , 205)
+tanker15 = analyzed_img("GameplayAssets\\tanker\\tanker(15).png", 257 , 66 , 65 , 215)
+tanker16 = analyzed_img("GameplayAssets\\tanker\\tanker(16).png", 243 , 65 , 56 , 210)
+tanker17 = analyzed_img("GameplayAssets\\tanker\\tanker(17).png", 262 , 75 , 60 , 204)
+tanker18 = analyzed_img("GameplayAssets\\tanker\\tanker(18).png", 266 , 77 , 70 , 201)
+tanker19 = analyzed_img("GameplayAssets\\tanker\\tanker(19).png", 249 , 71 , 71 , 207)
+tanker20 = analyzed_img("GameplayAssets\\tanker\\tanker(20).png" , 260 , 73 , 98 , 207 )
+tanker21 = analyzed_img("GameplayAssets\\tanker\\tanker(21).png" , 260 , 73 , 98 , 207 )
+tanker22 = analyzed_img("GameplayAssets\\tanker\\tanker(22).png" , 260 , 73 , 98 , 207 )
+tanker23 = analyzed_img("GameplayAssets\\tanker\\tanker(23).png", 240 , 62 , 56 , 219)
+tanker24 = analyzed_img("GameplayAssets\\tanker\\tanker(24).png" , 211 , 62 , 89 , 216 )
+tanker25 = analyzed_img("GameplayAssets\\tanker\\tanker(25).png" , 211 , 62 , 89 , 216 )
+tanker26 = analyzed_img("GameplayAssets\\tanker\\tanker(26).png" , 211 , 62 , 89 , 216 )
+tanker27 = analyzed_img("GameplayAssets\\tanker\\tanker(27).png" , 263 , 60 , 67 , 218 )
+tanker28 = analyzed_img("GameplayAssets\\tanker\\tanker(28).png" , 263 , 60 , 67 , 218 )
+tanker29 = analyzed_img("GameplayAssets\\tanker\\tanker(29).png" , 263 , 60 , 67 , 218 )
+tanker30 = analyzed_img("GameplayAssets\\tanker\\tanker(30).png" , 214 , 61 , 102 , 220 )
+tanker31 = analyzed_img("GameplayAssets\\tanker\\tanker(31).png" , 214 , 61 , 102 , 220 )
+tanker32 = analyzed_img("GameplayAssets\\tanker\\tanker(32).png", 217 , 77 , 94 , 203)
+tanker33 = analyzed_img("GameplayAssets\\tanker\\tanker(33).png", 410 , 186 , 0 , 0)
+tanker34 = analyzed_img("GameplayAssets\\tanker\\tanker(34).png", 256 , 80 , 75 , 199)
+tanker35 = analyzed_img("GameplayAssets\\tanker\\tanker(35).png", 410 , 186 , 0 , 0)
+tanker36 = analyzed_img("GameplayAssets\\tanker\\tanker(36).png", 410 , 186 , 0 , 0)
+tanker37 = analyzed_img("GameplayAssets\\tanker\\tanker(37).png", 410 , 186 , 0 , 0)
+tanker38 = analyzed_img("GameplayAssets\\tanker\\tanker(38).png", 410 , 186 , 0 , 0)
+
+attack_damage = [10.0, 10.0 , 15.0, 15.0 , 20.0,  25.0]
+health = [500.0, 550.0, 550.0, 600.0, 600.0, 700.0]
+damage_reduce = [40.0, 40.0, 45.0, 50.0, 60.0]
+
 class tankerclass():
     def __init__(self, side, gameplay):
         self.pre_status = None
@@ -19,19 +62,21 @@ class tankerclass():
         self.gameplay = gameplay
         if side == 1 :
             self.side = 1
+            self.level = self.gameplay.character_level1[0]
         elif side == 2:
             self.side = -1
+            self.level = self.gameplay.character_level2[0]
 
         self.speed = 5.0 # 1/100 map per second 
         self.attack_scope = 1 * self.gameplay.box_size[0]   # 4/15 map width
         self.attack_speed = 1/6 # attack(s) pers second
-        self.attack_damage = 5.0
-        self.health_max = 500.0
+        self.attack_damage = attack_damage[self.level - 1]
+        self.health_max = health[self.level - 1]
         self.health =  self.health_max
         self.mana_max = 100.0
         self.mana = 0
         self.damage_reduce =  0 #0%
-        self.damage_reduce_special =  40 #%
+        self.damage_reduce_special =  damage_reduce[self.level - 1]
         self.skill_lasting_time = 3
 
         self.effect_list = []
@@ -73,6 +118,15 @@ class tankerclass():
 
         
     def status_update(self):
+        if self.side == 1 :
+            self.level = self.gameplay.character_level1[0]
+        elif self.side == 2:
+            self.level = self.gameplay.character_level2[0]
+
+        self.attack_damage = attack_damage[self.level - 1]
+        self.health_max = health[self.level - 1]
+        self.damage_reduce_special =  damage_reduce[self.level - 1]
+
         self.pre_status = self.status
 
         if self.pre_status == 1:
@@ -157,7 +211,7 @@ class tankerclass():
                 ispass = False
                 for object in self.gameplay.side(- self.side) :
                     if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 3 + (self.box.width + object.box.width) / 2 :
-                        if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                        if (object.box.centerx - self.box.centerx) * self.side > 0:
                             if same_line_checker(self, object):
                                 self.status = 1
                                 flag = True
@@ -170,7 +224,7 @@ class tankerclass():
                 ispass = False
                 for object in self.gameplay.side( - self.side) :
                     if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 3 + (self.box.width + object.box.width) / 2:
-                        if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                        if (object.box.centerx - self.box.centerx) * self.side > 0:
                             if same_line_checker(self, object):
                                 self.status = 1
                                 flag = True
@@ -179,7 +233,7 @@ class tankerclass():
                 if not ispass:
                     for object in self.gameplay.side(self.side) + self.gameplay.side4 :
                         if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 2 + (self.box.width + object.box.width) / 2 :
-                            if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                            if (object.box.centerx - self.box.centerx) * self.side > 0:
                                 if same_line_checker(self, object):
                                     if not (self == object):
                                         self.status = 2
@@ -293,7 +347,7 @@ class tankerclass():
         if self.switcher2.operation():
             self.damage_reduce = self.damage_reduce_special
             self.skill_countdowner.start()
-            self.effect = shield(self, 3, 40)
+            self.effect = shield(self, 3, self.damage_reduce_special)
             add_effect(self,self.effect)
 
         if self.skill_countdowner.Return == False:

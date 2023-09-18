@@ -3,6 +3,9 @@ from img_analyze import *
 from screen import *
 from object_function import *
 
+
+nexus = analyzed_img("GameplayAssets\\nexus.png", 309 , 15 , 106 , 572)
+
 class Nexusclass():
     def __init__(self, side , gameplay):
         self.gameplay = gameplay

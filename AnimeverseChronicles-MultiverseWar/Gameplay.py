@@ -13,6 +13,9 @@ from list_function import*
 from object_function import *
 import random
 
+
+
+
 class gameplay():
     def __init__(self, play_mode):
         pygame.init()
@@ -23,7 +26,7 @@ class gameplay():
         self.spawn_queue1 = []
         self.spawn_queue2 = []
 
-        path_num = random.randint(1, 5)
+        path_num = (random.randint(1, 5) * random.randint(1, 5) * random.randint(1, 5) * random.randint(1, 5)) % 5  + 1
         # print(path_num)
         # self.fake_bg_original = pygame.image.load('GameplayAssets\\bg1.png')
         self.bg_original = pygame.image.load('GameplayAssets\\bg({}).jpg'.format(path_num))
@@ -117,12 +120,12 @@ class gameplay():
         self.nexus1 = Nexusclass(1, self)
         self.nexus2 = Nexusclass(2, self)
 
-        # spawn(narutoclass, 1, 20, self)
-        # spawn(tankerclass, 2, 36, self)
-        # spawn(tankerclass, 2, 37, self)
-        # spawn(tankerclass, 2, 38, self)
-        # spawn(tankerclass, 2, 39, self)
-        # spawn(tankerclass, 2, 40, self)
+
+        spawn(tankerclass, 2, 40, self)
+        spawn(tankerclass, 2, 40, self)
+        spawn(tankerclass, 2, 40, self)
+        spawn(tankerclass, 2, 40, self)
+        spawn(tankerclass, 2, 40, self)
 
         self.selected_object = None
 
@@ -525,7 +528,7 @@ class gameplay():
             class_display(object.name)
             text_display("Bacsic statics :", int(16 * scale), (panel.left + 35 * scale ,panel.top + 72 * scale), White)
 
-            text_display("Health : {} / {}".format(object.health, object.health_max), int(14 * scale), (panel.left + 35 * scale ,panel.top + 93 * scale), White)
+            text_display("Health : {} / {}".format(round(object.health, 2), object.health_max), int(14 * scale), (panel.left + 35 * scale ,panel.top + 93 * scale), White)
             if object.health >= 50:
                 bar_display(object.health,object.health_max,(panel.left + 117 * scale ,panel.top + 121 * scale), Green)
             else:

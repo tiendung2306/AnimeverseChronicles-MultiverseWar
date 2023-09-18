@@ -8,6 +8,54 @@ from object_function import *
 from list_function import *
 from collide_checker import *
 
+healling_effect1 = analyzed_img("GameplayAssets\\effect\\healling_effect(1).png" , 31 , 33 , 202 , 222 )
+healling_effect2 = analyzed_img("GameplayAssets\\effect\\healling_effect(2).png" , 31 , 33 , 202 , 222 )
+healling_effect3 = analyzed_img("GameplayAssets\\effect\\healling_effect(3).png" , 31 , 33 , 202 , 222 )
+healling_effect4 = analyzed_img("GameplayAssets\\effect\\healling_effect(4).png" , 31 , 33 , 202 , 222 )
+
+shield_animation1 = analyzed_img("GameplayAssets\\effect\\shield_animation(1).png" , 151 , 267 , 311 , 150 )
+shield_animation2 = analyzed_img("GameplayAssets\\effect\\shield_animation(2).png" , 151 , 267 , 311 , 150 )
+shield_animation3 = analyzed_img("GameplayAssets\\effect\\shield_animation(3).png" , 151 , 267 , 311 , 150 )
+shield_animation4 = analyzed_img("GameplayAssets\\effect\\shield_animation(4).png" , 151 , 267 , 311 , 150 )
+shield_animation5 = analyzed_img("GameplayAssets\\effect\\shield_animation(5).png" , 151 , 267 , 311 , 150 )
+shield_animation6 = analyzed_img("GameplayAssets\\effect\\shield_animation(6).png" , 151 , 267 , 311 , 150 )
+shield_animation7 = analyzed_img("GameplayAssets\\effect\\shield_animation(7).png" , 151 , 267 , 311 , 150 )
+
+dizzy_effect1 = analyzed_img("GameplayAssets\\effect\\dizzy_effect(1).png", 27 , 58 , 522 , 290)
+dizzy_effect2 = analyzed_img("GameplayAssets\\effect\\dizzy_effect(2).png", 27 , 58 , 522 , 290)
+dizzy_effect3 = analyzed_img("GameplayAssets\\effect\\dizzy_effect(3).png", 27 , 58 , 522 , 290)
+dizzy_effect4 = analyzed_img("GameplayAssets\\effect\\dizzy_effect(4).png", 27 , 58 , 522 , 290)
+dizzy_effect5 = analyzed_img("GameplayAssets\\effect\\dizzy_effect(5).png", 27 , 58 , 522 , 290)
+dizzy_effect6 = analyzed_img("GameplayAssets\\effect\\dizzy_effect(6).png", 27 , 58 , 522 , 290)
+dizzy_effect7 = analyzed_img("GameplayAssets\\effect\\dizzy_effect(7).png", 27 , 58 , 522 , 290)
+dizzy_effect8 = analyzed_img("GameplayAssets\\effect\\dizzy_effect(8).png", 27 , 58 , 522 , 290)
+dizzy_effect9 = analyzed_img("GameplayAssets\\effect\\dizzy_effect(9).png", 27 , 58 , 522 , 290)
+
+knock_back1 = analyzed_img("GameplayAssets\\effect\knock_back(1).png", 283 , 198 , 143 , 84)
+knock_back2 = analyzed_img("GameplayAssets\\effect\knock_back(2).png", 287 , 180 , 195 , 101)
+knock_back3 = analyzed_img("GameplayAssets\\effect\knock_back(3).png", 291 , 160 , 189 , 120)
+knock_back4 = analyzed_img("GameplayAssets\\effect\knock_back(4).png", 291 , 160 , 189 , 120)
+knock_back5 = analyzed_img("GameplayAssets\\effect\knock_back(5).png", 291 , 160 , 189 , 120)
+knock_back6 = analyzed_img("GameplayAssets\\effect\knock_back(6).png", 378 , 147 , 83 , 115)
+
+flying1 = analyzed_img("GameplayAssets\\effect\\flying(1).png",  199 , 259 , 270 , 105)
+flying2 = analyzed_img("GameplayAssets\\effect\\flying(2).png",  199 , 259 , 270 , 105)
+flying3 = analyzed_img("GameplayAssets\\effect\\flying(3).png",  199 , 259 , 270 , 105)
+flying4 = analyzed_img("GameplayAssets\\effect\\flying(4).png",  199 , 259 , 270 , 105)
+flying5 = analyzed_img("GameplayAssets\\effect\\flying(5).png",  199 , 259 , 270 , 105)
+flying6 = analyzed_img("GameplayAssets\\effect\\flying(6).png",  199 , 259 , 270 , 105)
+flying7 = analyzed_img("GameplayAssets\\effect\\flying(7).png",  199 , 259 , 270 , 105)
+flying8 = analyzed_img("GameplayAssets\\effect\\flying(8).png",  199 , 259 , 270 , 105)
+
+soul1 = analyzed_img("GameplayAssets\\effect\\soul(1).png", 241 , 109 , 221 , 201)
+soul2 = analyzed_img("GameplayAssets\\effect\\soul(2).png", 241 , 109 , 221 , 201)
+soul3 = analyzed_img("GameplayAssets\\effect\\soul(3).png", 241 , 109 , 221 , 201)
+soul4 = analyzed_img("GameplayAssets\\effect\\soul(4).png", 241 , 109 , 221 , 201)
+soul5 = analyzed_img("GameplayAssets\\effect\\soul(5).png", 241 , 109 , 221 , 201)
+soul6 = analyzed_img("GameplayAssets\\effect\\soul(6).png", 241 , 109 , 221 , 201)
+soul7 = analyzed_img("GameplayAssets\\effect\\soul(7).png", 241 , 109 , 221 , 201)
+soul8 = analyzed_img("GameplayAssets\\effect\\soul(8).png", 241 , 109 , 221 , 201)
+
 
 class dizzy():
     def __init__(self, object, lasted_time):
