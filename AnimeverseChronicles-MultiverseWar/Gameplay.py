@@ -64,6 +64,7 @@ class gameplay():
         #level
         self.islevel_up1 = False
         self.islevel_up2 = False
+        self.level_up_cost = [200, 250, 280, 300, 340, 380, 420, 450, 500, 600, 700, 800, 850, 900, 1000, 1100, 1250, 1500, 1750, 2000]
         self.curr_level1 = 1
         self.curr_level2 = 1
         self.character_level_max = [5, 5, 5, 5, 3, 2]
@@ -208,20 +209,53 @@ class gameplay():
     def check_press(self, event):
         if event.key == pygame.K_ESCAPE:
             self.escape_pressed()
-        if event.key == keybindingmanager.key_map['Slot 1']:
-            self.gameplay_ui.insert_in_spawn_queue(0, 2)
-        if event.key == keybindingmanager.key_map['Slot 2']:
-            self.gameplay_ui.insert_in_spawn_queue(1, 2)
-        if event.key == keybindingmanager.key_map['Slot 3']:
-            self.gameplay_ui.insert_in_spawn_queue(2, 2)
-        if event.key == keybindingmanager.key_map['Slot 4']:
-            self.gameplay_ui.insert_in_spawn_queue(3, 2)
-        if event.key == keybindingmanager.key_map['Slot 5']:
-            self.gameplay_ui.insert_in_spawn_queue(4, 2)
-        if event.key == keybindingmanager.key_map['Slot 6']:
-            self.gameplay_ui.insert_in_spawn_queue(5, 2)
-        if event.key == keybindingmanager.key_map['Slot 7']:
-            self.gameplay_ui.insert_in_spawn_queue(6, 2)
+        if self.islevel_up2 == False:
+            if event.key == keybindingmanager.key_map['Slot 1']:
+                self.gameplay_ui.insert_in_spawn_queue(0, 2)
+            if event.key == keybindingmanager.key_map['Slot 2']:
+                self.gameplay_ui.insert_in_spawn_queue(1, 2)
+            if event.key == keybindingmanager.key_map['Slot 3']:
+                self.gameplay_ui.insert_in_spawn_queue(2, 2)
+            if event.key == keybindingmanager.key_map['Slot 4']:
+                self.gameplay_ui.insert_in_spawn_queue(3, 2)
+            if event.key == keybindingmanager.key_map['Slot 5']:
+                self.gameplay_ui.insert_in_spawn_queue(4, 2)
+            if event.key == keybindingmanager.key_map['Slot 6']:
+                self.gameplay_ui.insert_in_spawn_queue(5, 2)
+            if event.key == keybindingmanager.key_map['Slot 7']:
+                self.gameplay_ui.insert_in_spawn_queue(6, 2)
+
+        #an p de len cap
+        if event.key == keybindingmanager.key_map['Player_2_level_up']:
+            self.gameplay_ui.lvl_up_button2.level_up2()
+        #an ctrl + so de tang cap cho nhan vat
+        keys = pygame.key.get_pressed()
+        # if keys[pygame.K_LCTRL]:
+        if keys[keybindingmanager.key_map['Slot 1']]:
+                if self.islevel_up2 == True:
+                    if self.character_level_up(1, 2) == True:
+                        self.islevel_up2 = False
+        if keys[keybindingmanager.key_map['Slot 2']]:
+                if self.islevel_up2 == True:
+                    if self.character_level_up(2, 2) == True:
+                        self.islevel_up2 = False
+        if keys[keybindingmanager.key_map['Slot 3']]:
+                if self.islevel_up2 == True:
+                    if self.character_level_up(3, 2) == True:
+                        self.islevel_up2 = False
+        if keys[keybindingmanager.key_map['Slot 4']]:
+                if self.islevel_up2 == True:
+                    if self.character_level_up(4, 2) == True:
+                        self.islevel_up2 = False
+        if keys[keybindingmanager.key_map['Slot 5']]:
+                if self.islevel_up2 == True:
+                    if self.character_level_up(5, 2) == True:
+                        self.islevel_up2 = False
+        if keys[keybindingmanager.key_map['Slot 6']]:
+                if self.islevel_up2 == True:
+                    if self.character_level_up(6, 2) == True:
+                        self.islevel_up2 = False
+
 
     def escape_pressed(self):
         if self.isPlay == True: #neu game dang chay
@@ -326,12 +360,17 @@ class gameplay():
                 return False
 
     def level_up(self, side):
+        # self.update()
         if side == 1:
-            self.curr_level1 += 1
-            self.islevel_up1 = True
+            if self.curr_gold_1 >= self.level_up_cost[self.curr_level1 - 1]:
+                self.gold_outcome_1 += self.level_up_cost[self.curr_level1 - 1]
+                self.curr_level1 += 1
+                self.islevel_up1 = True
         else:
-            self.curr_level2 += 1
-            self.islevel_up2 = True
+            if self.curr_gold_2 >= self.level_up_cost[self.curr_level2 - 1]:
+                self.gold_outcome_2 += self.level_up_cost[self.curr_level2 - 1]
+                self.curr_level2 += 1
+                self.islevel_up2 = True
 
     def update(self): #update cac thong so cua game, chay theo tung frame cua gameplay_loop
         #timer process

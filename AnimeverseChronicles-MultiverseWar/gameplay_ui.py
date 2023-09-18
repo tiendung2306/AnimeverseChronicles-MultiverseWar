@@ -194,6 +194,11 @@ class lvl_up_button():
             screen.screen.blit(self.button_image_2, self.button_image_2_rect)
             screen.screen.blit(self.level2, self.level2_rect)
 
+    def level_up2(self):
+        if self.side == 2 and self.gameplay.play_mode == 2 and self.gameplay.islevel_up2 == False:
+            self.gameplay.level_up(self.side)
+            self.level2 = self.level_font.render('Lv: ' + str(self.gameplay.curr_level2), True, Black)
+
     def check_click(self, mouse):
         if self.side == 1:
             if self.button_image_1_rect.left <= mouse[0] <= self.button_image_1_rect.right and self.button_image_1_rect.top <= mouse[1] <= self.button_image_1_rect.bottom:
@@ -201,8 +206,7 @@ class lvl_up_button():
                 self.level1 = self.level_font.render('Lv: ' + str(self.gameplay.curr_level1), True, Black)
         if self.side == 2 and self.gameplay.play_mode == 2:
             if self.button_image_2_rect.left <= mouse[0] <= self.button_image_2_rect.right and self.button_image_2_rect.top <= mouse[1] <= self.button_image_2_rect.bottom:
-                self.gameplay.level_up(self.side)
-                self.level2 = self.level_font.render('Lv: ' + str(self.gameplay.curr_level2), True, Black)
+                self.level_up2()
             
 
 class gameplay_ui():
@@ -221,7 +225,7 @@ class gameplay_ui():
         self.lvl_up_button1 = lvl_up_button(self.gameplay, 1)
         self.lvl_up_button2 = lvl_up_button(self.gameplay, 2)
 
-        self.level_font = pygame.font.Font('Fonts\\Minecraft.ttf', 12)
+        self.level_font = pygame.font.Font('Fonts\\Minecraft.ttf', int(screen.screen.get_rect().width / 140))
 
         self.add_button()
         self.load_image()
@@ -333,9 +337,10 @@ class gameplay_ui():
                             self.gameplay.islevel_up2 = False
                     else:
                         self.insert_in_spawn_queue(i, 2)
-
-        self.lvl_up_button1.check_click(mouse)
-        self.lvl_up_button2.check_click(mouse)
+        if self.gameplay.islevel_up1 == False:
+            self.lvl_up_button1.check_click(mouse)
+        if self.gameplay.islevel_up2 == False:
+            self.lvl_up_button2.check_click(mouse)
 
     def draw_spawn_bar(self):
         self.spawn_bar1.draw()
