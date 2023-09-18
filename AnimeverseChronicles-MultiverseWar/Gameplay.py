@@ -121,11 +121,11 @@ class gameplay():
         self.nexus2 = Nexusclass(2, self)
 
 
-        spawn(tankerclass, 2, 40, self)
-        spawn(tankerclass, 2, 40, self)
-        spawn(tankerclass, 2, 40, self)
-        spawn(tankerclass, 2, 40, self)
-        spawn(tankerclass, 2, 40, self)
+        # spawn(tankerclass, 2, 40, self)
+        # spawn(tankerclass, 2, 40, self)
+        # spawn(tankerclass, 2, 40, self)
+        # spawn(tankerclass, 2, 40, self)
+        # spawn(tankerclass, 2, 40, self)
 
         self.selected_object = None
 
