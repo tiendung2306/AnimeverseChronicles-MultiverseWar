@@ -9,6 +9,120 @@ from animation_player import *
 from screen import *
 from common_effect import *
 
+attack_damage = [10.0, 20.0]
+health = [150.0, 170 ]
+
+
+naruto1 = analyzed_img( "GameplayAssets\\naruto\\naruto(1).png " , 296 , 346 , 74 , 176 )
+naruto2 = analyzed_img( "GameplayAssets\\naruto\\naruto(2).png " , 296 , 346 , 74 , 176 )
+naruto3 = analyzed_img( "GameplayAssets\\naruto\\naruto(3).png " , 296 , 346 , 74 , 176 )
+naruto4 = analyzed_img( "GameplayAssets\\naruto\\naruto(4).png " , 296 , 346 , 74 , 176 )
+naruto5 = analyzed_img( "GameplayAssets\\naruto\\naruto(5).png " , 296 , 346 , 74 , 176 )
+naruto6 = analyzed_img( "GameplayAssets\\naruto\\naruto(6).png " , 268 , 369 , 110 , 156 )
+naruto7 = analyzed_img( "GameplayAssets\\naruto\\naruto(7).png " , 295 , 341 , 78 , 177 )
+naruto8 = analyzed_img( "GameplayAssets\\naruto\\naruto(8).png " , 281 , 425 , 148 , 102 )
+naruto9 = analyzed_img( "GameplayAssets\\naruto\\naruto(9).png " , 281 , 425 , 148 , 102 )
+naruto10 = analyzed_img( "GameplayAssets\\naruto\\naruto(10).png " , 289 , 386 , 118 , 137 )
+naruto11 = analyzed_img( "GameplayAssets\\naruto\\naruto(11).png " , 324 , 335 , 93 , 185 )
+naruto12 = analyzed_img( "GameplayAssets\\naruto\\naruto(12).png " , 324 , 335 , 93 , 185 )
+naruto13 = analyzed_img( "GameplayAssets\\naruto\\naruto(13).png " , 292 , 349 , 96 , 178 )
+naruto14 = analyzed_img( "GameplayAssets\\naruto\\naruto(14).png " , 303 , 352 , 97 , 169 )
+naruto15 = analyzed_img( "GameplayAssets\\naruto\\naruto(15).png " , 306 , 340 , 97 , 183 )
+naruto16 = analyzed_img( "GameplayAssets\\naruto\\naruto(16).png " , 306 , 340 , 97 , 183 )
+naruto17 = analyzed_img( "GameplayAssets\\naruto\\naruto(17).png " , 322 , 361 , 102 , 164 )
+naruto18 = analyzed_img( "GameplayAssets\\naruto\\naruto(18).png " , 278 , 354 , 98 , 167 )
+naruto19 = analyzed_img( "GameplayAssets\\naruto\\naruto(19).png " , 295 , 362 , 77 , 158 )
+naruto20 = analyzed_img( "GameplayAssets\\naruto\\naruto(20).png " , 295 , 362 , 77 , 158 )
+naruto21 = analyzed_img( "GameplayAssets\\naruto\\naruto(21).png " , 295 , 362 , 77 , 158 )
+naruto22 = analyzed_img( "GameplayAssets\\naruto\\naruto(22).png " , 295 , 362 , 77 , 158 )
+naruto23 = analyzed_img( "GameplayAssets\\naruto\\naruto(23).png " , 295 , 362 , 77 , 158 )
+naruto24 = analyzed_img( "GameplayAssets\\naruto\\naruto(24).png " , 295 , 362 , 77 , 158 )
+naruto25 = analyzed_img( "GameplayAssets\\naruto\\naruto(25).png " , 295 , 362 , 77 , 158 )
+naruto26 = analyzed_img( "GameplayAssets\\naruto\\naruto(26).png " , 295 , 362 , 77 , 158 )
+naruto27 = analyzed_img( "GameplayAssets\\naruto\\naruto(27).png " , 162 , 339 , 331 , 187 )
+naruto28 = analyzed_img( "GameplayAssets\\naruto\\naruto(28).png " , 162 , 339 , 331 , 187 )
+naruto29 = analyzed_img( "GameplayAssets\\naruto\\naruto(29).png " , 162 , 339 , 331 , 187 )
+naruto30 = analyzed_img( "GameplayAssets\\naruto\\naruto(30).png " , 194 , 338 , 234 , 191 )
+naruto31 = analyzed_img( "GameplayAssets\\naruto\\naruto(31).png " , 194 , 338 , 234 , 191 )
+naruto32 = analyzed_img( "GameplayAssets\\naruto\\naruto(32).png " , 194 , 338 , 234 , 191 )
+naruto33 = analyzed_img( "GameplayAssets\\naruto\\naruto(33).png " , 194 , 338 , 234 , 191 )
+naruto34 = analyzed_img( "GameplayAssets\\naruto\\naruto(34).png " , 194 , 338 , 234 , 191 )
+naruto35 = analyzed_img( "GameplayAssets\\naruto\\naruto(35).png " , 165 , 337 , 326 , 191 )
+naruto36 = analyzed_img( "GameplayAssets\\naruto\\naruto(36).png " , 165 , 337 , 326 , 191 )
+naruto37 = analyzed_img( "GameplayAssets\\naruto\\naruto(37).png " , 165 , 337 , 326 , 191 )
+naruto38 = analyzed_img( "GameplayAssets\\naruto\\naruto(38).png " , 165 , 337 , 326 , 191 )
+naruto39 = analyzed_img( "GameplayAssets\\naruto\\naruto(39).png " , 278 , 310 , 112 , 222 )
+naruto40 = analyzed_img( "GameplayAssets\\naruto\\naruto(40).png " , 278 , 310 , 112 , 222 )
+naruto41 = analyzed_img( "GameplayAssets\\naruto\\naruto(41).png " , 278 , 310 , 112 , 222 )
+naruto42 = analyzed_img( "GameplayAssets\\naruto\\naruto(42).png " , 289 , 314 , 112 , 221 )
+naruto43 = analyzed_img( "GameplayAssets\\naruto\\naruto(43).png " , 289 , 314 , 112 , 221 )
+naruto44 = analyzed_img( "GameplayAssets\\naruto\\naruto(44).png " , 265 , 332 , 106 , 194 )
+naruto45 = analyzed_img( "GameplayAssets\\naruto\\naruto(45).png " , 265 , 332 , 106 , 194 )
+naruto46 = analyzed_img( "GameplayAssets\\naruto\\naruto(46).png " , 272 , 385 , 94 , 135 )
+naruto47 = analyzed_img( "GameplayAssets\\naruto\\naruto(47).png " , 276 , 371 , 106 , 154 )
+naruto48 = analyzed_img( "GameplayAssets\\naruto\\naruto(48).png " , 276 , 371 , 106 , 154 )
+naruto49 = analyzed_img( "GameplayAssets\\naruto\\naruto(49).png " , 276 , 371 , 106 , 154 )
+naruto50 = analyzed_img( "GameplayAssets\\naruto\\naruto(50).png " , 275 , 350 , 95 , 164 )
+naruto51 = analyzed_img( "GameplayAssets\\naruto\\naruto(51).png " , 284 , 315 , 90 , 202 )
+naruto52 = analyzed_img( "GameplayAssets\\naruto\\naruto(52).png " , 260 , 410 , 129 , 121 )
+naruto53 = analyzed_img( "GameplayAssets\\naruto\\naruto(53).png " , 263 , 326 , 121 , 195 )
+naruto54 = analyzed_img( "GameplayAssets\\naruto\\naruto(54).png " , 263 , 326 , 121 , 195 )
+naruto55 = analyzed_img( "GameplayAssets\\naruto\\naruto(55).png " , 263 , 326 , 121 , 195 )
+naruto56 = analyzed_img( "GameplayAssets\\naruto\\naruto(56).png " , 263 , 326 , 121 , 195 )
+naruto57 = analyzed_img( "GameplayAssets\\naruto\\naruto(57).png " , 260 , 432 , 132 , 99 )
+naruto58 = analyzed_img( "GameplayAssets\\naruto\\naruto(58).png " , 268 , 337 , 115 , 192 )
+naruto59 = analyzed_img( "GameplayAssets\\naruto\\naruto(59).png " , 267 , 309 , 120 , 215 )
+naruto60 = analyzed_img( "GameplayAssets\\naruto\\naruto(60).png " , 267 , 309 , 120 , 215 )
+naruto61 = analyzed_img( "GameplayAssets\\naruto\\naruto(61).png " , 267 , 309 , 120 , 215 )
+naruto62 = analyzed_img( "GameplayAssets\\naruto\\naruto(62).png " , 253 , 373 , 159 , 150 )
+naruto63 = analyzed_img( "GameplayAssets\\naruto\\naruto(63).png " , 253 , 373 , 159 , 150 )
+naruto64 = analyzed_img( "GameplayAssets\\naruto\\naruto(64).png " , 253 , 373 , 159 , 150 )
+naruto65 = analyzed_img( "GameplayAssets\\naruto\\naruto(65).png " , 253 , 373 , 159 , 150 )
+naruto66 = analyzed_img( "GameplayAssets\\naruto\\naruto(66).png " , 253 , 373 , 159 , 150 )
+naruto67 = analyzed_img( "GameplayAssets\\naruto\\naruto(67).png " , 253 , 373 , 159 , 150 )
+naruto68 = analyzed_img( "GameplayAssets\\naruto\\naruto(68).png " , 278 , 353 , 102 , 167 )
+naruto69 = analyzed_img( "GameplayAssets\\naruto\\naruto(69).png " , 278 , 353 , 102 , 167 )
+naruto70 = analyzed_img( "GameplayAssets\\naruto\\naruto(70).png " , 278 , 353 , 102 , 167 )
+naruto71 = analyzed_img( "GameplayAssets\\naruto\\naruto(71).png " , 259 , 353 , 90 , 172 )
+naruto72 = analyzed_img( "GameplayAssets\\naruto\\naruto(72).png " , 249 , 429 , 128 , 93 )
+naruto73 = analyzed_img( "GameplayAssets\\naruto\\naruto(73).png " , 239 , 464 , 176 , 102 )
+naruto74 = analyzed_img( "GameplayAssets\\naruto\\naruto(74).png " , 249 , 354 , 136 , 170 )
+naruto75 = analyzed_img( "GameplayAssets\\naruto\\naruto(75).png " , 194 , 338 , 234 , 191 )
+naruto76 = analyzed_img( "GameplayAssets\\naruto\\naruto(76).png " , 194 , 338 , 234 , 191 )
+naruto77 = analyzed_img( "GameplayAssets\\naruto\\naruto(77).png " , 194 , 338 , 234 , 191 )
+naruto78 = analyzed_img( "GameplayAssets\\naruto\\naruto(35).png " , 165 , 337 , 326 , 191 )
+naruto79 = analyzed_img( "GameplayAssets\\naruto\\naruto(79).png " , 165 , 337 , 326 , 191 )
+naruto80 = analyzed_img( "GameplayAssets\\naruto\\naruto(80).png " , 165 , 337 , 326 , 191 )
+naruto81 = analyzed_img( "GameplayAssets\\naruto\\naruto(81).png " , 165 , 337 , 326 , 191 )
+naruto82 = analyzed_img( "GameplayAssets\\naruto\\naruto(82).png " , 289 , 314 , 112 , 221 )
+
+
+rasenshuriken1 = analyzed_img( "GameplayAssets\\naruto\\rasenshuriken(1).png " , 363 , 351 , 320 , 135 )
+rasenshuriken2 = analyzed_img( "GameplayAssets\\naruto\\rasenshuriken(2).png " , 363 , 351 , 320 , 135 )
+rasenshuriken3 = analyzed_img( "GameplayAssets\\naruto\\rasenshuriken(3).png " , 363 , 351 , 320 , 135 )
+rasenshuriken4 = analyzed_img( "GameplayAssets\\naruto\\rasenshuriken(4).png " , 363 , 351 , 320 , 135 )
+rasenshuriken5 = analyzed_img( "GameplayAssets\\naruto\\rasenshuriken(5).png " , 363 , 351 , 320 , 135 )
+rasenshuriken6 = analyzed_img( "GameplayAssets\\naruto\\rasenshuriken(6).png " , 363 , 351 , 320 , 135 )
+
+explosion_stage_1_1 = analyzed_img( "GameplayAssets\\naruto\\explosion_stage_1(1).png " , 289 , 397 , 88 , 72 )
+explosion_stage_1_2 = analyzed_img( "GameplayAssets\\naruto\\explosion_stage_1(2).png " , 264 , 359 , 130 , 110 )
+explosion_stage_1_3 = analyzed_img( "GameplayAssets\\naruto\\explosion_stage_1(3).png " , 237 , 315 , 177 , 152 )
+explosion_stage_1_4 = analyzed_img( "GameplayAssets\\naruto\\explosion_stage_1(4).png " , 176 , 214 , 303 , 257 )
+
+explosion_stage_2_1 = analyzed_img( "GameplayAssets\\naruto\\explosion_stage_2(1).png " , 90 , 170 , 484 , 300 )
+explosion_stage_2_2 = analyzed_img( "GameplayAssets\\naruto\\explosion_stage_2(2).png " , 90 , 170 , 484 , 300 )
+explosion_stage_2_3 = analyzed_img( "GameplayAssets\\naruto\\explosion_stage_2(3).png " , 90 , 170 , 484 , 300 )
+
+explosion_stage_3_1 = analyzed_img( "GameplayAssets\\naruto\\explosion_stage_3(1).png " , 77 , 111 , 538 , 361 )
+explosion_stage_3_2 = analyzed_img( "GameplayAssets\\naruto\\explosion_stage_3(2).png " , 77 , 111 , 538 , 361 )
+
+breaking_ground1 = analyzed_img("GameplayAssets\\naruto\\breaking_ground(1).png" , 38 , 357 , 629 , 135 )
+breaking_ground2 = analyzed_img("GameplayAssets\\naruto\\breaking_ground(2).png" , 5 , 230 , 685 , 256 )
+breaking_ground3 = analyzed_img("GameplayAssets\\naruto\\breaking_ground(3).png" , 9 , 120 , 645 , 367 )
+
+shuriken_explosion = analyzed_img("GameplayAssets\\naruto\\shuriken_explosion.png ", 195 , 307 , 184 , 184 )
+
+
 class getting_hit_object():
     def __init__(self, object):
         self.object = object
@@ -29,7 +143,7 @@ class rasenshuriken():
         self.speed = 15.0 # 5/100 map per second 
         self.x_limit = (self.naruto.box.centerx + (screen.screen.get_width() / 4.0) * self.side ) / screen.screen.get_width()
         self.lasting_time = ( self.x_limit * screen.screen.get_width() - self.box.centerx ) * self.side / (self.speed * screen.screen.get_rect().width / 100) 
-        self.damage = 3.0
+        self.damage = 5.0
         self.damaged_list = []
         self.effectted_list = []
 
@@ -136,11 +250,11 @@ class cloneclass():
         self.level = naruto.level
 
         self.speed = 5.0 # 5/100 map per second 
-        self.attack_scope = 1 * self.gameplay.box_size[0] # 4/15 map width
-        self.attack_speed = 1/3 # attack(s) pers second
-        self.attack_damage = 1.0
-        self.attack_damage_orginal = self.attack_damage
-        self.health_max = 100.0
+        self.attack_scope = naruto.attack_scope 
+        self.attack_speed = naruto.attack_speed
+        self.attack_damage_orginal = naruto.attack_damage_orginal
+        self.attack_damage = naruto.attack_damage
+        self.health_max = 70.0
         self.health = self.health_max 
         self.mana_max = 100.0
         self.mana = 0
@@ -174,6 +288,10 @@ class cloneclass():
         self.attack_coundowner = timing_clock(1 / self.attack_speed, self.gameplay)
 
     def status_update(self):
+        self.level = self.naruto.level
+        self.health_max =  self.naruto.health_max
+        self.attack_damage = self.naruto.attack_damage
+
         self.collide = None 
         self.pre_status = self.status
 
@@ -260,7 +378,7 @@ class cloneclass():
                 ispass = False
                 for object in self.gameplay.side(- self.side) :
                     if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 3 + (self.box.width + object.box.width) / 2 :
-                        if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                        if (object.box.centerx - self.box.centerx) * self.side > 0:
                             if same_line_checker(self, object):
                                 self.status = 1
                                 flag = True
@@ -273,7 +391,7 @@ class cloneclass():
                 ispass = False
                 for object in self.gameplay.side( - self.side) :
                     if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 3 + (self.box.width + object.box.width) / 2:
-                        if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                        if (object.box.centerx - self.box.centerx) * self.side > 0:
                             if same_line_checker(self, object):
                                 self.status = 1
                                 flag = True
@@ -282,7 +400,7 @@ class cloneclass():
                 if not ispass:
                     for object in self.gameplay.side(self.side) + self.gameplay.side4 :
                         if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 2 + (self.box.width + object.box.width) / 2 :
-                            if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                            if (object.box.centerx - self.box.centerx) * self.side > 0:
                                 if same_line_checker(self, object):
                                     if not (self == object):
                                         self.status = 2
@@ -348,6 +466,9 @@ class cloneclass():
             self.naruto.clone_list.remove(self)
             self.side = 0
             self.gameplay.side0.append(self)
+            if self.animation_player == None:
+                self.animation_player = self.standstill_animation
+
             self.img = self.animation_player.img_lib[self.animation_player.clock.Return - 1]
         
         self.dying_animation.play()
@@ -454,15 +575,17 @@ class narutoclass():
         self.gameplay = gameplay
         if side == 1 :
             self.side = 1
+            self.level = self.gameplay.character_level1[5]
         elif side == 2:
             self.side = -1   
+            self.level = self.gameplay.character_level2[5]
         
         self.speed = 5.0 # 5/100 map per second 
         self.attack_scope = 1 * self.gameplay.box_size[0] # 4/15 map width
         self.attack_speed = 1/3 # attack(s) pers second
-        self.attack_damage = 10.0
+        self.attack_damage = attack_damage[self.level - 1]
         self.attack_damage_orginal = self.attack_damage
-        self.health_max = 100.0
+        self.health_max = health[self.level - 1]
         self.health = self.health_max 
         self.mana_max =100.0
         self.mana = 0.0
@@ -517,9 +640,16 @@ class narutoclass():
 
         self.attack_coundowner = timing_clock(1 / self.attack_speed, self.gameplay)
         self.clock = N_ValueReturn_repeated_clock(0.1 , 5 , self.gameplay)
-        add_effect(self, iron_body(self, 1000))
 
     def status_update(self):
+
+        if self.side == 1 :
+            self.level = self.gameplay.character_level1[5]
+        elif self.side == 2:
+            self.level = self.gameplay.character_level2[5]
+        self.attack_damage = attack_damage[self.level - 1]
+        self.health_max = health[self.level - 1]
+    
         self.collide = None 
         self.pre_status = self.status
 
@@ -621,7 +751,7 @@ class narutoclass():
                     ispass = False
                     for object in self.gameplay.side(- self.side) :
                         if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 3 + (self.box.width + object.box.width) / 2 :
-                            if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                            if (object.box.centerx - self.box.centerx) * self.side > 0:
                                 if same_line_checker(self, object):
                                     self.status = 1
                                     flag = True
@@ -634,7 +764,7 @@ class narutoclass():
                     ispass = False
                     for object in self.gameplay.side( - self.side) :
                         if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 3 + (self.box.width + object.box.width) / 2:
-                            if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                            if (object.box.centerx - self.box.centerx) * self.side > 0:
                                 if same_line_checker(self, object):
                                     self.status = 1
                                     flag = True
@@ -643,7 +773,7 @@ class narutoclass():
                     if not ispass:
                         for object in self.gameplay.side(self.side) + self.gameplay.side4 :
                             if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 2 + (self.box.width + object.box.width) / 2 :
-                                if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                                if (object.box.centerx - self.box.centerx) * self.side > 0:
                                     if same_line_checker(self, object):
                                         if not (self == object):
                                             self.status = 2

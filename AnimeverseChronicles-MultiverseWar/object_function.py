@@ -8,7 +8,6 @@ class fake_object_class():
         self.status = True
         self.side = 0
 
-
 def copy( rect1, rect2 ):
     rect1.left = rect2.left
     rect1.top = rect2.top
@@ -18,10 +17,18 @@ def copy( rect1, rect2 ):
 def spawn(object,side,position,gameplay):
     tmp = object(side, gameplay)
     tmp.index = len(gameplay.side(tmp.side)) 
-    tmp.level = 1
     gameplay.side(tmp.side).append(tmp)
     tmp2 = pygame.Rect(position * gameplay.box_size[0], gameplay.path_height - gameplay.box_size[1], gameplay.box_size[0], gameplay.box_size[1])
     get_spawn_display(tmp, tmp2)
+
+tanker3 = analyzed_img("GameplayAssets\\tanker\\tanker(3).png", 229 , 60 , 85 , 222)
+sword_man15 = analyzed_img("GameplayAssets\\sword_man\\sword_man(15).png", 231 , 350 , 131 , 242)
+archer15 = analyzed_img("GameplayAssets\\archer\\archer(15).png", 195 , 294 , 81 , 198)
+goku1 = analyzed_img("GameplayAssets\\goku\\goku(1).png ",139 , 90 , 110 , 226)
+wizard1 = analyzed_img("GameplayAssets\\wizard\\wizard(1).png", 170 , 56 , 68 , 179)
+nexus = analyzed_img("GameplayAssets\\nexus.png", 309 , 15 , 106 , 572)
+naruto18 = analyzed_img( "GameplayAssets\\naruto\\naruto(18).png " , 278 , 354 , 98 , 167 )
+
 
 img_lib = [tanker3, sword_man15, archer15, goku1, wizard1,nexus, naruto18]
 

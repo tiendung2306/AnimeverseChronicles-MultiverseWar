@@ -5,6 +5,16 @@ from screen import *
 from img_analyze import *
 from animation_player import *
 
+
+spawn1 = analyzed_img("GameplayAssets\spawn(1).png ", 219, 1 , 167 , 215)
+spawn2 = analyzed_img("GameplayAssets\spawn(2).png ", 219, 1 , 167 , 215)
+spawn3 = analyzed_img("GameplayAssets\spawn(3).png ", 219, 1 , 167 , 215)
+spawn4 = analyzed_img("GameplayAssets\spawn(4).png ", 219, 1 , 167 , 215)
+spawn5 = analyzed_img("GameplayAssets\spawn(5).png ", 219, 1 , 167 , 215)
+spawn6 = analyzed_img("GameplayAssets\spawn(6).png ", 219, 1 , 167 , 215)
+spawn7 = analyzed_img("GameplayAssets\spawn(7).png ", 219, 1 , 167 , 215)
+spawn8 = analyzed_img("GameplayAssets\spawn(8).png ", 219, 1 , 167 , 215)
+
 class button():
     def __init__(self, character_name, image_filename, gameplay):
         self.gameplay = gameplay
@@ -236,9 +246,9 @@ class gameplay_ui():
         self.lvl_up_button2.load_image()
 
     def add_button(self):
+        self.character_spawn_buttons.append(button(self.gameplay.tankerclass, 'GameplayAssets\\tanker_avatar.png', self.gameplay))
         self.character_spawn_buttons.append(button(self.gameplay.sword_manclass, 'GameplayAssets\\sword_man_avatar.png', self.gameplay))
         self.character_spawn_buttons.append(button(self.gameplay.archerclass, 'GameplayAssets\\archer_avatar.png', self.gameplay))
-        self.character_spawn_buttons.append(button(self.gameplay.tankerclass, 'GameplayAssets\\tanker_avatar.png', self.gameplay))
         self.character_spawn_buttons.append(button(self.gameplay.wizardclass, 'GameplayAssets\\wizard_avatar.png', self.gameplay))
         self.character_spawn_buttons.append(button(self.gameplay.gokuclass, 'GameplayAssets\\goku_avatar1.png', self.gameplay))
         self.character_spawn_buttons.append(button(self.gameplay.narutoclass, 'GameplayAssets\\naruto_avatar.png', self.gameplay))

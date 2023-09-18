@@ -10,6 +10,41 @@ from animation_player import *
 from common_effect import *
 from screen import *
    
+goku1 = analyzed_img("GameplayAssets\\goku\\goku(1).png ",139 , 90 , 110 , 226)
+goku2 = analyzed_img("GameplayAssets\\goku\\goku(2).png ",139 , 90 , 110 , 226)
+goku3 = analyzed_img("GameplayAssets\\goku\\goku(3).png ",139 , 90 , 110 , 226)
+goku4 = analyzed_img("GameplayAssets\\goku\\goku(4).png ",139 , 90 , 110 , 226)
+goku5 = analyzed_img("GameplayAssets\\goku\\goku(5).png ",102 , 137 , 201 , 136)
+goku6 = analyzed_img("GameplayAssets\\goku\\goku(6).png ",102 , 137 , 201 , 136)
+goku7 = analyzed_img("GameplayAssets\\goku\\goku(7).png ",102 , 137 , 201 , 136)
+goku8 = analyzed_img("GameplayAssets\\goku\\goku(8).png ",102 , 137 , 201 , 136)
+goku9 = analyzed_img("GameplayAssets\\goku\\goku(9).png ",135 , 166 , 99 , 151)
+goku10 = analyzed_img("GameplayAssets\\goku\\goku(10).png", 179 , 131 , 97 , 175)
+goku11 = analyzed_img("GameplayAssets\\goku\\goku(11).png", 161 , 126 , 85 , 198)
+goku12 = analyzed_img("GameplayAssets\\goku\\goku(12).png", 161 , 126 , 85 , 198)
+goku13 = analyzed_img("GameplayAssets\\goku\\goku(13).png", 161 , 126 , 85 , 198)
+goku14 = analyzed_img("GameplayAssets\\goku\\goku(14).png", 161 , 126 , 85 , 198)
+goku15 = analyzed_img("GameplayAssets\\goku\\goku(15).png", 208 , 137 , 116 , 203)
+goku16 = analyzed_img("GameplayAssets\\goku\\goku(16).png", 224 , 120 , 130 , 211)
+goku17 = analyzed_img("GameplayAssets\\goku\\goku(17).png", 224 , 120 , 130 , 211)
+goku18 = analyzed_img("GameplayAssets\\goku\\goku(18).png", 224 , 120 , 130 , 211)
+goku19 = analyzed_img("GameplayAssets\\goku\\goku(19).png", 224 , 120 , 130 , 211)
+goku20 = analyzed_img("GameplayAssets\\goku\\goku(20).png", 224 , 120 , 130 , 211)
+goku21 = analyzed_img("GameplayAssets\\goku\\goku(21).png", 224 , 120 , 130 , 211)
+goku22 = analyzed_img("GameplayAssets\\goku\\goku(22).png", 224 , 120 , 130 , 211)
+goku23 = analyzed_img("GameplayAssets\\goku\\goku(23).png", 224 , 120 , 130 , 211)
+goku24 = analyzed_img("GameplayAssets\\goku\\goku(24).png", 224 , 120 , 130 , 211)
+goku25 = analyzed_img("GameplayAssets\\goku\\goku(25).png", 224 , 120 , 130 , 211)
+goku50 = analyzed_img("GameplayAssets\\goku\\goku(50).png", 224 , 120 , 130 , 211)
+goku51 = analyzed_img("GameplayAssets\\goku\\goku(51).png", 224 , 120 , 130 , 211)
+goku52 = analyzed_img("GameplayAssets\\goku\\goku(52).png", 224 , 120 , 130 , 211)
+goku53 = analyzed_img("GameplayAssets\\goku\\goku(53).png", 224 , 120 , 130 , 211)
+
+
+goku_to_kame = analyzed_img("GameplayAssets\\goku\\goku(23).png", 315 , 251 , 5 , 4)
+kame = pygame.image.load("GameplayAssets\\goku\\kame.png")
+
+
 class getting_hit_object():
     def __init__(self, object):
         self.object = object
@@ -93,8 +128,10 @@ class gokuclass():
         self.gameplay = gameplay
         if side == 1 :
             self.side = 1
+            self.level = self.gameplay.character_level1[4]
         elif side == 2:
             self.side = -1
+            self.level = self.gameplay.character_level2[4]
 
         self.speed = 5.0 # 5/100 map per second 
         self.attack_scope = 1 * self.gameplay.box_size[0] # 4/15 map width
@@ -233,7 +270,7 @@ class gokuclass():
                 ispass = False
                 for object in self.gameplay.side(- self.side) :
                     if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 3 + (self.box.width + object.box.width) / 2 :
-                        if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                        if (object.box.centerx - self.box.centerx) * self.side > 0:
                             if same_line_checker(self, object):
                                 self.status = 1
                                 flag = True
@@ -246,7 +283,7 @@ class gokuclass():
                 ispass = False
                 for object in self.gameplay.side( - self.side) :
                     if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 3 + (self.box.width + object.box.width) / 2:
-                        if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                        if (object.box.centerx - self.box.centerx) * self.side > 0:
                             if same_line_checker(self, object):
                                 self.status = 1
                                 flag = True
@@ -255,7 +292,7 @@ class gokuclass():
                 if not ispass:
                     for object in self.gameplay.side(self.side) + self.gameplay.side4 :
                         if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 2 + (self.box.width + object.box.width) / 2 :
-                            if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                            if (object.box.centerx - self.box.centerx) * self.side > 0:
                                 if same_line_checker(self, object):
                                     if not (self == object):
                                         self.status = 2

@@ -9,6 +9,7 @@ from screen import *
 fpsclock = pygame.time.Clock()
 FPS = 60
 
+straw_doll = analyzed_img("GameplayAssets\straw_doll.png", 68 , 17 , 105 , 257)
 
 
 class straw_doll_class():

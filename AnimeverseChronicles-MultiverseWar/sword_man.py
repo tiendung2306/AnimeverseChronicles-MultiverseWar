@@ -10,6 +10,54 @@ from screen import *
 from common_effect import *
 
 
+sword_man1 = analyzed_img("GameplayAssets\\sword_man\\sword_man(1).png", 254 , 352 , 108 , 239)
+sword_man2 = analyzed_img("GameplayAssets\\sword_man\\sword_man(2).png", 254 , 352 , 108 , 239)
+sword_man3 = analyzed_img("GameplayAssets\\sword_man\\sword_man(3).png", 254 , 352 , 108 , 239)
+sword_man4 = analyzed_img("GameplayAssets\\sword_man\\sword_man(4).png", 254 , 352 , 108 , 239)
+sword_man5 = analyzed_img("GameplayAssets\\sword_man\\sword_man(5).png", 254 , 352 , 108 , 239)
+sword_man6 = analyzed_img("GameplayAssets\\sword_man\\sword_man(6).png", 254 , 352 , 108 , 239)
+sword_man7 = analyzed_img("GameplayAssets\\sword_man\\sword_man(7).png", 254 , 352 , 108 , 239)
+sword_man8 = analyzed_img("GameplayAssets\\sword_man\\sword_man(8).png", 254 , 352 , 108 , 239)
+sword_man9 = analyzed_img("GameplayAssets\\sword_man\\sword_man(9).png", 252 , 340 , 116 , 249)
+sword_man10 = analyzed_img("GameplayAssets\\sword_man\\sword_man(10).png", 250 , 347 , 113 , 246)
+sword_man11 = analyzed_img("GameplayAssets\\sword_man\\sword_man(11).png", 249 , 348 , 122 , 247)
+sword_man12 = analyzed_img("GameplayAssets\\sword_man\\sword_man(12).png", 249 , 348 , 122 , 247)
+sword_man13 = analyzed_img("GameplayAssets\\sword_man\\sword_man(13).png", 231 , 350 , 131 , 242)
+sword_man14 = analyzed_img("GameplayAssets\\sword_man\\sword_man(14).png", 231 , 350 , 131 , 242)
+sword_man15 = analyzed_img("GameplayAssets\\sword_man\\sword_man(15).png", 231 , 350 , 131 , 242)
+sword_man16 = analyzed_img("GameplayAssets\\sword_man\\sword_man(16).png", 240 , 348 , 125 , 244)
+sword_man17 = analyzed_img("GameplayAssets\\sword_man\\sword_man(17).png", 244 , 353 , 127 , 238)
+sword_man18 = analyzed_img("GameplayAssets\\sword_man\\sword_man(18).png", 244 , 353 , 127 , 238)
+sword_man19 = analyzed_img("GameplayAssets\\sword_man\\sword_man(19).png", 253 , 346 , 121 , 246)
+sword_man20 = analyzed_img("GameplayAssets\\sword_man\\sword_man(20).png", 247 , 355 , 117 , 236)
+sword_man21 = analyzed_img("GameplayAssets\\sword_man\\sword_man(21).png", 247 , 355 , 117 , 236)
+sword_man22 = analyzed_img("GameplayAssets\\sword_man\\sword_man(22).png", 250 , 352 , 123 , 238)
+sword_man23 = analyzed_img("GameplayAssets\\sword_man\\sword_man(23).png", 251 , 355 , 113 , 236)
+sword_man24 = analyzed_img("GameplayAssets\\sword_man\\sword_man(24).png", 251 , 355 , 113 , 236)
+sword_man25 = analyzed_img("GameplayAssets\\sword_man\\sword_man(25).png", 251 , 355 , 113 , 236)
+sword_man26 = analyzed_img("GameplayAssets\\sword_man\\sword_man(26).png", 258 , 392 , 109 , 203)
+sword_man27 = analyzed_img("GameplayAssets\\sword_man\\sword_man(27).png", 253 , 394 , 108 , 203)
+sword_man28 = analyzed_img("GameplayAssets\\sword_man\\sword_man(28).png", 253 , 394 , 108 , 203)
+sword_man29 = analyzed_img("GameplayAssets\\sword_man\\sword_man(29).png", 250 , 382 , 117 , 208)
+sword_man30 = analyzed_img("GameplayAssets\\sword_man\\sword_man(30).png", 232 , 386 , 129 , 208)
+sword_man31 = analyzed_img("GameplayAssets\\sword_man\\sword_man(31).png", 249 , 362 , 124 , 229)
+sword_man32 = analyzed_img("GameplayAssets\\sword_man\\sword_man(32).png", 257 , 352 , 107 , 239)
+sword_man33 = analyzed_img("GameplayAssets\\sword_man\\sword_man(33).png", 259 , 385 , 124 , 209)
+sword_man34 = analyzed_img("GameplayAssets\\sword_man\\sword_man(34).png", 259 , 385 , 124 , 209)
+sword_man35 = analyzed_img("GameplayAssets\\sword_man\\sword_man(35).png", 259 , 385 , 124 , 209)
+sword_man36 = analyzed_img("GameplayAssets\\sword_man\\sword_man(36).png", 259 , 385 , 124 , 209)
+sword_man37 = analyzed_img("GameplayAssets\\sword_man\\sword_man(37).png", 251 , 377 , 88 , 214)
+sword_man38 = analyzed_img("GameplayAssets\\sword_man\\sword_man(38).png", 246 , 354 , 122 , 239)
+sword_man39 = analyzed_img("GameplayAssets\\sword_man\\sword_man(39).png", 246 , 354 , 122 , 239)
+sword_man40 = analyzed_img("GameplayAssets\\sword_man\\sword_man(40).png", 246 , 354 , 122 , 239)
+sword_man41 = analyzed_img("GameplayAssets\\sword_man\\sword_man(41).png", 246 , 354 , 122 , 239)
+sword_man50 = analyzed_img("GameplayAssets\\sword_man\\sword_man(50).png", 246 , 354 , 122 , 239)
+
+
+
+attack_damage = [50.0, 55.0 , 60.0, 65.0 , 70.0,  75.0]
+health = [150.0, 150.0, 160.0, 160.0, 170.0, 170.0]
+
 class sword_manclass():
     def __init__(self,side,gameplay):
         self.pre_status = None
@@ -19,15 +67,17 @@ class sword_manclass():
         self.gameplay = gameplay
         if side == 1 :
             self.side = 1
+            self.level = self.gameplay.character_level1[1]
         elif side == 2:
             self.side = -1   
+            self.level = self.gameplay.character_level2[1]
         
         self.speed = 5.0 # 5/100 map per second 
         self.attack_scope = 1 * self.gameplay.box_size[0] # 4/15 map width
         self.attack_speed = 1/3 # attack(s) pers second
-        self.attack_damage = 30.0
+        self.attack_damage = attack_damage[self.level - 1]
         self.attack_damage_orginal = self.attack_damage
-        self.health_max = 100.0
+        self.health_max = health[self.level - 1]
         self.health = self.health_max 
         self.mana_max =100.0
         self.mana = 90.0
@@ -69,6 +119,14 @@ class sword_manclass():
 
  
     def status_update(self):
+        if self.side == 1 :
+            self.level = self.gameplay.character_level1[1]
+        elif self.side == 2:
+            self.level = self.gameplay.character_level2[1]
+        self.attack_damage = attack_damage[self.level - 1]
+        self.health_max = health[self.level - 1]
+        
+        
         self.collide = None 
         self.pre_status = self.status
 
@@ -155,7 +213,7 @@ class sword_manclass():
                 ispass = False
                 for object in self.gameplay.side(- self.side) :
                     if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 3 + (self.box.width + object.box.width) / 2 :
-                        if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                        if (object.box.centerx - self.box.centerx) * self.side > 0:
                             if same_line_checker(self, object):
                                 self.status = 1
                                 flag = True
@@ -168,7 +226,7 @@ class sword_manclass():
                 ispass = False
                 for object in self.gameplay.side( - self.side) :
                     if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 3 + (self.box.width + object.box.width) / 2:
-                        if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                        if (object.box.centerx - self.box.centerx) * self.side > 0:
                             if same_line_checker(self, object):
                                 self.status = 1
                                 flag = True
@@ -177,7 +235,7 @@ class sword_manclass():
                 if not ispass:
                     for object in self.gameplay.side(self.side) + self.gameplay.side4 :
                         if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 2 + (self.box.width + object.box.width) / 2 :
-                            if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                            if (object.box.centerx - self.box.centerx) * self.side > 0:
                                 if same_line_checker(self, object):
                                     if not (self == object):
                                         self.status = 2
