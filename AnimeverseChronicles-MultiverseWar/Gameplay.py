@@ -42,8 +42,8 @@ class gameplay():
             sword_manclass : 30,
             archerclass : 40,
             wizardclass : 50,
-            gokuclass : 100,
-            narutoclass : 150
+            gokuclass : 0,
+            narutoclass : 0
         }
 
         self.character_slot_idx = {
@@ -132,19 +132,20 @@ class gameplay():
         self.nexus1 = Nexusclass(1, self)
         self.nexus2 = Nexusclass(2, self)
 
-
-        # spawn(tankerclass, 2, 40, self)
-        # spawn(tankerclass, 2, 40, self)
-        # spawn(tankerclass, 2, 40, self)
-        # spawn(tankerclass, 2, 40, self)
-        # spawn(tankerclass, 2, 40, self)
-
         self.selected_object = None
         self.AI = PvC_mode(self)
 
     def AI_process(self):
         if self.play_mode == 1:
             self.AI.update()
+
+        
+
+    def character_level(self, side, index):
+        if side == 1:
+            return self.character_level1[index]
+        elif side == -1:
+            return self.character_level2[index]
 
     def side(self, side):
         if side == 1:

@@ -12,18 +12,18 @@ from color import *
 a = b = c = d = 0
 Flag = True
 flag2 = False
-counter = 1
-img = pygame.image.load("GameplayAssets\\healling_effect({}).png".format(counter))
+counter = 57
+img = pygame.image.load("GameplayAssets\\goku\\goku({}).png".format(counter))
 WIN = pygame.display.set_mode(img.get_size())
 while Flag:
     WIN.fill(Black)
     WIN.blit(img,(0,0))
     for event in pygame.event.get():
         if event.type == KEYDOWN:
-            print("healling_effect({}).png".format(counter),"= analyzed_img(","GameplayAssets\\healling_effect({}).png".format(counter),",",a,",",b,",",c - a,",",d - b,")")
+            print("goku({}).png".format(counter),"= analyzed_img(","GameplayAssets\\goku\\goku({}).png".format(counter),",",a,",",b,",",c - a,",",d - b,")")
             
             counter += 1
-            img = pygame.image.load("GameplayAssets\\healling_effect({}).png".format(counter))
+            img = pygame.image.load("GameplayAssets\\goku\\goku({}).png".format(counter))
             if event.key == 9:
                 Flag = False
             # if event.key == 32 :
@@ -45,7 +45,8 @@ while Flag:
     pygame.draw.rect(WIN,Yellow,pygame.Rect(a,b,c - a,d - b),1)
     pygame.display.update()
 text = ""
-for i in range(1,7):
-    text_i = "spawn{}, ".format(i)
-    text = text + text_i
+for i in range(23,26):
+    for j in range(1,7):
+        text_i = "goku{}, ".format(i)
+        text = text + text_i
 print(text)

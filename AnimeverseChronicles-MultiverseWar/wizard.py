@@ -56,11 +56,11 @@ magic_ball7 = analyzed_img("GameplayAssets\\wizard\\magic_ball(7).png" , 294 , 8
 magic_ball8 = analyzed_img("GameplayAssets\\wizard\\magic_ball(8).png" , 339 , 94 , 62 , 72)
 magic_ball9 = analyzed_img("GameplayAssets\\wizard\\magic_ball(9).png" , 369 , 101 , 40 , 40)
    
-attack_damage = [10.0, 10.0 , 15.0, 15.0 , 15.0,  15.0]
-health = [100.0, 100.0, 105.0, 1005.0, 110.0, 110.0]
-mana_per_att = [20, 25, 25, 30, 40]
-heal_per_skill = [20, 30, 40, 60, 70]
-level_effect = [1, 1, 2, 3, 4]
+attack_damage = [10.0, 10.0 , 20.0, 25.0 , 40.0]
+health = [100.0, 120.0, 160.0, 180.0, 250.0]
+mana_per_att = [20, 25, 40, 50, 50]
+heal_per_skill = [40, 50, 80, 100, 200]
+level_effect = [1, 1, 3, 4, 6]
 
 class magic_ball_class():
     def __init__(self,wizard):
@@ -194,11 +194,10 @@ class wizardclass():
             magicbullet.resize()
 
     def status_update(self):
-        if self.side == 1 :
-            self.level = self.gameplay.character_level1[3]
-        elif self.side == 2:
-            self.level = self.gameplay.character_level2[3]
-
+        if not self.level == self.gameplay.character_level(self.side, 3):
+            self.level = self.gameplay.character_level(self.side, 3)
+            self.attack_damage = attack_damage[self.level - 1]
+            self.health_max = health[self.level - 1]
 
 
         self.collide = None 

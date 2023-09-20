@@ -49,9 +49,9 @@ tanker36 = analyzed_img("GameplayAssets\\tanker\\tanker(36).png", 410 , 186 , 0 
 tanker37 = analyzed_img("GameplayAssets\\tanker\\tanker(37).png", 410 , 186 , 0 , 0)
 tanker38 = analyzed_img("GameplayAssets\\tanker\\tanker(38).png", 410 , 186 , 0 , 0)
 
-attack_damage = [10.0, 10.0 , 15.0, 15.0 , 20.0,  25.0]
-health = [500.0, 550.0, 550.0, 600.0, 600.0, 700.0]
-damage_reduce = [40.0, 40.0, 45.0, 50.0, 60.0]
+attack_damage = [10.0 , 20.0, 45.0 , 50.0,  70.0]
+health = [500000.0, 600.0, 900.0, 950.0, 1200.0]
+damage_reduce = [40.0, 45.0, 70.0, 65.0, 90.0]
 
 class tankerclass():
     def __init__(self, side, gameplay):
@@ -76,7 +76,6 @@ class tankerclass():
         self.mana_max = 100.0
         self.mana = 0
         self.damage_reduce =  0 #0%
-        self.damage_reduce_special =  damage_reduce[self.level - 1]
         self.skill_lasting_time = 3
 
         self.effect_list = []
@@ -118,10 +117,11 @@ class tankerclass():
 
         
     def status_update(self):
-        if self.side == 1 :
-            self.level = self.gameplay.character_level1[0]
-        elif self.side == 2:
-            self.level = self.gameplay.character_level2[0]
+        if not self.level == self.gameplay.character_level(self.side, 0):
+            self.attack_damage = attack_damage[self.level - 1]
+            self.health_max = health[self.level - 1]
+            self.damage_reduce_special =  damage_reduce[self.level - 1]
+
 
         self.attack_damage = attack_damage[self.level - 1]
         self.health_max = health[self.level - 1]
@@ -345,9 +345,8 @@ class tankerclass():
 
     def special_skill(self):
         if self.switcher2.operation():
-            self.damage_reduce = self.damage_reduce_special
             self.skill_countdowner.start()
-            self.effect = shield(self, 3, self.damage_reduce_special)
+            self.effect = shield(self, 10, damage_reduce[self.level - 1])
             add_effect(self,self.effect)
 
         if self.skill_countdowner.Return == False:

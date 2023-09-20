@@ -645,7 +645,7 @@ class narutoclass():
 
         if self.side == 1 :
             self.level = self.gameplay.character_level1[5]
-        elif self.side == 2:
+        elif self.side == -1:
             self.level = self.gameplay.character_level2[5]
         self.attack_damage = attack_damage[self.level - 1]
         self.health_max = health[self.level - 1]

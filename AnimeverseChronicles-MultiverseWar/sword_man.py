@@ -55,8 +55,8 @@ sword_man50 = analyzed_img("GameplayAssets\\sword_man\\sword_man(50).png", 246 ,
 
 
 
-attack_damage = [50.0, 55.0 , 60.0, 65.0 , 70.0,  75.0]
-health = [150.0, 150.0, 160.0, 160.0, 170.0, 170.0]
+attack_damage = [50.0, 55.0 , 100.0, 110.0 , 200.0]
+health = [150.0, 170.0, 200.0, 220.0, 300.0]
 
 class sword_manclass():
     def __init__(self,side,gameplay):
@@ -119,13 +119,10 @@ class sword_manclass():
 
  
     def status_update(self):
-        if self.side == 1 :
-            self.level = self.gameplay.character_level1[1]
-        elif self.side == 2:
-            self.level = self.gameplay.character_level2[1]
-        self.attack_damage = attack_damage[self.level - 1]
-        self.health_max = health[self.level - 1]
-        
+        if not self.level == self.gameplay.character_level(self.side, 2):
+            self.level = self.gameplay.character_level(self.side, 2)
+            self.attack_damage = attack_damage[self.level - 1]
+            self.health_max = health[self.level - 1]
         
         self.collide = None 
         self.pre_status = self.status
@@ -343,7 +340,6 @@ class sword_manclass():
             self.attack_coundowner.start()
 
         self.animation_player = self.special_skill_animation
-        self.attack_damage = 2 * self.attack_damage_orginal
         if self.special_skill_animation.clock.Return == 3 or self.special_skill_animation.clock.Return == 8:
             if self.switcher1.operation():
                 for object in self.gameplay.side(- self.side) :
@@ -359,7 +355,6 @@ class sword_manclass():
 
 
     def special_skill_reset(self):
-        self.attack_damage = self.attack_damage_orginal
         self.special_skill_animation.reset() 
         self.switcher3.reset()
 

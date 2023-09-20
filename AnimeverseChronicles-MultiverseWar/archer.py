@@ -48,9 +48,9 @@ archer40 = analyzed_img("GameplayAssets\\archer\\archer(40).png", 199 , 298 , 69
 arrow = analyzed_img("GameplayAssets\\archer\\arrow.png", 279 , 332 , 132 , 20)
 special_arrow = analyzed_img("GameplayAssets\\archer\\special_arrow.png", 279 , 332 , 132 , 20)
 
-attack_damage = [20.0, 25.0 , 25.0, 30.0 , 40.0,  50.0]
-attack_speed = [1 / 2, 1 / 2, 1 / 1.75, 1 / 1.5, 1 / 1]
-health = [100.0, 100.0, 105.0, 1005.0, 110.0, 110.0]
+attack_damage = [20.0, 30.0 , 50.0, 70.0 , 100.0]
+attack_speed = [1 / 2.0, 1 / 1.75, 1 / 1.0, 1 / 1.0 , 1 / 1,0]
+health = [100.0, 120.0, 150.0, 170.0, 200.0]
 
 class arrowclass():
     def __init__(self,archer):
@@ -160,7 +160,7 @@ class archerclass():
         self.health_max = health[self.level - 1]
         self.health = self.health_max
         self.mana_max =100.0
-        self.mana = 0.0
+        self.mana = 90.0
 
         self.arrow_list = []
         self.effect_list = []
@@ -177,7 +177,7 @@ class archerclass():
         self.animation_player = None
         self.moving_animation = animation_player([archer1,archer2,archer3,archer4,archer5,archer6,archer7,archer8,archer9,archer10],self.side, 1, self.imgbox , self.gameplay)
         self.walking_animation = animation_player([archer11,archer12,archer13,archer14,archer15,archer16],self.side, 1, self.imgbox, self.gameplay)
-        self.attacking_animation = one_time_animation_player([archer17,archer18,archer19,archer20,archer21,archer22,archer23,archer24,archer25,archer26,archer27,archer28,archer29,archer30],self.side, 1 , self.imgbox, self.gameplay)
+        self.attacking_animation = one_time_animation_player([archer17,archer19,archer20,archer21,archer22,archer23,archer24,archer25,archer26,archer27,archer30],self.side, 0.5 , self.imgbox, self.gameplay)
         self.standstill_animation = one_time_animation_player([archer11,archer12,archer13,archer14,archer15,archer16],self.side, 1, self.imgbox, self.gameplay)
         self.dying_animation = one_time_animation_player([archer40], self.side, 0.8, self.imgbox, self.gameplay)
         self.knock_back_animation = animation_player([archer31], self.side, 1, self.imgbox, self.gameplay)
@@ -206,15 +206,20 @@ class archerclass():
 
 
     def status_update(self):
-        if self.side == 1 :
-            self.level = self.gameplay.character_level1[2]
-        elif self.side == 2:
-            self.level = self.gameplay.character_level2[2]
-        self.attack_damage = attack_damage[self.level - 1]
-        self.health_max = health[self.level - 1]
-        self.attack_speed = attack_speed[self.level - 1]
-        if 1 / self.attack_speed <= self.attacking_animation.loop_time :
-            self.attacking_animation.update_looptime( 1 / self.attack_speed )
+        if not self.level == self.gameplay.character_level(self.side, 2):
+            self.level = self.gameplay.character_level(self.side, 2)
+            self.attack_damage = attack_damage[self.level - 1]
+            self.attack_damage_orginal = self.attack_damage
+            self.health_max = health[self.level - 1]
+            self.attack_speed = attack_speed[self.level - 1]
+            self.attack_speed_orginal = self.attack_speed
+            if self.special_status:
+                if len(self.arrow_list) >= self.flag + 1:
+                    self.attack_speed *= 2
+                    self.attack_coundowner.update_lasting_time(1 / self.attack_speed)
+                else:
+                    self.attack_damage *= 2
+
 
         self.collide = None 
         self.pre_status = self.status
@@ -398,8 +403,22 @@ class archerclass():
         self.animation_player = self.attacking_animation
         if self.attacking_animation.clock.Return == 9:
             if self.switcher1.operation():
-                self.arrow_list.append(arrowclass(self))  
+                if self.level < 3:
+                    self.arrow_list.append(arrowclass(self))  
+                elif self.level >= 3 and self.level < 5:
+                    self.arrow_list.append(arrowclass(self))  
+                    self.imgbox.centery += self.gameplay.box_size[1] / 5
+                    self.arrow_list.append(arrowclass(self))  
+                    self.imgbox.centery -= self.gameplay.box_size[1] / 5
+                elif self.level == 5:
+                    self.arrow_list.append(arrowclass(self))  
+                    self.imgbox.centery += self.gameplay.box_size[1] / 5
+                    self.arrow_list.append(arrowclass(self))  
+                    self.imgbox.centery -= 2 * self.gameplay.box_size[1] / 5
+                    self.arrow_list.append(arrowclass(self))  
+                    self.imgbox.centery += self.gameplay.box_size[1] / 5
 
+                    
         elif self.attacking_animation.clock.Return == 8:
             self.switcher1.reset()
 
@@ -417,15 +436,13 @@ class archerclass():
             self.attack_scope = 7 * self.gameplay.box_size[0]
             self.flag = len(self.arrow_list)
 
-        if len(self.arrow_list) == self.flag + 1:
+        if len(self.arrow_list) >= self.flag + 1:
             if self.switcher3.operation():
                 self.piercing = False
                 self.attack_damage = self.attack_damage_orginal
                 self.attack_scope = self.attack_scope_orginal
                 self.attack_speed = self.attack_speed * 2
                 self.attack_coundowner.update_lasting_time(1 / self.attack_speed)
-                if 1 / self.attack_speed <= 1 :
-                    self.attacking_animation.update_looptime( 1 / self.attack_speed )
                 self.skill_countdowner.start()
 
             if self.skill_countdowner.Return == False:
@@ -437,7 +454,6 @@ class archerclass():
         self.switcher3.reset()
         self.attack_damage = self.attack_damage_orginal
         self.attack_speed = self.attack_speed_orginal
-        self.attacking_animation.update_looptime(1)
         self.attack_coundowner.update_lasting_time(1 / self.attack_speed)
         self.skill_countdowner.reset()
 
@@ -479,6 +495,7 @@ class archerclass():
 
             for arrows in self.arrow_list:
                 arrows.operation()
+
 
             # pygame.draw.rect(screen.screen,White,self.box,1)
             # pygame.draw.rect(screen.screen,White,self.imgbox,1)
