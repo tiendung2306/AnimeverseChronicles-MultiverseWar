@@ -75,7 +75,7 @@ class gameplay():
             self.play_pause_button = (screen.screen.get_rect().width - screen.screen.get_rect().width // 32, 10)
 
 
-        self.gold_per_sec = 10
+        self.gold_per_sec = 5
         #level
         self.islevel_up1 = False
         self.islevel_up2 = False

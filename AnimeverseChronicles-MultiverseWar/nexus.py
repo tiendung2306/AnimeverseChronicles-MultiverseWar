@@ -22,7 +22,7 @@ class Nexusclass():
         self.box = pygame.Rect(0,0,0,0)
         self.imgbox = pygame.Rect(0,0,0,0)
         get_spawn_display(self, rect)
-        self.health_max = 1000000.0
+        self.health_max = 1000.0
         self.health =  self.health_max
         self.mana_max = 100.0
         self.mana = 0

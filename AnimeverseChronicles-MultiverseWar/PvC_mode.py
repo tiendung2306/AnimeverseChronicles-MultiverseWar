@@ -28,19 +28,26 @@ class PvC_mode():
             self.gameplay.gold_outcome_2 += self.gameplay.character_cost[self.gameplay.character_slot_idx[idx]]
 
     def update(self):
-        if len(self.character_control) == 0:
+        self.character_control = []
+        for i in range(1, len(self.gameplay.side2)):
+            self.character_control.append(list(self.gameplay.character_slot_idx.values()).index(self.gameplay.side2[i].__class__))
+        for x in self.spawn_queue:
+            self.character_control.append(x)
+
+        # print(self.character_control)
+        if len(self.character_control) == 0 or (len(self.character_control) == 1 and self.character_control[0] != 0):
             if self.spawn_state(0):
                 self.insert_in_spawn_queue(0)
                 self.character_control.append(0)
-        elif len(self.character_control) <= 1:
+        elif self.character_control[-1] == 0 and len(self.character_control) <= 4:
             if self.spawn_state(2):
                 self.insert_in_spawn_queue(2)
                 self.character_control.append(2)
-        elif len(self.character_control) <= 2:
+        elif self.character_control[-1] == 2 and len(self.character_control) <= 4:
             if self.spawn_state(3):
                 self.insert_in_spawn_queue(3)
                 self.character_control.append(3)
-        else:
+        elif len(self.character_control) <= 6:
             if len(self.gameplay.side2) + len(self.spawn_queue) - len(self.gameplay.side1) < 2 and self.spawn_state(5):
                 rand_num = self.get_random_number() % 2 + 4
                 if self.spawn_state(rand_num):
