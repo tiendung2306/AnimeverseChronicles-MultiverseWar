@@ -50,7 +50,7 @@ tanker37 = analyzed_img("GameplayAssets\\tanker\\tanker(37).png", 410 , 186 , 0 
 tanker38 = analyzed_img("GameplayAssets\\tanker\\tanker(38).png", 410 , 186 , 0 , 0)
 
 attack_damage = [10.0 , 20.0, 45.0 , 50.0,  70.0]
-health = [500000.0, 600.0, 900.0, 950.0, 1200.0]
+health = [500.0, 600.0, 900.0, 950.0, 1200.0]
 damage_reduce = [40.0, 45.0, 70.0, 65.0, 90.0]
 
 class tankerclass():
@@ -74,7 +74,7 @@ class tankerclass():
         self.health_max = health[self.level - 1]
         self.health =  self.health_max
         self.mana_max = 100.0
-        self.mana = 0
+        self.mana = 0.0
         self.damage_reduce =  0 #0%
         self.skill_lasting_time = 3
 
@@ -177,7 +177,7 @@ class tankerclass():
     def check_collide(self):
         if self.iscollide_check:
             for object in self.gameplay.side(self.side) + self.gameplay.side4 + self.gameplay.side(- self.side):
-                if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                if abs(object.box.centerx - self.box.centerx) <= self.gameplay.box_size[0] / 3:
                     if same_line_checker(self, object):
                         if not (self == object):
                             if collide_checker(self ,object):

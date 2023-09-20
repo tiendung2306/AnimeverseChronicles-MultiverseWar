@@ -340,7 +340,7 @@ class cloneclass():
     def check_collide(self):
         if self.iscollide_check:
             for object in self.gameplay.side(self.side) + self.gameplay.side4 + self.gameplay.side(- self.side):
-                if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                if abs(object.box.centerx - self.box.centerx) <= self.gameplay.box_size[0] / 3:
                     if same_line_checker(self, object):
                         if not (self == object):
                             if collide_checker(self ,object):
@@ -708,7 +708,7 @@ class narutoclass():
     def check_collide(self):
         if self.iscollide_check:
             for object in self.gameplay.side(self.side) + self.gameplay.side4 + self.gameplay.side(- self.side):
-                if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                if abs(object.box.centerx - self.box.centerx) <= self.gameplay.box_size[0] / 3:
                     if same_line_checker(self, object):
                         if not (self == object):
                             if collide_checker(self ,object):

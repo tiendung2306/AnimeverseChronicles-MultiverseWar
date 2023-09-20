@@ -120,9 +120,10 @@ class gameplay():
         self.nexus1 = Nexusclass(1, self)
         self.nexus2 = Nexusclass(2, self)
 
+
         self.selected_object = None
 
-        
+
 
     def character_level(self, side, index):
         if side == 1:
