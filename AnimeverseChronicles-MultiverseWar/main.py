@@ -227,6 +227,8 @@ class main():
             thisGameplay.draw_character_panel(self.mouse)
 
             thisGameplay.pre_curr_time = thisGameplay.curr_time
+
+            thisGameplay.AI_process()
             
             if thisGameplay.isGameover == True:
                 thisGameplay.draw_gameover_panel()

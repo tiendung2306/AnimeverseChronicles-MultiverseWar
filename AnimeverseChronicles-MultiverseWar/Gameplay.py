@@ -11,9 +11,9 @@ from key_binding_manager import *
 from gameover_panel import *
 from list_function import*
 from object_function import *
+from PvC_mode import *
+from Random import *
 import random
-
-
 
 
 class gameplay():
@@ -25,8 +25,9 @@ class gameplay():
         self.spawn_time = 2 #thoi gian de spawn mot con nhan vat tinh theo s
         self.spawn_queue1 = []
         self.spawn_queue2 = []
+        self.rand = Random()
 
-        path_num = (random.randint(1, 5) * random.randint(1, 5) * random.randint(1, 5) * random.randint(1, 5)) % 5  + 1
+        path_num = (self.rand.get_truly_random_seed_through_os()) % 5  + 1
         # print(path_num)
         # self.fake_bg_original = pygame.image.load('GameplayAssets\\bg1.png')
         self.bg_original = pygame.image.load('GameplayAssets\\bg({}).jpg'.format(path_num))
@@ -37,12 +38,21 @@ class gameplay():
         self.pause_button_original = pygame.image.load('GameplayAssets\\pause_button.png')
         
         self.character_cost = {
-            sword_manclass : 10,
-            archerclass : 20,
-            tankerclass : 30,
+            tankerclass : 20,
+            sword_manclass : 30,
+            archerclass : 40,
             wizardclass : 50,
             gokuclass : 100,
             narutoclass : 150
+        }
+
+        self.character_slot_idx = {
+            0 : tankerclass,
+            1 : sword_manclass,
+            2 : archerclass,
+            3 : wizardclass,
+            4 : gokuclass,
+            5 : narutoclass,
         }
 
         #character type
@@ -64,6 +74,8 @@ class gameplay():
         else:
             self.play_pause_button = (screen.screen.get_rect().width - screen.screen.get_rect().width // 32, 10)
 
+
+        self.gold_per_sec = 10
         #level
         self.islevel_up1 = False
         self.islevel_up2 = False
@@ -128,6 +140,11 @@ class gameplay():
         # spawn(tankerclass, 2, 40, self)
 
         self.selected_object = None
+        self.AI = PvC_mode(self)
+
+    def AI_process(self):
+        if self.play_mode == 1:
+            self.AI.update()
 
     def side(self, side):
         if side == 1:
@@ -208,6 +225,7 @@ class gameplay():
                 return 'Settings'
             if self.Pause_Pannel.check_click(mouse) == self.Pause_Pannel.buttons[2]: #an vao nut back to menu
                 return 'Back'
+
 
     def check_press(self, event):
         if event.key == pygame.K_ESCAPE:
@@ -391,8 +409,8 @@ class gameplay():
             curr_sec = str(curr_tmp_sec)
 
             #gold process
-        self.curr_gold_1 = int(curr_tmp_min * 60 + curr_tmp_sec) * 50 + self.gold_income_1 - self.gold_outcome_1 #luong vang hien tai = luong vang theo thoi gian + luong vang kiem duoc - luong vang da tieu
-        self.curr_gold_2 = int(curr_tmp_min * 60 + curr_tmp_sec) * 50 + self.gold_income_2 - self.gold_outcome_2 #luong vang hien tai = luong vang theo thoi gian + luong vang kiem duoc - luong vang da tieu
+        self.curr_gold_1 = int(curr_tmp_min * 60 + curr_tmp_sec) * self.gold_per_sec + self.gold_income_1 - self.gold_outcome_1 #luong vang hien tai = luong vang theo thoi gian + luong vang kiem duoc - luong vang da tieu
+        self.curr_gold_2 = int(curr_tmp_min * 60 + curr_tmp_sec) * self.gold_per_sec + self.gold_income_2 - self.gold_outcome_2 #luong vang hien tai = luong vang theo thoi gian + luong vang kiem duoc - luong vang da tieu
         
         self.timer_text1 = self.timer_font.render(curr_min + ':' + curr_sec, True, Black)
         self.timer_text1_rect = self.timer_text1.get_rect()

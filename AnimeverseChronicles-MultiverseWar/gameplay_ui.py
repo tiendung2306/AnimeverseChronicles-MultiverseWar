@@ -310,7 +310,11 @@ class gameplay_ui():
         if len(self.character_spawn_buttons) <= button_num:
             return
         if self.character_spawn_buttons[button_num].can_spawn(side) == True:
-                    self.click_spawn_button(button_num, side)
+            self.click_spawn_button(button_num, side)
+
+
+    def spawn_state(self, button_num, side):
+        return (self.character_spawn_buttons[button_num].can_spawn(side) and len(self.gameplay.spawn_queue1) < 3)
 
     def click_spawn_button(self, button_num, side):
         spawning(side, self.gameplay)
