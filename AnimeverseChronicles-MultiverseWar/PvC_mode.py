@@ -2,7 +2,6 @@ import pygame
 from pygame.locals import *
 from object_function import *
 from Random import *
-
 class PvC_mode():
     def __init__(self, gameplay):
         self.gameplay = gameplay
@@ -30,7 +29,10 @@ class PvC_mode():
     def update(self):
         self.character_control = []
         for i in range(1, len(self.gameplay.side2)):
-            self.character_control.append(list(self.gameplay.character_slot_idx.values()).index(self.gameplay.side2[i].__class__))
+            try:
+                self.character_control.append(list(self.gameplay.character_slot_idx.values()).index(self.gameplay.side2[i].__class__))
+            except:
+                pass
         for x in self.spawn_queue:
             self.character_control.append(x)
 
