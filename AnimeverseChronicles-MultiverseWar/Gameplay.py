@@ -41,8 +41,8 @@ class gameplay():
             archerclass : 20,
             tankerclass : 30,
             wizardclass : 50,
-            gokuclass : 100,
-            narutoclass : 150
+            gokuclass : 0,
+            narutoclass : 0
         }
 
         #character type
@@ -119,16 +119,10 @@ class gameplay():
 
         self.nexus1 = Nexusclass(1, self)
         self.nexus2 = Nexusclass(2, self)
-        spawn(tankerclass, 1, 20, self)
-
-
-        spawn(sword_manclass, 1, 20, self)
-        spawn(tankerclass, 1, 20, self)
-        # spawn(tankerclass, 2, 40, self)
-        # spawn(tankerclass, 2, 40, self)
-        # spawn(tankerclass, 2, 40, self)
 
         self.selected_object = None
+
+        
 
     def character_level(self, side, index):
         if side == 1:

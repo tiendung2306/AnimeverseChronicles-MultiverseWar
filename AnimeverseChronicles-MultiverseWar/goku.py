@@ -76,7 +76,7 @@ class kame_class():
                 self.start_point = goku_to_kame.reverse.imgbox_to_hitbox(goku.imgbox).topleft
             else:
                 self.start_point = goku_to_kame2.reverse.imgbox_to_hitbox(goku.imgbox).topleft
-            self.angle = angle - 90
+            self.angle = 180 - angle
         self.size = (self.goku.box.width * 20 ,self.goku.box.width )
         self.width = self.size[1] / 2
         self.radius = self.size[0] / 2
@@ -109,7 +109,7 @@ class kame_class():
         if  self.goku.gameplay.curr_time <= self.time_marker:
             self.width = self.size[1] / 5
         else:
-            if self.width < self.size[1] * 3:
+            if self.width < self.size[1] * 2:
                 self.width += (self.goku.gameplay.curr_time - self.goku.gameplay.pre_curr_time) * self.size[1] * 3
 
 
@@ -562,15 +562,15 @@ class gokuclass():
                 if self.switcher2.operation():
                     index = self.index
                     while True:
-                        if not self.gameplay.side(self.side)[index - 1] ==  None:
-                            object = self.gameplay.side(self.side)[index - 1]
+                        if not self.gameplay.side(self.side)[index + 1] ==  None:
+                            object = self.gameplay.side(self.side)[index + 1]
                             Rect = pygame.Rect(0,0, self.gameplay.box_size[0], self.gameplay.box_size[1])
-                            Rect.center = (object.box.centerx + self.gameplay.box_size[0] / 2,  self.gameplay.path_height - self.gameplay.box_size[1] / 2)
+                            Rect.center = (object.box.centerx + (self.gameplay.box_size[0] / 2) * self.side ,  self.gameplay.path_height - self.gameplay.box_size[1] / 2)
                             get_spawn_display(self, Rect)
                             break
 
                         else:
-                            index -= 1
+                            index += 1
                             
         
         elif self.level == 3:    
@@ -683,14 +683,14 @@ class gokuclass():
                 if self.switcher2.operation():
                     index = self.index
                     while True:
-                        if not self.gameplay.side(self.side)[index - 1] ==  None:
-                            object = self.gameplay.side(self.side)[index - 1]
+                        if not self.gameplay.side(self.side)[index + 1] ==  None:
+                            object = self.gameplay.side(self.side)[index + 1]
                             Rect = pygame.Rect(0,0, self.gameplay.box_size[0], self.gameplay.box_size[1])
-                            Rect.center = (object.box.centerx + self.gameplay.box_size[0] / 2,  self.gameplay.path_height - self.gameplay.box_size[1] / 2)
+                            Rect.center = (object.box.centerx + (self.gameplay.box_size[0] / 2) * self.side ,  self.gameplay.path_height - self.gameplay.box_size[1] / 2)
                             get_spawn_display(self, Rect)
                             break
                         else:
-                            index -= 1
+                            index += 1
 
 
 
