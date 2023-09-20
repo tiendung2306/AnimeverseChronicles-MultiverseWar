@@ -47,11 +47,11 @@ sword_man34 = analyzed_img("GameplayAssets\\sword_man\\sword_man(34).png", 259 ,
 sword_man35 = analyzed_img("GameplayAssets\\sword_man\\sword_man(35).png", 259 , 385 , 124 , 209)
 sword_man36 = analyzed_img("GameplayAssets\\sword_man\\sword_man(36).png", 259 , 385 , 124 , 209)
 sword_man37 = analyzed_img("GameplayAssets\\sword_man\\sword_man(37).png", 251 , 377 , 88 , 214)
-sword_man38 = analyzed_img("GameplayAssets\\sword_man\\sword_man(38).png", 246 , 354 , 122 , 239)
-sword_man39 = analyzed_img("GameplayAssets\\sword_man\\sword_man(39).png", 246 , 354 , 122 , 239)
-sword_man40 = analyzed_img("GameplayAssets\\sword_man\\sword_man(40).png", 246 , 354 , 122 , 239)
-sword_man41 = analyzed_img("GameplayAssets\\sword_man\\sword_man(41).png", 246 , 354 , 122 , 239)
-sword_man50 = analyzed_img("GameplayAssets\\sword_man\\sword_man(50).png", 246 , 354 , 122 , 239)
+sword_man38 = analyzed_img("GameplayAssets\\sword_man\\sword_man(38).png", 249 , 348 , 122 , 247)
+sword_man39 = analyzed_img("GameplayAssets\\sword_man\\sword_man(39).png", 249 , 348 , 122 , 247)
+sword_man40 = analyzed_img("GameplayAssets\\sword_man\\sword_man(40).png", 249 , 348 , 122 , 247)
+sword_man41 = analyzed_img("GameplayAssets\\sword_man\\sword_man(41).png", 249 , 348 , 122 , 247)
+sword_man50 = analyzed_img("GameplayAssets\\sword_man\\sword_man(50).png", 249 , 348 , 122 , 247)
 
 
 
@@ -79,8 +79,8 @@ class sword_manclass():
         self.attack_damage_orginal = self.attack_damage
         self.health_max = health[self.level - 1]
         self.health = self.health_max 
-        self.mana_max =100.0
-        self.mana = 90.0
+        self.mana_max = 100.0
+        self.mana = 0.0
 
         self.effect_list = []
 
@@ -172,7 +172,7 @@ class sword_manclass():
     def check_collide(self):
         if self.iscollide_check:
             for object in self.gameplay.side(self.side) + self.gameplay.side4 + self.gameplay.side(- self.side):
-                if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                if abs(object.box.centerx - self.box.centerx) <= self.gameplay.box_size[0] / 3:
                     if same_line_checker(self, object):
                         if not (self == object):
                             if collide_checker(self ,object):
