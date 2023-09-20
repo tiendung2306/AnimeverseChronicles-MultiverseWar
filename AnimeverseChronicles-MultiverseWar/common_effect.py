@@ -133,8 +133,16 @@ class knock_back():
                 self.object.special_skill_reset()
                 self.object.special_status = False     
             self.object.status = -1
-            if self.object.box.right < self.object.gameplay.nexus2.box.left and self.object.box.left > self.object.gameplay.nexus1.box.right:
+            if self.object.box.centerx  < self.object.gameplay.nexus2.box.left and self.object.box.centerx > self.object.gameplay.nexus1.box.right:
                 self.object.imgbox.centerx -= (self.speed * screen.screen.get_rect().width / 100) * (self.object.gameplay.curr_time - self.object.gameplay.pre_curr_time)  * self.object.side
+            elif self.object.box.centerx > self.object.gameplay.nexus2.box.left or self.object.box.centerx < self.object.gameplay.nexus1.box.right:
+                tmp = self.object.imgbox.centerx - self.object.box.centerx
+                if self.object.side == 1:
+                    self.object.box.centerx = self.object.gameplay.nexus1.box.right
+                elif  self.object.side == -1:
+                    self.object.box.centerx = self.object.gameplay.nexus2.box.left
+                self.object.imgbox.centerx = self.object.box.centerx + tmp
+                    
             for object in self.object.gameplay.side(self.object.side):
                 if collide_checker(self.object,object):
                     if (not (object == self.object)) :
@@ -221,6 +229,9 @@ class falling():
 
 class shield():
     def __init__(self, object, lasted_time, damage_reduce_percent):
+        for effect in object.effect_list:
+            if effect.__class__ == self.__class__:
+                effect.remove()
         self.object = object
         self.animation = animation_player_special([shield_animation1,shield_animation2,shield_animation3,shield_animation4,shield_animation5,shield_animation6,shield_animation7], object.side ,0.6, self.object.box, ( - 1 , 1/4, 3,  1/2), object.gameplay)
         self.clock = timing_clock(lasted_time ,object.gameplay)
