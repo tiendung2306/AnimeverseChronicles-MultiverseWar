@@ -1019,7 +1019,13 @@ class narutoclass():
 
     def kagebusino_jutsu(self, position): 
         tmp = cloneclass(self)
-        tmp.indexx = len(self.clone_list)
+        if self.side == 1:
+            tmp.index = self.gameplay.side1_heros
+            self.gameplay.side1_heros += 1
+        else:
+            tmp.index = self.gameplay.side2_heros
+            self.gameplay.side2_heros += 1
+
         self.gameplay.side0.append(tmp)
         copy(tmp.imgbox, self.imgbox)
         tmp.imgbox.centerx += position * self.gameplay.box_size[0]

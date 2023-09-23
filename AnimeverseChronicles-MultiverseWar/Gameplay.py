@@ -124,7 +124,10 @@ class gameplay():
         self.screen = screen.screen.get_size()
     #Object import:
         self.side1 = []
+        self.side1_heros = 0
         self.side2 = []
+        self.side2_heros = 0
+
         self.side3 = []
         self.side4 = []
         self.side0 = []

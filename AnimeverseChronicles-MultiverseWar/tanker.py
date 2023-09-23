@@ -50,7 +50,7 @@ tanker37 = analyzed_img("GameplayAssets\\tanker\\tanker(37).png", 410 , 186 , 0 
 tanker38 = analyzed_img("GameplayAssets\\tanker\\tanker(38).png", 410 , 186 , 0 , 0)
 
 attack_damage = [10.0 , 20.0, 45.0 , 50.0,  70.0]
-health = [500.0, 600.0, 900.0, 950.0, 1200.0]
+health = [500.0, 600.0, 1200.0, 1500.0, 3000.0]
 damage_reduce = [40.0, 45.0, 70.0, 65.0, 90.0]
 
 class tankerclass():

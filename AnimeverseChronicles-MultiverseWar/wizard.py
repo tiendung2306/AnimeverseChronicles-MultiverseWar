@@ -58,7 +58,7 @@ magic_ball9 = analyzed_img("GameplayAssets\\wizard\\magic_ball(9).png" , 369 , 1
    
 attack_damage = [10.0, 10.0 , 20.0, 25.0 , 40.0]
 health = [100.0, 120.0, 160.0, 180.0, 250.0]
-mana_per_att = [20, 25, 40, 50, 50]
+mana_per_att = [25, 30, 50, 50, 50]
 heal_per_skill = [40, 50, 80, 100, 200]
 level_effect = [1, 1, 3, 4, 6]
 
@@ -143,9 +143,9 @@ class wizardclass():
             self.level = self.gameplay.character_level2[3]               
 
         self.speed = 5.0 # 5/100 map per second 
-        self.attack_scope = 7 * self.gameplay.box_size[0] # 4/15 map width
+        self.attack_scope = 8 * self.gameplay.box_size[0] # 4/15 map width
         self.attack_scope_orginal = self.attack_scope
-        self.attack_speed = 1/5 # arrow(s) pers second
+        self.attack_speed = 1/2 # arrow(s) pers second
         self.attack_speed_orginal = self.attack_speed
         self.attack_damage = attack_damage[self.level - 1]
         self.attack_damage_orginal = self.attack_damage
@@ -272,7 +272,7 @@ class wizardclass():
 
     def check_forward(self): #always after check_collide
         if self.mana >= self.mana_max:
-            self.mana = 0
+            self.mana = self.mana % 100
             self.special_status = True
             self.status = 4 
             ispass = True

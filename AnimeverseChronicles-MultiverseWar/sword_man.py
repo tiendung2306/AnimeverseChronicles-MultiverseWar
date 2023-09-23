@@ -56,7 +56,7 @@ sword_man50 = analyzed_img("GameplayAssets\\sword_man\\sword_man(50).png", 249 ,
 
 
 attack_damage = [50.0, 55.0 , 100.0, 110.0 , 200.0]
-health = [150.0, 170.0, 200.0, 220.0, 300.0]
+health = [150.0, 200.0, 300.0, 400.0, 600.0]
 
 class sword_manclass():
     def __init__(self,side,gameplay):
@@ -209,7 +209,7 @@ class sword_manclass():
             elif self.collide == 1:
                 ispass = False
                 for object in self.gameplay.side(- self.side) :
-                    if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 3 + (self.box.width + object.box.width) / 2 :
+                    if abs(object.box.centerx  - self.box.centerx ) <= self.attack_scope + (self.box.width + object.box.width) / 2 :
                         if (object.box.centerx - self.box.centerx) * self.side > 0:
                             if same_line_checker(self, object):
                                 self.status = 1
@@ -221,23 +221,29 @@ class sword_manclass():
                     flag = True
             else:
                 ispass = False
+                for object in self.gameplay.side(self.side) + self.gameplay.side4 :
+                    if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 2 + (self.box.width + object.box.width) / 2 :
+                        if (object.box.centerx - self.box.centerx) * self.side > 0:
+                            if same_line_checker(self, object):
+                                if (not (self == object)) and (self.index > object.index):
+                                    self.status = 2
+                                    flag = True
+                                    break         
+                if flag == True:
+                    check = self.attack_scope
+                else:
+                    check = self.gameplay.box_size[0] / 2
                 for object in self.gameplay.side( - self.side) :
-                    if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 3 + (self.box.width + object.box.width) / 2:
+                    if abs(object.box.centerx  - self.box.centerx ) <= check + (self.box.width + object.box.width) / 2:
                         if (object.box.centerx - self.box.centerx) * self.side > 0:
                             if same_line_checker(self, object):
                                 self.status = 1
                                 flag = True
                                 ispass = True
                                 break
-                if not ispass:
-                    for object in self.gameplay.side(self.side) + self.gameplay.side4 :
-                        if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 2 + (self.box.width + object.box.width) / 2 :
-                            if (object.box.centerx - self.box.centerx) * self.side > 0:
-                                if same_line_checker(self, object):
-                                    if (not (self == object)) and (self.index > object.index):
-                                        self.status = 2
-                                        flag = True
-                                        break         
+
+
+
             if not flag:
                 self.status = 3
 
