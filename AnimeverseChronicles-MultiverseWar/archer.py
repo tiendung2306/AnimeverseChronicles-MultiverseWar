@@ -323,7 +323,7 @@ class archerclass():
                         if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 2 + (self.box.width + object.box.width) / 2 :
                             if (object.box.centerx - self.box.centerx) * self.side > 0:
                                 if same_line_checker(self, object):
-                                    if not (self == object):
+                                    if (not (self == object)) and (self.index > object.index):
                                         self.status = 2
                                         flag = True
                                         break         
@@ -411,12 +411,15 @@ class archerclass():
                     self.arrow_list.append(arrowclass(self))  
                     self.imgbox.centery -= self.gameplay.box_size[1] / 5
                 elif self.level == 5:
+                    tmp = self.imgbox.centery
                     self.arrow_list.append(arrowclass(self))  
                     self.imgbox.centery += self.gameplay.box_size[1] / 5
                     self.arrow_list.append(arrowclass(self))  
                     self.imgbox.centery -= 2 * self.gameplay.box_size[1] / 5
                     self.arrow_list.append(arrowclass(self))  
                     self.imgbox.centery += self.gameplay.box_size[1] / 5
+                    self.imgbox.centery = tmp
+
 
                     
         elif self.attacking_animation.clock.Return == 8:

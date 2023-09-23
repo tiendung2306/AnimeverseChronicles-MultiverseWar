@@ -11,8 +11,8 @@ from common_effect import *
 
 
 wizard1 = analyzed_img("GameplayAssets\\wizard\\wizard(1).png", 170 , 56 , 68 , 179)
-wizard2 = analyzed_img("GameplayAssets\\wizard\\wizard(2).png", 187 , 83 , 51 , 157)
-wizard3 = analyzed_img("GameplayAssets\\wizard\\wizard(3).png", 191 , 91 , 51 , 154)
+wizard2 = analyzed_img("GameplayAssets\\wizard\\wizard(2).png", 170 , 56 , 68 , 179)
+wizard3 = analyzed_img("GameplayAssets\\wizard\\wizard(3).png", 170 , 56 , 68 , 179)
 wizard4 = analyzed_img("GameplayAssets\\wizard\\wizard(4).png", 175 , 96 , 53 , 127)
 wizard5 = analyzed_img("GameplayAssets\\wizard\\wizard(5).png", 157 , 98 , 91 , 143)
 wizard6 = analyzed_img("GameplayAssets\\wizard\\wizard(6).png", 137 , 74 , 59 , 161)
@@ -38,7 +38,7 @@ wizard25 = analyzed_img("GameplayAssets\\wizard\\wizard(25).png", 163 , 59 , 70 
 wizard26 = analyzed_img("GameplayAssets\\wizard\\wizard(26).png", 141 , 64 , 76 , 150)
 wizard27 = analyzed_img("GameplayAssets\\wizard\\wizard(27).png", 132 , 87 , 75 , 155)
 wizard28 = analyzed_img("GameplayAssets\\wizard\\wizard(28).png", 149 , 84 , 73 , 158)
-wizard29 = analyzed_img("GameplayAssets\\wizard\\wizard(29).png", 149 , 84 , 73 , 158)
+wizard29 = analyzed_img("GameplayAssets\\wizard\\wizard(29).png", 170 , 56 , 68 , 179)
 wizard30 = analyzed_img("GameplayAssets\\wizard\\wizard(30).png", 149 , 84 , 73 , 158)
 wizard31 = analyzed_img("GameplayAssets\\wizard\\wizard(31).png", 149 , 84 , 73 , 158)
 wizard32 = analyzed_img("GameplayAssets\\wizard\\wizard(32).png", 149 , 84 , 73 , 158)
@@ -301,7 +301,7 @@ class wizardclass():
                         if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 2 + (self.box.width + object.box.width) / 2:
                             if (object.box.centerx - self.box.centerx) * self.side > 0:
                                 if same_line_checker(self, object):
-                                    if not (self == object):
+                                    if (not (self == object)) and (self.index > object.index):
                                         self.status = 2
                                         flag = True
                                         break
