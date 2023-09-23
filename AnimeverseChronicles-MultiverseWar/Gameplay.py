@@ -27,23 +27,23 @@ class gameplay():
         self.spawn_queue2 = []
         self.rand = Random()
 
-        path_num = (self.rand.get_truly_random_seed_through_os()) % 5  + 1
-        # print(path_num)
+        self.path_num = (self.rand.get_truly_random_seed_through_os()) % 5  + 1
+        # print(self.path_num)
         # self.fake_bg_original = pygame.image.load('GameplayAssets\\bg1.png')
-        self.bg_original = pygame.image.load('GameplayAssets\\bg({}).jpg'.format(path_num))
-        self.path_original = pygame.image.load('GameplayAssets\\path' + str(path_num) + '.png')
+        self.bg_original = pygame.image.load('GameplayAssets\\bg({}).jpg'.format(self.path_num))
+        self.path_original = pygame.image.load('GameplayAssets\\path' + str(self.path_num) + '.png')
         self.board_original = pygame.image.load('GameplayAssets\\board.png')
         self.settings_button_original = pygame.image.load('GameplayAssets\\settings_button.png')
         self.play_button_original = pygame.image.load('GameplayAssets\\play_button.png')
         self.pause_button_original = pygame.image.load('GameplayAssets\\pause_button.png')
         
         self.character_cost = {
-            tankerclass : 20,
-            sword_manclass : 30,
-            archerclass : 40,
-            wizardclass : 50,
-            gokuclass : 400,
-            narutoclass : 400
+            tankerclass : [20, 30, 45, 70, 100],
+            sword_manclass : [30, 50, 70, 90, 120],
+            archerclass : [40, 65, 90, 110, 150],
+            wizardclass : [50, 70, 100, 135, 170],
+            gokuclass : [350, 400, 500],
+            narutoclass : [350, 550]
         }
 
         self.character_slot_idx = {
@@ -75,7 +75,7 @@ class gameplay():
             self.play_pause_button = (screen.screen.get_rect().width - screen.screen.get_rect().width // 32, 10)
 
 
-        self.gold_per_sec = 5
+        self.gold_per_sec = 100
         #level
         self.islevel_up1 = False
         self.islevel_up2 = False
@@ -142,7 +142,11 @@ class gameplay():
         if self.play_mode == 1:
             self.AI.update()
 
-
+    def get_character_cost(self, idx, side): #idx tinh tu 0
+        if side == 1:
+            return self.character_cost[self.character_slot_idx[idx]][self.character_level1[idx] - 1]
+        else:
+            return self.character_cost[self.character_slot_idx[idx]][self.character_level2[idx] - 1]
 
     def character_level(self, side, index):
         if side == 1:
@@ -230,6 +234,8 @@ class gameplay():
             if self.Pause_Pannel.check_click(mouse) == self.Pause_Pannel.buttons[2]: #an vao nut back to menu
                 return 'Back'
 
+    def on_hover(self, mouse):
+        self.gameplay_ui.on_hover(mouse)
 
     def check_press(self, event):
         if event.key == pygame.K_ESCAPE:

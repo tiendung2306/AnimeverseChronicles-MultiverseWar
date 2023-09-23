@@ -73,19 +73,23 @@ class button():
             screen.screen.blit(self.key_icon, (pos[0] + self.button_image_2.get_rect().width - 2*self.button_image_2.get_rect().width / 5.0, screen.screen.get_rect().height / 190))
 
     def can_spawn(self, side):
+        val_list = list(self.gameplay.character_slot_idx.values())
+        idx = val_list.index(self.character_type)
         if side == 1:
-            if self.gameplay.curr_gold_1 >= self.gameplay.character_cost[self.character_type]:
+            if self.gameplay.curr_gold_1 >= self.gameplay.character_cost[self.character_type][self.gameplay.character_level1[idx] - 1]:
                 return True
         else:
-            if self.gameplay.curr_gold_2 >= self.gameplay.character_cost[self.character_type]:
+            if self.gameplay.curr_gold_2 >= self.gameplay.character_cost[self.character_type][self.gameplay.character_level2[idx] - 1]:
                 return True
         return False
 
     def spend_gold(self, side):
+        val_list = list(self.gameplay.character_slot_idx.values())
+        idx = val_list.index(self.character_type)
         if side == 1:
-            self.gameplay.gold_outcome_1 += self.gameplay.character_cost[self.character_type]
+            self.gameplay.gold_outcome_1 += self.gameplay.character_cost[self.character_type][self.gameplay.character_level1[idx] - 1]
         else:
-            self.gameplay.gold_outcome_2 += self.gameplay.character_cost[self.character_type]
+            self.gameplay.gold_outcome_2 += self.gameplay.character_cost[self.character_type][self.gameplay.character_level2[idx] - 1]
 
     def spawn(self, side):
         if side == 1:
@@ -101,6 +105,8 @@ class spawn_process():
         self.size = (screen.screen.get_rect().width / 8.7, screen.screen.get_rect().height / 130)
         self.position2 = (screen.screen.get_rect().width - screen.screen.get_rect().width / 550 - self.size[0], screen.screen.get_rect().width - screen.screen.get_rect().width / 7 / 2.4 - self.size[1])
         self.color = Black
+        if self.gameplay.path_num <= 2:
+            self.color = White
 
         self.is_spawn = False
         self.start_spawn_time = 0.0
@@ -172,9 +178,11 @@ class lvl_up_button():
         # self.button_image_2 = pygame.transform.flip(self.button_image_2, True, False)
 
         self.level_font = pygame.font.Font('Fonts\\Minecraft.ttf', 14)
-
-        self.level1 = self.level_font.render('Lv: ' + str(self.gameplay.curr_level1), True, Black)
-        self.level2 = self.level_font.render('Lv: ' + str(self.gameplay.curr_level2), True, Black)
+        self.text_color = Black
+        if self.gameplay.path_num <= 2:
+            self.text_color = White
+        self.level1 = self.level_font.render('Lv: ' + str(self.gameplay.curr_level1), True, self.text_color)
+        self.level2 = self.level_font.render('Lv: ' + str(self.gameplay.curr_level2), True, self.text_color)
         
     def load_image(self):
         self.button_image_1 = self.button_image_original.copy()
@@ -207,13 +215,22 @@ class lvl_up_button():
     def level_up2(self):
         if self.side == 2 and self.gameplay.play_mode == 2 and self.gameplay.islevel_up2 == False:
             self.gameplay.level_up(self.side)
-            self.level2 = self.level_font.render('Lv: ' + str(self.gameplay.curr_level2), True, Black)
+            self.level2 = self.level_font.render('Lv: ' + str(self.gameplay.curr_level2), True, self.text_color)
+
+    def on_hover(self, mouse):
+        if self.side == 1:
+            if self.button_image_1_rect.left <= mouse[0] <= self.button_image_1_rect.right and self.button_image_1_rect.top <= mouse[1] <= self.button_image_1_rect.bottom:
+                return True
+        if self.side == 2 and self.gameplay.play_mode == 2:
+            if self.button_image_2_rect.left <= mouse[0] <= self.button_image_2_rect.right and self.button_image_2_rect.top <= mouse[1] <= self.button_image_2_rect.bottom:
+                return True
+        return False
 
     def check_click(self, mouse):
         if self.side == 1:
             if self.button_image_1_rect.left <= mouse[0] <= self.button_image_1_rect.right and self.button_image_1_rect.top <= mouse[1] <= self.button_image_1_rect.bottom:
                 self.gameplay.level_up(self.side)
-                self.level1 = self.level_font.render('Lv: ' + str(self.gameplay.curr_level1), True, Black)
+                self.level1 = self.level_font.render('Lv: ' + str(self.gameplay.curr_level1), True, self.text_color)
         if self.side == 2 and self.gameplay.play_mode == 2:
             if self.button_image_2_rect.left <= mouse[0] <= self.button_image_2_rect.right and self.button_image_2_rect.top <= mouse[1] <= self.button_image_2_rect.bottom:
                 self.level_up2()
@@ -236,6 +253,8 @@ class gameplay_ui():
         self.lvl_up_button2 = lvl_up_button(self.gameplay, 2)
 
         self.level_font = pygame.font.Font('Fonts\\Minecraft.ttf', int(screen.screen.get_rect().width / 140))
+
+        self.text_beside_mouse_font = pygame.font.Font('Fonts\\joystix_monospace.otf', 14)
 
         self.add_button()
         self.load_image()
@@ -391,6 +410,31 @@ class gameplay_ui():
                 self.button_rect_2[i].left = prev_pos_width
                 self.button_rect_2[i].top = screen.screen.get_rect().height / 300
                 prev_pos_width = prev_pos_width - self.button_border.get_rect().width - screen.screen.get_rect().width / 250
+
+    def display_text_beside_mouse(self, text, mouse):
+        text_surface = self.text_beside_mouse_font.render(text, True, Yellow)
+        screen.screen.blit(text_surface, (mouse[0] + screen.screen.get_rect().width / 100, mouse[1] + screen.screen.get_rect().width / 100))
+        # print(text)
+
+    def on_hover(self, mouse):
+        if len(self.character_spawn_buttons) != len(self.button_rect_1) :
+            return
+        if self.gameplay.play_mode == 2 and len(self.character_spawn_buttons) != len(self.button_rect_2) :
+            return
+        for i in range(0, len(self.character_spawn_buttons)):
+            if self.button_rect_1[i].left <= mouse[0] <= self.button_rect_1[i].right and self.button_rect_1[i].top <= mouse[1] <= self.button_rect_1[i].bottom:
+                if self.gameplay.islevel_up1 == False:
+                    self.display_text_beside_mouse(str(self.gameplay.get_character_cost(i, 1)), mouse)
+        if self.gameplay.play_mode == 2:
+            for i in range(0, len(self.character_spawn_buttons)):
+                if self.button_rect_2[i].left <= mouse[0] <= self.button_rect_2[i].right and self.button_rect_2[i].top <= mouse[1] <= self.button_rect_2[i].bottom:
+                    if self.gameplay.islevel_up2 == False:
+                        self.display_text_beside_mouse(str(self.gameplay.get_character_cost(i, 2)), mouse)
+
+        if self.lvl_up_button1.on_hover(mouse) == True:
+            self.display_text_beside_mouse(str(self.gameplay.level_up_cost[self.gameplay.curr_level1 - 1]), mouse)
+        if self.lvl_up_button2.on_hover(mouse) == True:
+            self.display_text_beside_mouse(str(self.gameplay.level_up_cost[self.gameplay.curr_level2 - 1]), mouse)
 
 class spawning():
     def __init__(self, side, gameplay):

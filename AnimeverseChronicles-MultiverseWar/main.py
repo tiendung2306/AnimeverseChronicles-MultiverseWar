@@ -222,8 +222,11 @@ class main():
                     thisGameplay.check_press(event)
                 if event.type == pygame.USEREVENT:
                     thisGameplay.time += 0.0104
+
                 
             thisGameplay.draw_gameplay_ui()
+
+            thisGameplay.on_hover(self.mouse)
             
             thisGameplay.object_operation()
 

@@ -17,14 +17,14 @@ class PvC_mode():
         return self.character_control[index]
 
     def spawn_state(self, idx):
-        if self.gameplay.curr_gold_2 >= self.gameplay.character_cost[self.gameplay.character_slot_idx[idx]] and len(self.spawn_queue) < 3:
+        if self.gameplay.curr_gold_2 >= self.gameplay.get_character_cost(idx, 2) and len(self.spawn_queue) < 3:
             return True
         return False
     
     def insert_in_spawn_queue(self, idx):
         if len(self.spawn_queue) < 3:
             self.spawn_queue.append(idx)
-            self.gameplay.gold_outcome_2 += self.gameplay.character_cost[self.gameplay.character_slot_idx[idx]]
+            self.gameplay.gold_outcome_2 += self.gameplay.get_character_cost(idx, 2)
 
     def update(self):
         self.character_control = []
