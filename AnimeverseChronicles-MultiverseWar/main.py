@@ -6,6 +6,7 @@ from MainMenu import *
 from settings import *
 from screen import *
 from tutorials import *
+from fps_display import *
 
 from collide_checker import *
 class main():
@@ -13,6 +14,8 @@ class main():
         os.environ['SDL_VIDEO_CENTERED'] = '1'
         pygame.init()
         pygame.display.set_caption('AnimeverseChronicles-MultiverseWar')
+
+        self.fps = FPS()
 
         self.cur_gameplay_mode = -1
 
@@ -234,6 +237,9 @@ class main():
                 thisGameplay.draw_gameover_panel()
             elif thisGameplay.isPlay == False:
                 thisGameplay.draw_pause_pannel()
+
+            self.fps.render(screen.screen)
+            self.fps.clock.tick()
             
             pygame.display.update()
             if Button == 'Back':
