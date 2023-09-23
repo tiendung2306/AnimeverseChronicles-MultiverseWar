@@ -16,7 +16,12 @@ def copy( rect1, rect2 ):
 
 def spawn(object,side,position,gameplay):
     tmp = object(side, gameplay)
-    tmp.index = len(gameplay.side(tmp.side)) 
+    if side == 1:
+        tmp.index = gameplay.side1_heros
+        gameplay.side1_heros += 1
+    else:
+        tmp.index = gameplay.side2_heros
+        gameplay.side2_heros += 1
     gameplay.side(tmp.side).append(tmp)
     tmp2 = pygame.Rect(position * gameplay.box_size[0], gameplay.path_height - gameplay.box_size[1], gameplay.box_size[0], gameplay.box_size[1])
     get_spawn_display(tmp, tmp2)
