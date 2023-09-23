@@ -665,8 +665,8 @@ class narutoclass():
         self.attack_damage_orginal = self.attack_damage
         self.health_max = health[self.level - 1]
         self.health = self.health_max 
-        self.mana_max =100.0
-        self.mana = 90.0
+        self.mana_max = 100.0
+        self.mana = 0.0
 
         self.effect_list = []
         self.clone_list = []

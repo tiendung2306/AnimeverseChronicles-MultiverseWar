@@ -132,15 +132,6 @@ class gameplay():
         self.nexus1 = Nexusclass(1, self)
         self.nexus2 = Nexusclass(2, self)
 
-        spawn(archerclass, 1 ,10, self)
-        spawn(sword_manclass, 1 ,10, self)
-        spawn(tankerclass, 1 ,10, self)
-        spawn(wizardclass, 1 ,10, self)
-
-        spawn(narutoclass, 2 ,16, self)
-
-
-
         self.selected_object = None
         self.AI = PvC_mode(self)
 
