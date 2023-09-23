@@ -136,13 +136,13 @@ class knock_back():
             tmp = (self.speed * screen.screen.get_rect().width / 100) * (self.object.gameplay.curr_time - self.object.gameplay.pre_curr_time)  * self.object.side
             if self.object.box.centerx < self.object.gameplay.nexus2.box.left - abs(tmp) and self.object.box.centerx > self.object.gameplay.nexus1.box.right + abs(tmp):
                 self.object.imgbox.centerx -= tmp
-            else:
-                tmp = self.object.imgbox.centerx - self.object.box.centerx
-                if self.object.side == 1:
-                    self.object.box.centerx = self.object.gameplay.nexus1.box.right 
-                elif  self.object.side == -1:
-                    self.object.box.centerx = self.object.gameplay.nexus2.box.left 
-                self.object.imgbox.centerx = self.object.box.centerx + tmp
+            # else:
+            #     tmp = self.object.imgbox.centerx - self.object.box.centerx
+            #     if self.object.side == 1:
+            #         self.object.box.centerx = self.object.gameplay.nexus1.box.right 
+            #     elif  self.object.side == -1:
+            #         self.object.box.centerx = self.object.gameplay.nexus2.box.left 
+            #     self.object.imgbox.centerx = self.object.box.centerx + tmp
                     
             for object in self.object.gameplay.side(self.object.side):
                 if collide_checker(self.object,object):

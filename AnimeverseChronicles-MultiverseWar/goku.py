@@ -83,7 +83,7 @@ class kame_class():
         self.is_rotation = rotation
 
         self.status = True
-        self.damage = 50.0
+        self.damage = 10.0
         self.damaged_list = []
 
         self.switch = N_time_switch(1)
@@ -331,7 +331,7 @@ class gokuclass():
                         if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 2 + (self.box.width + object.box.width) / 2 :
                             if (object.box.centerx - self.box.centerx) * self.side > 0:
                                 if same_line_checker(self, object):
-                                    if not (self == object):
+                                    if (not (self == object)) and (self.index > object.index):
                                         self.status = 2
                                         flag = True
                                         break         

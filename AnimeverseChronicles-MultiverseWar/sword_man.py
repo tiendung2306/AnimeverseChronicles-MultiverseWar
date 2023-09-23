@@ -73,7 +73,7 @@ class sword_manclass():
             self.level = self.gameplay.character_level2[1]
         
         self.speed = 5.0 # 5/100 map per second 
-        self.attack_scope = 1 * self.gameplay.box_size[0] # 4/15 map width
+        self.attack_scope = 2.5 * self.gameplay.box_size[0] # 4/15 map width
         self.attack_speed = 1/3 # attack(s) pers second
         self.attack_damage = attack_damage[self.level - 1]
         self.attack_damage_orginal = self.attack_damage
@@ -234,7 +234,7 @@ class sword_manclass():
                         if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 2 + (self.box.width + object.box.width) / 2 :
                             if (object.box.centerx - self.box.centerx) * self.side > 0:
                                 if same_line_checker(self, object):
-                                    if not (self == object):
+                                    if (not (self == object)) and (self.index > object.index):
                                         self.status = 2
                                         flag = True
                                         break         

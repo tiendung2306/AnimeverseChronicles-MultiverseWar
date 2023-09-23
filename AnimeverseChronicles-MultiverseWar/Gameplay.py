@@ -132,6 +132,14 @@ class gameplay():
         self.nexus1 = Nexusclass(1, self)
         self.nexus2 = Nexusclass(2, self)
 
+        spawn(archerclass, 1 ,10, self)
+        spawn(sword_manclass, 1 ,10, self)
+        spawn(tankerclass, 1 ,10, self)
+        spawn(wizardclass, 1 ,10, self)
+
+        spawn(narutoclass, 2 ,16, self)
+
+
 
         self.selected_object = None
         self.AI = PvC_mode(self)
@@ -523,11 +531,11 @@ class gameplay():
             screen.screen.blit(img, board.topleft, img_area)
 
             def class_display(class_name):
-                tmp = pygame.font.Font('Fonts\\AznKnucklesTrial-z85pa.otf', int(31 * scale)).render(class_name,True,White) #co chu phair ngi=uyennnnnn
+                tmp = pygame.font.Font('Fonts\\AznKnucklesTrial-z85pa.otf', int(31 * scale)).render(class_name,True,White) 
                 screen.screen.blit(tmp, ((board.left + character_box.left) / 2.0 - tmp.get_width() / 2.0, character_box.top))
 
             def text_display(text, font_size, topleft, color):
-                tmp = pygame.font.Font('Fonts\\AznKnucklesTrial-z85pa.otf', font_size).render(text,True,color) #co chu phair ngi=uyennnnnn
+                tmp = pygame.font.Font('Fonts\\AznKnucklesTrial-z85pa.otf', font_size).render(text,True,color)
                 screen.screen.blit(tmp, topleft)
             def bar_display(data1,data2, center, color):
                 hcn1 = pygame.Rect(0,0,167 * scale,11 * scale)

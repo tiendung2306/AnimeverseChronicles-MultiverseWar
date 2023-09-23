@@ -12,18 +12,18 @@ from color import *
 a = b = c = d = 0
 Flag = True
 flag2 = False
-counter = 57
-img = pygame.image.load("GameplayAssets\\goku\\goku({}).png".format(counter))
+counter = 89
+img = pygame.image.load("GameplayAssets\\naruto\\shuriken.png".format(counter))
 WIN = pygame.display.set_mode(img.get_size())
 while Flag:
     WIN.fill(Black)
     WIN.blit(img,(0,0))
     for event in pygame.event.get():
         if event.type == KEYDOWN:
-            print("goku({}).png".format(counter),"= analyzed_img(","GameplayAssets\\goku\\goku({}).png".format(counter),",",a,",",b,",",c - a,",",d - b,")")
+            print("shuriken".format(counter),"= analyzed_img(","GameplayAssets\\naruto\\shuriken({}).png".format(counter),",",a,",",b,",",c - a,",",d - b,")")
             
             counter += 1
-            img = pygame.image.load("GameplayAssets\\goku\\goku({}).png".format(counter))
+            img = pygame.image.load("GameplayAssets\\naruto\\naruto({}).png".format(counter))
             if event.key == 9:
                 Flag = False
             # if event.key == 32 :
@@ -45,8 +45,7 @@ while Flag:
     pygame.draw.rect(WIN,Yellow,pygame.Rect(a,b,c - a,d - b),1)
     pygame.display.update()
 text = ""
-for i in range(23,26):
-    for j in range(1,7):
-        text_i = "goku{}, ".format(i)
+for i in range(89,95):
+        text_i = "naruto{}, ".format(i)
         text = text + text_i
 print(text)

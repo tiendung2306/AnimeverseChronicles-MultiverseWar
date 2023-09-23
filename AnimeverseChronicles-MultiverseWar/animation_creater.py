@@ -27,39 +27,10 @@ import time
 
 WIN = pygame.display.set_mode((1000,1000))
 img_iib = []
-for i in range(9,15):
-    # if i % 6 == 5:
-        img = pygame.image.load("GameplayAssets\\goku\\goku({}).png".format(i))
+for i in range(20,23):
+        img = pygame.image.load("GameplayAssets\\naruto\\naruto({}).png".format(i))
         img_iib.append(img)
-for i in range(54,58):
-    # if i % 6 == 5:
-        img = pygame.image.load("GameplayAssets\\goku\\goku({}).png".format(i))
-        img_iib.append(img)
-for j in range(1,15):
-        i = 57
-        img = pygame.image.load("GameplayAssets\\goku\\goku({}).png".format(i))
-        img_iib.append(img)
-for i in range(58,60):
-        img = pygame.image.load("GameplayAssets\\goku\\goku({}).png".format(i))
-        img_iib.append(img)
-i = 18
-img = pygame.image.load("GameplayAssets\\goku\\goku({}).png".format(i))
-img_iib.append(img)
-for i in range(16,21):
-    # if i % 6 == 5:
-        img = pygame.image.load("GameplayAssets\\goku\\goku({}).png".format(i))
-        img_iib.append(img)
-for i in range(21,23):
-    for j in range(1,4):
-        img = pygame.image.load("GameplayAssets\\goku\\goku({}).png".format(i))
-        img_iib.append(img)
-for i in range(23,26):
-    for j in range(1,7):
-        img = pygame.image.load("GameplayAssets\\goku\\goku({}).png".format(i))
-        img_iib.append(img)
-i = 18
-img = pygame.image.load("GameplayAssets\\goku\\goku({}).png".format(i))
-img_iib.append(img)
+
 
 flag = 0
 time_gap = 100
