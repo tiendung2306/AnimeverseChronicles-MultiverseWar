@@ -37,7 +37,7 @@ class PvC_mode():
             self.character_control.append(x)
 
         # print(self.character_control)
-        if len(self.character_control) == 0 or (len(self.character_control) == 1 and self.character_control[0] != 0):
+        if len(self.character_control) == 0 or (len(self.character_control) == 1 and self.character_control[-1] != 0):
             if self.spawn_state(0):
                 self.insert_in_spawn_queue(0)
                 self.character_control.append(0)
@@ -49,12 +49,34 @@ class PvC_mode():
             if self.spawn_state(3):
                 self.insert_in_spawn_queue(3)
                 self.character_control.append(3)
-        elif len(self.character_control) <= 6:
+        elif len(self.character_control) <= 5:
             if len(self.gameplay.side2) + len(self.spawn_queue) - len(self.gameplay.side1) < 2 and self.spawn_state(5):
                 rand_num = self.get_random_number() % 2 + 4
                 if self.spawn_state(rand_num):
                     self.insert_in_spawn_queue(rand_num)
                     self.character_control.append(rand_num)
+            else:
+                #up level
+                if self.gameplay.curr_gold_2 >= self.gameplay.level_up_cost[self.gameplay.curr_level2 - 1]:
+                    self.gameplay.level_up(2)
+                    if self.gameplay.character_level_up(3, 2) == False:
+                        if self.gameplay.character_level_up(1, 2) == False:
+                            if self.gameplay.character_level_up(4, 2) == False:
+                                if self.gameplay.character_level_up(6, 2) == False:
+                                    if self.gameplay.character_level_up(5, 2) == False:
+                                        if self.gameplay.character_level_up(2, 2) == False:
+                                            pass
+        else:
+            #up level
+            if self.gameplay.curr_gold_2 >= self.gameplay.level_up_cost[self.gameplay.curr_level2 - 1]:
+                self.gameplay.level_up(2)
+                if self.gameplay.character_level_up(3, 2) == False:
+                    if self.gameplay.character_level_up(1, 2) == False:
+                        if self.gameplay.character_level_up(4, 2) == False:
+                            if self.gameplay.character_level_up(6, 2) == False:
+                                if self.gameplay.character_level_up(5, 2) == False:
+                                    if self.gameplay.character_level_up(2, 2) == False:
+                                        pass
 
 
         if self.start_spawn_time != -1 and self.gameplay.curr_time - self.start_spawn_time >= self.gameplay.spawn_time:

@@ -42,8 +42,8 @@ class gameplay():
             sword_manclass : 30,
             archerclass : 40,
             wizardclass : 50,
-            gokuclass : 0,
-            narutoclass : 0
+            gokuclass : 400,
+            narutoclass : 400
         }
 
         self.character_slot_idx = {
