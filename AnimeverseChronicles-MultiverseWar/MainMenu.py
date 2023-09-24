@@ -13,7 +13,7 @@ class mainmenu():
         self.title_color = Dark_Yellow
         self.play_mode_state = 0
 
-        self.main_menu_bg_original = pygame.image.load('GameplayAssets\\mainmenubg.png')
+        self.main_menu_bg_original = pygame.image.load('GameplayAssets\\mainmenubg.jpg')
 
         self.load_all_image()
 

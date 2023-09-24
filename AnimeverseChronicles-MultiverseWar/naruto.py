@@ -8,9 +8,7 @@ from list_function import *
 from animation_player import *
 from screen import *
 from common_effect import *
-
-attack_damage = [10.0, 20.0]
-health = [150.0, 170 ]
+from character_properties import *
 
 
 naruto1 = analyzed_img( "GameplayAssets\\naruto\\naruto(1).png " , 296 , 346 , 74 , 176 )
@@ -129,6 +127,8 @@ breaking_ground3 = analyzed_img("GameplayAssets\\naruto\\breaking_ground(3).png"
 
 shuriken_explosion = analyzed_img("GameplayAssets\\naruto\\shuriken_explosion.png ", 195 , 307 , 184 , 184 )
 
+health = na_health
+attack_damage = na_attack_damage
 
 class getting_hit_object():
     def __init__(self, object):
@@ -150,7 +150,7 @@ class rasenshuriken():
         self.speed = 15.0 # 5/100 map per second 
         self.x_limit = (self.naruto.box.centerx + (screen.screen.get_width() / 4.0) * self.side ) / screen.screen.get_width()
         self.lasting_time = ( self.x_limit * screen.screen.get_width() - self.box.centerx ) * self.side / (self.speed * screen.screen.get_rect().width / 100) 
-        self.damage = 3.0
+        self.damage = 5.0
         self.damaged_list = []
         self.effectted_list = []
 
@@ -200,8 +200,7 @@ class rasenshuriken():
             if collide_checker(self, enemy_object):
                 if not list_find_special(self.damaged_list, enemy_object) :
                     self.damaged_list.append(getting_hit_object(enemy_object))
-                    enemy_object.get_hit = True
-                    enemy_object.get_damage = self.damage
+                    enemy_object.health -= self.damage
 
 
         for damaged_object in self.damaged_list:
@@ -660,13 +659,13 @@ class narutoclass():
         self.speed = 5.0 # 5/100 map per second 
         self.attack_scope = 1 * self.gameplay.box_size[0] # 4/15 map width
         self.attack_scope2 = 5 * self.gameplay.box_size[0] # 4/15 map width
-        self.attack_speed = 1/3 # attack(s) pers second
+        self.attack_speed = 1/1 # attack(s) pers second
         self.attack_damage = attack_damage[self.level - 1]
         self.attack_damage_orginal = self.attack_damage
         self.health_max = health[self.level - 1]
         self.health = self.health_max 
         self.mana_max = 100.0
-        self.mana = 0.0
+        self.mana = 50.0
 
         self.effect_list = []
         self.clone_list = []
@@ -725,13 +724,11 @@ class narutoclass():
         self.special_skill_countdowner = timing_clock(5.0 , self.gameplay)
 
     def status_update(self):
-
-        if self.side == 1 :
-            self.level = self.gameplay.character_level1[5]
-        elif self.side == -1:
-            self.level = self.gameplay.character_level2[5]
-        self.attack_damage = attack_damage[self.level - 1]
-        self.health_max = health[self.level - 1]
+        if not self.special_status:
+            if not self.level == self.gameplay.character_level(self.side, 5):
+                self.level = self.gameplay.character_level(self.side, 5)
+                self.attack_damage = attack_damage[self.level - 1]
+                self.health_max = health[self.level - 1]
     
         self.collide = None 
         self.pre_status = self.status
@@ -983,7 +980,8 @@ class narutoclass():
                         if abs(object.box.centerx  - self.box.centerx ) <= self.attack_scope + (self.box.width + object.box.width) / 2 :
                             if (object.box.centerx - self.box.centerx) * self.side >= 0:
                                 if same_line_checker(self, object):
-                                    self.mana += 10 
+                                    if not self.special_status:
+                                        self.mana += 30
                                     object.get_hit = True
                                     object.get_damage = self.attack_damage
             elif self.attacking_animation.clock.Return == 15:
@@ -992,7 +990,8 @@ class narutoclass():
                         if abs(object.box.centerx  - self.box.centerx ) <= self.attack_scope + (self.box.width + object.box.width) / 2 :
                             if (object.box.centerx - self.box.centerx) * self.side >= 0:
                                 if same_line_checker(self, object):
-                                    self.mana += 10 
+                                    if not self.special_status:
+                                        self.mana += 30                                    
                                     add_effect(object, flying(object, 5.0))
                                     object.get_hit = True
                                     object.get_damage = self.attack_damage
@@ -1052,7 +1051,7 @@ class narutoclass():
 
             elif self.special_skill_animation2.clock.Return > 4 : 
                 if self.switcher_list[self.clock.Return - 1].operation():
-                    self.kagebusino_jutsu(self.clock.Return * self.side)
+                    self.kagebusino_jutsu(self.clock.Return * self.side  * 2)
 
 
 
@@ -1069,7 +1068,7 @@ class narutoclass():
 
             elif self.special_skill_animation.clock.Return > 4 : 
                 if self.switcher_list[self.clock.Return - 1].operation():
-                    self.kagebusino_jutsu(self.clock.Return * self.side)
+                    self.kagebusino_jutsu(self.clock.Return * self.side  * 2)
 
             if self.special_skill_animation.clock.Return == 65 :
                 self.switcher2.reset()
@@ -1104,6 +1103,8 @@ class narutoclass():
             switch.reset()
         self.special_skill_countdowner.reset()
 
+        for clone in self.clone_list:
+            clone.alive = False
 
 
     def operation(self):
@@ -1136,8 +1137,7 @@ class narutoclass():
                 if self.special_skill_countdowner.Return == False:
                     self.special_status = False
                     self.special_skill_reset()
-                    for clone in self.clone_list:
-                        clone.alive = False
+
 
             if self.get_hit :
                 self.Geting_hit()
@@ -1146,6 +1146,11 @@ class narutoclass():
                 self.alive = False
                 for clone in self.clone_list:
                     clone.alive = False
+                if self.side == 1:
+                    self.gameplay.gold_income_1 += self.gameplay.character_cost[self.__class__] / 2
+                else:
+                    self.gameplay.gold_income_2 += self.gameplay.character_cost[self.__class__] / 2
+
             
             for shuriken in self.shuriken_list:
                 shuriken.operation()

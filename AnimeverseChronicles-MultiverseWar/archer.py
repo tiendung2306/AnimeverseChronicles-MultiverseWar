@@ -7,6 +7,7 @@ from switch import *
 from list_function import *
 from animation_player import *
 from screen import *
+from character_properties import *
 
 
 archer1 = analyzed_img("GameplayAssets\\archer\\archer(1).png", 166 , 285 , 113 , 212)
@@ -48,9 +49,9 @@ archer40 = analyzed_img("GameplayAssets\\archer\\archer(40).png", 199 , 298 , 69
 arrow = analyzed_img("GameplayAssets\\archer\\arrow.png", 279 , 332 , 132 , 20)
 special_arrow = analyzed_img("GameplayAssets\\archer\\special_arrow.png", 279 , 332 , 132 , 20)
 
-attack_damage = [20.0, 30.0 , 50.0, 70.0 , 100.0]
-attack_speed = [1 / 2.0, 1 / 1.75, 1 / 1.0, 1 / 1.0 , 1 / 1,0]
-health = [100.0, 120.0, 150.0, 170.0, 200.0]
+attack_damage = ac_attack_damage
+attack_speed = ac_attack_speed
+health = ac_health
 
 class arrowclass():
     def __init__(self,archer):
@@ -72,13 +73,15 @@ class arrowclass():
         self.damage = self.archer.attack_damage
         self.special = self.archer.special_status 
 
-        self.x_limit = self.archer.box.centerx + (self.archer.attack_scope * 1.5 + self.archer.box.width / 2) * self.side
         self.damaged_object = []
         if self.piercing :
+            self.x_limit = self.archer.box.centerx + (self.archer.attack_scope + self.gameplay.box_size[0] * 3 + self.archer.box.width / 2) * self.side
             if self.side == 1:
                 self.img = special_arrow
             elif self.side == -1:
                 self.img = reverse(special_arrow)
+        else:
+            self.x_limit = self.archer.box.centerx + (self.archer.attack_scope + self.gameplay.box_size[0] + self.archer.box.width / 2) * self.side
 
     def resize(self):
         a = float(screen.screen.get_width()) / self.gameplay.screen[0]
@@ -435,7 +438,8 @@ class archerclass():
     def special_skill(self):
         if self.switcher2.operation():
             self.piercing = True
-            self.attack_damage *= 2 
+            if self.level <= 2:
+                self.attack_damage *= 2 
             self.attack_scope = 7 * self.gameplay.box_size[0]
             self.flag = len(self.arrow_list)
 
@@ -453,6 +457,7 @@ class archerclass():
 
     def special_skill_reset(self):
         self.special_status = False
+        self.piercing = False
         self.switcher2.reset()
         self.switcher3.reset()
         self.attack_damage = self.attack_damage_orginal
@@ -491,6 +496,10 @@ class archerclass():
 
             if self.health <= 0:
                 self.alive = False
+                if self.side == 1:
+                    self.gameplay.gold_income_1 += self.gameplay.character_cost[self.__class__] / 2
+                else:
+                    self.gameplay.gold_income_2 += self.gameplay.character_cost[self.__class__] / 2
                 
 
             self.display()

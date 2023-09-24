@@ -8,6 +8,7 @@ from animation_player import *
 from screen import *
 from list_function import*
 from common_effect import*
+from character_properties import *
 
 
 tanker1 = analyzed_img("GameplayAssets\\tanker\\tanker(1).png", 229 , 60 , 85 , 222)
@@ -49,9 +50,9 @@ tanker36 = analyzed_img("GameplayAssets\\tanker\\tanker(36).png", 410 , 186 , 0 
 tanker37 = analyzed_img("GameplayAssets\\tanker\\tanker(37).png", 410 , 186 , 0 , 0)
 tanker38 = analyzed_img("GameplayAssets\\tanker\\tanker(38).png", 410 , 186 , 0 , 0)
 
-attack_damage = [10.0 , 20.0, 45.0 , 50.0,  70.0]
-health = [500.0, 600.0, 1200.0, 1500.0, 3000.0]
-damage_reduce = [40.0, 45.0, 70.0, 65.0, 90.0]
+attack_damage = tk_attack_damage
+health = tk_health
+damage_reduce = tk_damage_reduce
 
 class tankerclass():
     def __init__(self, side, gameplay):
@@ -121,11 +122,6 @@ class tankerclass():
             self.attack_damage = attack_damage[self.level - 1]
             self.health_max = health[self.level - 1]
             self.damage_reduce_special =  damage_reduce[self.level - 1]
-
-
-        self.attack_damage = attack_damage[self.level - 1]
-        self.health_max = health[self.level - 1]
-        self.damage_reduce_special =  damage_reduce[self.level - 1]
 
         self.pre_status = self.status
 
@@ -269,6 +265,8 @@ class tankerclass():
         if self.mana >= self.mana_max:
             self.mana = 0
             self.special_status = True
+            if self.level >= 3:
+                add_effect(self, iron_body(self, 3))
 
         if self.status > 0:
             if not self.pre_status == None:
@@ -346,7 +344,7 @@ class tankerclass():
     def special_skill(self):
         if self.switcher2.operation():
             self.skill_countdowner.start()
-            self.effect = shield(self, 10, damage_reduce[self.level - 1])
+            self.effect = shield(self, 6, damage_reduce[self.level - 1])
             add_effect(self,self.effect)
 
         if self.skill_countdowner.Return == False:
@@ -394,6 +392,10 @@ class tankerclass():
 
             if self.health <= 0:
                 self.alive = False
+                if self.side == 1:
+                    self.gameplay.gold_income_1 += self.gameplay.character_cost[self.__class__] / 2
+                else:
+                    self.gameplay.gold_income_2 += self.gameplay.character_cost[self.__class__] / 2
                 
 
             self.display()

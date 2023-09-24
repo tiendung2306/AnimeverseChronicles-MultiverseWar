@@ -8,6 +8,7 @@ from list_function import *
 from animation_player import *
 from screen import *
 from common_effect import *
+from character_properties import *
 
 
 wizard1 = analyzed_img("GameplayAssets\\wizard\\wizard(1).png", 170 , 56 , 68 , 179)
@@ -56,11 +57,11 @@ magic_ball7 = analyzed_img("GameplayAssets\\wizard\\magic_ball(7).png" , 294 , 8
 magic_ball8 = analyzed_img("GameplayAssets\\wizard\\magic_ball(8).png" , 339 , 94 , 62 , 72)
 magic_ball9 = analyzed_img("GameplayAssets\\wizard\\magic_ball(9).png" , 369 , 101 , 40 , 40)
    
-attack_damage = [10.0, 10.0 , 20.0, 25.0 , 40.0]
-health = [100.0, 120.0, 160.0, 180.0, 250.0]
-mana_per_att = [25, 30, 50, 50, 50]
-heal_per_skill = [40, 50, 80, 100, 200]
-level_effect = [1, 1, 3, 4, 6]
+attack_damage = wz_attack_damage
+health = wz_health
+mana_per_att = wz_mana_per_att
+heal_per_skill = wz_heal_per_skill
+level_effect = wz_level_effect
 
 class magic_ball_class():
     def __init__(self,wizard):
@@ -151,8 +152,8 @@ class wizardclass():
         self.attack_damage_orginal = self.attack_damage
         self.health_max = health[self.level - 1]
         self.health = self.health_max
-        self.mana_max =100.0
-        self.mana = 0.0
+        self.mana_max = 100.0
+        self.mana = 85.0
 
         self.magicbullet_list = []
         self.effect_list = []
@@ -398,7 +399,7 @@ class wizardclass():
                     else:
                         break
                 for object in self.effected_list:
-                    add_effect(object, dizzy(object, 5))
+                    add_effect(object, dizzy(object, 1))
                     add_effect(object, soul_sucking(object))                        
                     
 
@@ -452,6 +453,10 @@ class wizardclass():
 
             if self.health <= 0:
                 self.alive = False
+                if self.side == 1:
+                    self.gameplay.gold_income_1 += self.gameplay.character_cost[self.__class__] / 2
+                else:
+                    self.gameplay.gold_income_2 += self.gameplay.character_cost[self.__class__] / 2
                 
 
             self.display()
