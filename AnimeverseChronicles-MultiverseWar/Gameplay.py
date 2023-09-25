@@ -75,11 +75,11 @@ class gameplay():
             self.play_pause_button = (screen.screen.get_rect().width - screen.screen.get_rect().width // 32, 10)
 
 
-        self.gold_per_sec = 100
+        self.gold_per_sec = 5
         #level
         self.islevel_up1 = False
         self.islevel_up2 = False
-        self.level_up_cost = [200, 250, 280, 300, 340, 380, 420, 450, 500, 600, 700, 800, 850, 900, 1000, 1100, 1250, 1500, 1750, 2000]
+        self.level_up_cost = [200, 250, 280, 300, 320, 350, 380, 400, 450, 500, 550, 600, 700, 800, 900, 1000, 1150, 1250, 1350, 1500]
         self.curr_level1 = 1
         self.curr_level2 = 1
         self.character_level_max = [5, 5, 5, 5, 3, 2]
