@@ -99,7 +99,7 @@ class soul_sucking():
         self.clock.start()
         if self.switch.operation():
             self.object.get_hit = True
-            self.object.get_damage = self.object.health * 20 / 100
+            self.object.get_damage = self.object.health * 5 / 100
         if self.clock.Return == True:
             self.animation.play()
         else:

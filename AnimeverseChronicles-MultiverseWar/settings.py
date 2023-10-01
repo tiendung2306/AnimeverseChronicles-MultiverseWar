@@ -8,7 +8,7 @@ from screen import *
 class settings():
     def __init__(self):
         self.buttons = ['Apply', 'Back']
-        self.settings_bg_original = pygame.image.load('GameplayAssets\\mainmenubg.png')
+        self.settings_bg_original = pygame.image.load('GameplayAssets\\mainmenubg.jpg')
         self.buttons_color = Navy
         self.load_all_image()
         self.load_all_text()

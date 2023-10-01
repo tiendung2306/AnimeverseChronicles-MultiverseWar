@@ -9,7 +9,8 @@ from switch import *
 from animation_player import *
 from common_effect import *
 from screen import *
-   
+from character_properties import *
+
 goku1 = analyzed_img("GameplayAssets\\goku\\goku(1).png ",139 , 90 , 110 , 226)
 goku2 = analyzed_img("GameplayAssets\\goku\\goku(2).png ",139 , 90 , 110 , 226)
 goku3 = analyzed_img("GameplayAssets\\goku\\goku(3).png ",139 , 90 , 110 , 226)
@@ -50,9 +51,9 @@ goku_to_kame = analyzed_img("GameplayAssets\\goku\\goku(23).png", 315 , 251 , 5 
 goku_to_kame2 = analyzed_img("GameplayAssets\\goku\\goku(57).png",  353 , 177 , 6 , 4)
 kame = pygame.image.load("GameplayAssets\\goku\\kame.png")
 
-attack_damage = [30.0, 35.0 , 40.0, 45.0 , 60.0,  65.0]
-health = [250.0, 250.0, 260.0, 260.0, 270.0, 270.0]
-
+attack_damage = gk_attack_damage
+health = gk_health
+kame_dame = gk_kame_dame
 
 class getting_hit_object():
     def __init__(self, object):
@@ -83,7 +84,7 @@ class kame_class():
         self.is_rotation = rotation
 
         self.status = True
-        self.damage = 10.0
+        self.damage = kame_dame[self.goku.level - 1]
         self.damaged_list = []
 
         self.switch = N_time_switch(1)
@@ -115,13 +116,11 @@ class kame_class():
 
 
     def collide_check(self):
-
         for enemy_object in self.gameplay.side( - self.side):
             if collide_check_special(self, enemy_object):
                 if not list_find_special(self.damaged_list, enemy_object):
                     self.damaged_list.append(getting_hit_object(enemy_object))
-                    enemy_object.get_hit = True
-                    enemy_object.get_damage = self.damage
+                    enemy_object.health -= self.damage
 
 
         for damaged_object in self.damaged_list:
@@ -161,7 +160,7 @@ class gokuclass():
         self.health_max = health[self.level - 1]
         self.health = self.health_max
         self.mana_max = 100.0
-        self.mana = 0.0
+        self.mana = 90.0
 
         self.effect_list = []
 
@@ -205,13 +204,10 @@ class gokuclass():
 
     def status_update(self):
         if not self.special_status:
-            if self.side == 1 :
-                self.level = self.gameplay.character_level1[4]
-            elif self.side == -1:
-                self.level = self.gameplay.character_level2[4]
-
-            self.attack_damage = attack_damage[self.level - 1]
-            self.health_max = health[self.level - 1]
+            if not self.level == self.gameplay.character_level(self.side, 4):
+                self.level = self.gameplay.character_level(self.side, 4)
+                self.attack_damage = attack_damage[self.level - 1]
+                self.health_max = health[self.level - 1]
 
         self.collide = None 
         self.pre_status = self.status
@@ -444,7 +440,7 @@ class gokuclass():
                                 if same_line_checker(self, object):
                                     if not object.__class__ == self.gameplay.nexusclass:
                                         self.target = object
-                                        add_effect(object, knock_back(object,self.special_skill_animation.clock.repeat_time * 3, 100))
+                                        add_effect(object, knock_back(object,self.special_skill_animation.clock.repeat_time * 3, 40))
                                         object.get_hit = True
                                         object.get_damage = self.attack_damage
                                         return
@@ -473,7 +469,7 @@ class gokuclass():
                                 if same_line_checker(self, object):
                                     if not object.__class__ == self.gameplay.nexusclass:
                                         self.target = object
-                                        add_effect(object, knock_back(object,self.special_skill_animation.clock.repeat_time * 3, 100))
+                                        add_effect(object, knock_back(object,self.special_skill_animation.clock.repeat_time * 3, 40))
                                         object.get_hit = True
                                         object.get_damage = self.attack_damage
                                         return
@@ -547,7 +543,7 @@ class gokuclass():
                 if self.switcher2.operation():
                     tmp = (self.box.centerx - self.imgbox.centerx, self.box.centery - self.imgbox.centery)
                     self.imgbox.centery -= 4.5 * self.gameplay.box_size[1]
-                    self.imgbox.centerx -=  3 * self.gameplay.box_size[0] * self.side
+                    self.imgbox.centerx -=  5.0 * self.gameplay.box_size[0] * self.side
                     self.box.center = (self.imgbox.centerx + tmp[0], self.imgbox.centery + tmp[1])
                     self.kame = kame_class(self, True, -45)
 
@@ -562,15 +558,22 @@ class gokuclass():
                 if self.switcher2.operation():
                     index = self.index
                     while True:
-                        if not self.gameplay.side(self.side)[index + 1] ==  None:
-                            object = self.gameplay.side(self.side)[index + 1]
-                            Rect = pygame.Rect(0,0, self.gameplay.box_size[0], self.gameplay.box_size[1])
-                            Rect.center = (object.box.centerx + (self.gameplay.box_size[0] / 2) * self.side ,  self.gameplay.path_height - self.gameplay.box_size[1] / 2)
-                            get_spawn_display(self, Rect)
-                            break
+                        if(( self.side == 1) and (index + 2 <= self.gameplay.side1_heros)) or (( self.side == -1) and (index + 2 <= self.gameplay.side2_heros)):
+                            if not self.gameplay.side(self.side)[index + 1] ==  None:
+                                object = self.gameplay.side(self.side)[index + 1]
+                                Rect = pygame.Rect(0,0, self.gameplay.box_size[0], self.gameplay.box_size[1])
+                                Rect.center = (object.box.centerx + (self.gameplay.box_size[0] / 2) * self.side ,  self.gameplay.path_height - self.gameplay.box_size[1] / 2)
+                                get_spawn_display(self, Rect)
+                                break
 
+                            else:
+                                index += 1
                         else:
-                            index += 1
+                                object = self.gameplay.side(self.side)[0]
+                                Rect = pygame.Rect(0,0, self.gameplay.box_size[0], self.gameplay.box_size[1])
+                                Rect.center = (object.box.centerx + (self.gameplay.box_size[0] / 2) * self.side ,  self.gameplay.path_height - self.gameplay.box_size[1] / 2)
+                                get_spawn_display(self, Rect)
+                                break
                             
         
         elif self.level == 3:    
@@ -585,7 +588,7 @@ class gokuclass():
                                 if same_line_checker(self, object):
                                     if not object.__class__ == self.gameplay.nexusclass:
                                         self.target = object
-                                        add_effect(object, knock_back(object,self.special_skill_animation.clock.repeat_time * 3, 100))
+                                        add_effect(object, knock_back(object,self.special_skill_animation.clock.repeat_time * 3, 40))
                                         object.get_hit = True
                                         object.get_damage = self.attack_damage
                                         return
@@ -668,7 +671,7 @@ class gokuclass():
                 if self.switcher2.operation():
                     tmp = (self.box.centerx - self.imgbox.centerx, self.box.centery - self.imgbox.centery)
                     self.imgbox.centery -= 4.5 * self.gameplay.box_size[1]
-                    self.imgbox.centerx -=  3 * self.gameplay.box_size[0] * self.side
+                    self.imgbox.centerx -=  5.0 * self.gameplay.box_size[0] * self.side
                     self.box.center = (self.imgbox.centerx + tmp[0], self.imgbox.centery + tmp[1])
                     self.kame = kame_class(self, True, -45)
 
@@ -683,14 +686,22 @@ class gokuclass():
                 if self.switcher2.operation():
                     index = self.index
                     while True:
-                        if not self.gameplay.side(self.side)[index + 1] ==  None:
-                            object = self.gameplay.side(self.side)[index + 1]
-                            Rect = pygame.Rect(0,0, self.gameplay.box_size[0], self.gameplay.box_size[1])
-                            Rect.center = (object.box.centerx + (self.gameplay.box_size[0] / 2) * self.side ,  self.gameplay.path_height - self.gameplay.box_size[1] / 2)
-                            get_spawn_display(self, Rect)
-                            break
+                        if(( self.side == 1) and (index + 2 <= self.gameplay.side1_heros)) or (( self.side == -1) and (index + 2 <= self.gameplay.side2_heros)):
+                            if not self.gameplay.side(self.side)[index + 1] ==  None:
+                                object = self.gameplay.side(self.side)[index + 1]
+                                Rect = pygame.Rect(0,0, self.gameplay.box_size[0], self.gameplay.box_size[1])
+                                Rect.center = (object.box.centerx + (self.gameplay.box_size[0] / 2) * self.side ,  self.gameplay.path_height - self.gameplay.box_size[1] / 2)
+                                get_spawn_display(self, Rect)
+                                break
+
+                            else:
+                                index += 1
                         else:
-                            index += 1
+                                object = self.gameplay.side(self.side)[0]
+                                Rect = pygame.Rect(0,0, self.gameplay.box_size[0], self.gameplay.box_size[1])
+                                Rect.center = (object.box.centerx + (self.gameplay.box_size[0] / 2) * self.side ,  self.gameplay.path_height - self.gameplay.box_size[1] / 2)
+                                get_spawn_display(self, Rect)
+                                break
 
 
 
@@ -728,7 +739,10 @@ class gokuclass():
 
             if self.health <= 0:
                 self.alive = False
-                
+                if self.side == 1:
+                    self.gameplay.gold_income_1 += self.gameplay.character_cost[self.__class__] * 10.0 / 100
+                else:
+                    self.gameplay.gold_income_2 += self.gameplay.character_cost[self.__class__] * 10.0 / 100
 
             self.display()
             self.status_update()

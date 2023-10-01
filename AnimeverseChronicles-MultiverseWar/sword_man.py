@@ -8,6 +8,8 @@ from list_function import *
 from animation_player import *
 from screen import *
 from common_effect import *
+from character_properties import *
+
 
 
 sword_man1 = analyzed_img("GameplayAssets\\sword_man\\sword_man(1).png", 254 , 352 , 108 , 239)
@@ -55,8 +57,8 @@ sword_man50 = analyzed_img("GameplayAssets\\sword_man\\sword_man(50).png", 249 ,
 
 
 
-attack_damage = [50.0, 55.0 , 100.0, 110.0 , 200.0]
-health = [150.0, 200.0, 300.0, 400.0, 600.0]
+attack_damage = sw_attack_damage
+health = sw_health
 
 class sword_manclass():
     def __init__(self,side,gameplay):
@@ -74,7 +76,7 @@ class sword_manclass():
         
         self.speed = 5.0 # 5/100 map per second 
         self.attack_scope = 2.5 * self.gameplay.box_size[0] # 4/15 map width
-        self.attack_speed = 1/3 # attack(s) pers second
+        self.attack_speed = 1/ 2.5 # attack(s) pers second
         self.attack_damage = attack_damage[self.level - 1]
         self.attack_damage_orginal = self.attack_damage
         self.health_max = health[self.level - 1]
@@ -327,7 +329,7 @@ class sword_manclass():
                     if abs(object.box.centerx  - self.box.centerx ) <= self.attack_scope + (self.box.width + object.box.width) / 2 :
                         if (object.box.centerx - self.box.centerx) * self.side >= 0:
                             if same_line_checker(self, object):
-                                self.mana += 10  
+                                self.mana += 30
                                 object.get_hit = True
                                 object.get_damage = self.attack_damage
         elif self.attacking_animation.clock.Return == 3:
@@ -352,7 +354,7 @@ class sword_manclass():
                     if abs(object.box.centerx  - self.box.centerx ) <= self.attack_scope + (self.box.width + object.box.width) / 2 :
                         if (object.box.centerx - self.box.centerx) * self.side >= 0:
                             if same_line_checker(self, object):
-                                add_effect(self, heal(self, self.health * 20.0 / 100))
+                                add_effect(self, heal(self, self.health_max * 20.0 / 100))
                                 object.get_hit = True
                                 object.get_damage = self.attack_damage
         elif self.special_skill_animation.clock.Return == 2 or self.special_skill_animation.clock.Return == 7:
@@ -395,7 +397,10 @@ class sword_manclass():
 
             if self.health <= 0:
                 self.alive = False
-                
+                if self.side == 1:
+                    self.gameplay.gold_income_1 += self.gameplay.character_cost[self.__class__] * 10.0 / 100
+                else:
+                    self.gameplay.gold_income_2 += self.gameplay.character_cost[self.__class__] * 10.0 / 100
 
             self.display()
             self.status_update()
