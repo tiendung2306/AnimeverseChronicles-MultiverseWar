@@ -9,8 +9,8 @@ class mainmenu():
         self.buttons = ['Play', 'Tutorial',  'Settings', 'Quit']
         self.play_mode_buttons = ['1 Player', '2 Players', 'Back', 'New Game', 'Continue']
         self.Screen = screen()
-        self.buttons_color = Navy
-        self.title_color = Dark_Yellow
+        self.buttons_color = White
+        self.title_color = Blue
         self.play_mode_state = 0
 
         self.main_menu_bg_original = pygame.image.load('GameplayAssets\\mainmenubg.jpg')

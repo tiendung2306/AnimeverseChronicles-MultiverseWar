@@ -420,8 +420,8 @@ class gameplay():
             curr_sec = str(curr_tmp_sec)
 
             #gold process
-        self.curr_gold_1 = int(curr_tmp_min * 60 + curr_tmp_sec) * self.gold_per_sec + self.gold_income_1 - self.gold_outcome_1 #luong vang hien tai = luong vang theo thoi gian + luong vang kiem duoc - luong vang da tieu
-        self.curr_gold_2 = int(curr_tmp_min * 60 + curr_tmp_sec) * self.gold_per_sec + self.gold_income_2 - self.gold_outcome_2 #luong vang hien tai = luong vang theo thoi gian + luong vang kiem duoc - luong vang da tieu
+        self.curr_gold_1 = int(int(curr_tmp_min * 60 + curr_tmp_sec) * self.gold_per_sec + self.gold_income_1 - self.gold_outcome_1) #luong vang hien tai = luong vang theo thoi gian + luong vang kiem duoc - luong vang da tieu
+        self.curr_gold_2 = int(int(curr_tmp_min * 60 + curr_tmp_sec) * self.gold_per_sec + self.gold_income_2 - self.gold_outcome_2) #luong vang hien tai = luong vang theo thoi gian + luong vang kiem duoc - luong vang da tieu
         
         self.timer_text1 = self.timer_font.render(curr_min + ':' + curr_sec, True, Black)
         self.timer_text1_rect = self.timer_text1.get_rect()
