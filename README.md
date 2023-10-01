@@ -1,11 +1,18 @@
-# Animeverse Chronicles - Multiverse War
 
+# Animeverse Chronicles
+
+## Cách tải Game:
+
++ 	Tải file AnimeverseChronicles.rar trong bản release mới nhất về máy. Giải nén rồi chạy file main.exe để bắt đầu game.
+
+
+## Giới thiệu
 Animeverse Chronicles là game chiến thuật thủ thành. Mỗi người chơi cần triệu hồi những nhân vật mạnh mẽ của mình ra để chiến đấu với đối thủ. Mục đích tối thượng là tiêu diệt nhà chính đối thủ để dành chiến thắng.
 
 Game có hai chế độ chơi là chế độ PvC(Người với Máy) và PvP(Người với Người).
 Chế độ chơi PvP, người chơi bên trái sẽ sử dụng chuột, bên phải sử dụng bàn phím.
 
-Cách chơi:
+## Cách chơi:
 +   Đối với dùng chuột: 
     Ấn chuột vào nhân vật để triệu hồi khi đủ tiền, ấn vào nút nâng cấp hình mũi tên lên để lên level cho nhà chính, và ấn vào nhân vật để chọn nhân vật bạn muốn nâng cấp.
 +   Đối với dùng bàn phím: 
