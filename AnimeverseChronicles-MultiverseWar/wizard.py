@@ -226,8 +226,8 @@ class wizardclass():
 
     def display(self):
         copy(self.box, self.animation_player.play())
-        pygame.draw.rect(screen.screen,Red,pygame.Rect(self.box.left + self.box.width / 4 ,self.box.top - self.box.height / 10 ,(self.box.width - self.box.width / 2) / self.health_max *self.health,self.box.height / 20))
-        pygame.draw.rect(screen.screen,Blue,pygame.Rect(self.box.left + self.box.width / 4 ,self.box.top - self.box.height / 5 - self.box.height / 30 ,(self.box.width - self.box.width / 2) / self.mana_max *self.mana,self.box.height / 20))
+        # pygame.draw.rect(screen.screen,Red,pygame.Rect(self.box.left + self.box.width / 4 ,self.box.top - self.box.height / 10 ,(self.box.width - self.box.width / 2) / self.health_max *self.health,self.box.height / 20))
+        # pygame.draw.rect(screen.screen,Blue,pygame.Rect(self.box.left + self.box.width / 4 ,self.box.top - self.box.height / 5 - self.box.height / 30 ,(self.box.width - self.box.width / 2) / self.mana_max *self.mana,self.box.height / 20))
 
 
     
@@ -454,9 +454,9 @@ class wizardclass():
             if self.health <= 0:
                 self.alive = False
                 if self.side == 1:
-                    self.gameplay.gold_income_1 += self.gameplay.character_cost[self.__class__][self.level - 1] * 10.0 / 100
+                    self.gameplay.gold_income_1 += int(self.gameplay.character_cost[self.__class__][self.level - 1] * 10.0 / 100)
                 else:
-                    self.gameplay.gold_income_2 += self.gameplay.character_cost[self.__class__][self.level - 1] * 10.0 / 100
+                    self.gameplay.gold_income_2 += int(self.gameplay.character_cost[self.__class__][self.level - 1] * 10.0 / 100)
                 
 
             self.display()
