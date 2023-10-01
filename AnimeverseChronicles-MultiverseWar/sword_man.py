@@ -121,8 +121,8 @@ class sword_manclass():
 
  
     def status_update(self):
-        if not self.level == self.gameplay.character_level(self.side, 2):
-            self.level = self.gameplay.character_level(self.side, 2)
+        if not self.level == self.gameplay.character_level(self.side, 1):
+            self.level = self.gameplay.character_level(self.side, 1)
             self.attack_damage = attack_damage[self.level - 1]
             self.health_max = health[self.level - 1]
         
