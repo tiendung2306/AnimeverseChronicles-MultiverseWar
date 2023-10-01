@@ -11,7 +11,10 @@ from key_binding_manager import *
 from gameover_panel import *
 from list_function import*
 from object_function import *
+from PvC_mode import *
+from Random import *
 import random
+
 
 class gameplay():
     def __init__(self, play_mode):
@@ -22,24 +25,34 @@ class gameplay():
         self.spawn_time = 2 #thoi gian de spawn mot con nhan vat tinh theo s
         self.spawn_queue1 = []
         self.spawn_queue2 = []
+        self.rand = Random()
 
-        path_num = random.randint(1, 5)
-        # print(path_num)
+        self.path_num = (self.rand.get_truly_random_seed_through_os()) % 5  + 1
+        # print(self.path_num)
         # self.fake_bg_original = pygame.image.load('GameplayAssets\\bg1.png')
-        self.bg_original = pygame.image.load('GameplayAssets\\bg({}).jpg'.format(path_num))
-        self.path_original = pygame.image.load('GameplayAssets\\path' + str(path_num) + '.png')
+        self.bg_original = pygame.image.load('GameplayAssets\\bg({}).jpg'.format(self.path_num))
+        self.path_original = pygame.image.load('GameplayAssets\\path' + str(self.path_num) + '.png')
         self.board_original = pygame.image.load('GameplayAssets\\board.png')
         self.settings_button_original = pygame.image.load('GameplayAssets\\settings_button.png')
         self.play_button_original = pygame.image.load('GameplayAssets\\play_button.png')
         self.pause_button_original = pygame.image.load('GameplayAssets\\pause_button.png')
         
         self.character_cost = {
-            sword_manclass : 10,
-            archerclass : 20,
-            tankerclass : 30,
-            wizardclass : 50,
-            gokuclass : 100,
-            narutoclass : 150
+            tankerclass : [20, 30, 45, 70, 100],
+            sword_manclass : [30, 50, 70, 90, 120],
+            archerclass : [40, 65, 90, 110, 150],
+            wizardclass : [50, 70, 100, 135, 170],
+            gokuclass : [350, 400, 500],
+            narutoclass : [350, 550]
+        }
+
+        self.character_slot_idx = {
+            0 : tankerclass,
+            1 : sword_manclass,
+            2 : archerclass,
+            3 : wizardclass,
+            4 : gokuclass,
+            5 : narutoclass,
         }
 
         #character type
@@ -61,9 +74,12 @@ class gameplay():
         else:
             self.play_pause_button = (screen.screen.get_rect().width - screen.screen.get_rect().width // 32, 10)
 
+
+        self.gold_per_sec = 5
         #level
         self.islevel_up1 = False
         self.islevel_up2 = False
+        self.level_up_cost = [200, 250, 280, 300, 320, 350, 380, 400, 450, 500, 550, 600, 700, 800, 900, 1000, 1150, 1250, 1350, 1500]
         self.curr_level1 = 1
         self.curr_level2 = 1
         self.character_level_max = [5, 5, 5, 5, 3, 2]
@@ -108,22 +124,36 @@ class gameplay():
         self.screen = screen.screen.get_size()
     #Object import:
         self.side1 = []
+        self.side1_heros = 1
         self.side2 = []
+        self.side2_heros = 1
+
         self.side3 = []
         self.side4 = []
         self.side0 = []
 
+
         self.nexus1 = Nexusclass(1, self)
         self.nexus2 = Nexusclass(2, self)
 
-        # spawn(narutoclass, 1, 20, self)
-        # spawn(tankerclass, 2, 36, self)
-        # spawn(tankerclass, 2, 37, self)
-        # spawn(tankerclass, 2, 38, self)
-        # spawn(tankerclass, 2, 39, self)
-        # spawn(tankerclass, 2, 40, self)
-
         self.selected_object = None
+        self.AI = PvC_mode(self)
+
+    def AI_process(self):
+        if self.play_mode == 1:
+            self.AI.update()
+
+    def get_character_cost(self, idx, side): #idx tinh tu 0
+        if side == 1:
+            return self.character_cost[self.character_slot_idx[idx]][self.character_level1[idx] - 1]
+        else:
+            return self.character_cost[self.character_slot_idx[idx]][self.character_level2[idx] - 1]
+
+    def character_level(self, side, index):
+        if side == 1:
+            return self.character_level1[index]
+        elif side == -1:
+            return self.character_level2[index]
 
     def side(self, side):
         if side == 1:
@@ -205,23 +235,59 @@ class gameplay():
             if self.Pause_Pannel.check_click(mouse) == self.Pause_Pannel.buttons[2]: #an vao nut back to menu
                 return 'Back'
 
+    def on_hover(self, mouse):
+        self.gameplay_ui.on_hover(mouse)
+
     def check_press(self, event):
         if event.key == pygame.K_ESCAPE:
             self.escape_pressed()
-        if event.key == keybindingmanager.key_map['Slot 1']:
-            self.gameplay_ui.insert_in_spawn_queue(0, 2)
-        if event.key == keybindingmanager.key_map['Slot 2']:
-            self.gameplay_ui.insert_in_spawn_queue(1, 2)
-        if event.key == keybindingmanager.key_map['Slot 3']:
-            self.gameplay_ui.insert_in_spawn_queue(2, 2)
-        if event.key == keybindingmanager.key_map['Slot 4']:
-            self.gameplay_ui.insert_in_spawn_queue(3, 2)
-        if event.key == keybindingmanager.key_map['Slot 5']:
-            self.gameplay_ui.insert_in_spawn_queue(4, 2)
-        if event.key == keybindingmanager.key_map['Slot 6']:
-            self.gameplay_ui.insert_in_spawn_queue(5, 2)
-        if event.key == keybindingmanager.key_map['Slot 7']:
-            self.gameplay_ui.insert_in_spawn_queue(6, 2)
+        if self.islevel_up2 == False:
+            if event.key == keybindingmanager.key_map['Slot 1']:
+                self.gameplay_ui.insert_in_spawn_queue(0, 2)
+            if event.key == keybindingmanager.key_map['Slot 2']:
+                self.gameplay_ui.insert_in_spawn_queue(1, 2)
+            if event.key == keybindingmanager.key_map['Slot 3']:
+                self.gameplay_ui.insert_in_spawn_queue(2, 2)
+            if event.key == keybindingmanager.key_map['Slot 4']:
+                self.gameplay_ui.insert_in_spawn_queue(3, 2)
+            if event.key == keybindingmanager.key_map['Slot 5']:
+                self.gameplay_ui.insert_in_spawn_queue(4, 2)
+            if event.key == keybindingmanager.key_map['Slot 6']:
+                self.gameplay_ui.insert_in_spawn_queue(5, 2)
+            if event.key == keybindingmanager.key_map['Slot 7']:
+                self.gameplay_ui.insert_in_spawn_queue(6, 2)
+
+        #an p de len cap
+        if event.key == keybindingmanager.key_map['Player_2_level_up']:
+            self.gameplay_ui.lvl_up_button2.level_up2()
+        #an ctrl + so de tang cap cho nhan vat
+        keys = pygame.key.get_pressed()
+        # if keys[pygame.K_LCTRL]:
+        if keys[keybindingmanager.key_map['Slot 1']]:
+                if self.islevel_up2 == True:
+                    if self.character_level_up(1, 2) == True:
+                        self.islevel_up2 = False
+        if keys[keybindingmanager.key_map['Slot 2']]:
+                if self.islevel_up2 == True:
+                    if self.character_level_up(2, 2) == True:
+                        self.islevel_up2 = False
+        if keys[keybindingmanager.key_map['Slot 3']]:
+                if self.islevel_up2 == True:
+                    if self.character_level_up(3, 2) == True:
+                        self.islevel_up2 = False
+        if keys[keybindingmanager.key_map['Slot 4']]:
+                if self.islevel_up2 == True:
+                    if self.character_level_up(4, 2) == True:
+                        self.islevel_up2 = False
+        if keys[keybindingmanager.key_map['Slot 5']]:
+                if self.islevel_up2 == True:
+                    if self.character_level_up(5, 2) == True:
+                        self.islevel_up2 = False
+        if keys[keybindingmanager.key_map['Slot 6']]:
+                if self.islevel_up2 == True:
+                    if self.character_level_up(6, 2) == True:
+                        self.islevel_up2 = False
+
 
     def escape_pressed(self):
         if self.isPlay == True: #neu game dang chay
@@ -326,12 +392,17 @@ class gameplay():
                 return False
 
     def level_up(self, side):
+        # self.update()
         if side == 1:
-            self.curr_level1 += 1
-            self.islevel_up1 = True
+            if self.curr_gold_1 >= self.level_up_cost[self.curr_level1 - 1]:
+                self.gold_outcome_1 += self.level_up_cost[self.curr_level1 - 1]
+                self.curr_level1 += 1
+                self.islevel_up1 = True
         else:
-            self.curr_level2 += 1
-            self.islevel_up2 = True
+            if self.curr_gold_2 >= self.level_up_cost[self.curr_level2 - 1]:
+                self.gold_outcome_2 += self.level_up_cost[self.curr_level2 - 1]
+                self.curr_level2 += 1
+                self.islevel_up2 = True
 
     def update(self): #update cac thong so cua game, chay theo tung frame cua gameplay_loop
         #timer process
@@ -349,8 +420,8 @@ class gameplay():
             curr_sec = str(curr_tmp_sec)
 
             #gold process
-        self.curr_gold_1 = int(curr_tmp_min * 60 + curr_tmp_sec) * 50 + self.gold_income_1 - self.gold_outcome_1 #luong vang hien tai = luong vang theo thoi gian + luong vang kiem duoc - luong vang da tieu
-        self.curr_gold_2 = int(curr_tmp_min * 60 + curr_tmp_sec) * 50 + self.gold_income_2 - self.gold_outcome_2 #luong vang hien tai = luong vang theo thoi gian + luong vang kiem duoc - luong vang da tieu
+        self.curr_gold_1 = int(int(curr_tmp_min * 60 + curr_tmp_sec) * self.gold_per_sec + self.gold_income_1 - self.gold_outcome_1) #luong vang hien tai = luong vang theo thoi gian + luong vang kiem duoc - luong vang da tieu
+        self.curr_gold_2 = int(int(curr_tmp_min * 60 + curr_tmp_sec) * self.gold_per_sec + self.gold_income_2 - self.gold_outcome_2) #luong vang hien tai = luong vang theo thoi gian + luong vang kiem duoc - luong vang da tieu
         
         self.timer_text1 = self.timer_font.render(curr_min + ':' + curr_sec, True, Black)
         self.timer_text1_rect = self.timer_text1.get_rect()
@@ -434,148 +505,155 @@ class gameplay():
                 draw_panel = False
 
         if draw_panel:
+            if not object.animation_player == None:
 
-            panel_center = (object.box.centerx, object.box.centery - self.box_size[1] * 4)
-            panel_width = self.box_size[0] * 15
+                panel_center = (object.box.centerx, object.box.centery - self.box_size[1] * 4)
+                panel_width = self.box_size[0] * 15
 
-            scale = panel_width / 600
+                scale = panel_width / 600
 
-            panel = pygame.Rect(0,0,panel_width,panel_width /2)
-            panel.center = panel_center
-            boder = 20 * scale
-            board = pygame.Rect(0,0,panel.width - boder * 2, panel.height - boder * 2)
-            board.center = panel_center
+                panel = pygame.Rect(0,0,panel_width,panel_width /2)
+                panel.center = panel_center
 
-            character_box = pygame.Rect(0 , 0 , 155 * scale , 235 * scale)
-            character_box.center = board.center
-            character_blit_box = pygame.Rect(0, 0 , 114 * scale , 197 * scale)
-            character_blit_box.center = board.center
+                if panel.left < screen.screen.get_rect().left :
+                    panel.left = screen.screen.get_rect().left
+                if panel.right > screen.screen.get_rect().right:
+                    panel.right = screen.screen.get_rect().right
 
-            pygame.draw.rect(screen.screen,Gray, panel, border_radius = 10)
-            pygame.draw.rect(screen.screen,Black, board,border_radius = 10) 
+                boder = 20 * scale
+                board = pygame.Rect(0,0,panel.width - boder * 2, panel.height - boder * 2)
+                board.center = panel.center
 
-            img = object.animation_player.img_lib[object.animation_player.clock.Return - 1].img
-            imgbox = get_spawn_imgbox( object, character_blit_box)
-            img = pygame.transform.smoothscale(img, (imgbox.width, imgbox.height))
-            img_area = (board.left - imgbox.left, board.top - imgbox.top, board.width, board.height)
-            screen.screen.blit(img, board.topleft, img_area)
+                character_box = pygame.Rect(0 , 0 , 155 * scale , 235 * scale)
+                character_box.center = board.center
+                character_blit_box = pygame.Rect(0, 0 , 114 * scale , 197 * scale)
+                character_blit_box.center = board.center
 
-            def class_display(class_name):
-                tmp = pygame.font.Font('Fonts\\AznKnucklesTrial-z85pa.otf', int(31 * scale)).render(class_name,True,White) #co chu phair ngi=uyennnnnn
-                screen.screen.blit(tmp, ((board.left + character_box.left) / 2.0 - tmp.get_width() / 2.0, character_box.top))
+                pygame.draw.rect(screen.screen,Gray, panel, border_radius = 10)
+                pygame.draw.rect(screen.screen,Black, board,border_radius = 10) 
 
-            def text_display(text, font_size, topleft, color):
-                tmp = pygame.font.Font('Fonts\\AznKnucklesTrial-z85pa.otf', font_size).render(text,True,color) #co chu phair ngi=uyennnnnn
-                screen.screen.blit(tmp, topleft)
-            def bar_display(data1,data2, center, color):
-                hcn1 = pygame.Rect(0,0,167 * scale,11 * scale)
-                hcn2 = pygame.Rect(0,0,167 * scale - 2, 11 * scale - 2)
-                hcn1.center = hcn2.center = center
-                pygame.draw.rect(screen.screen, Gray, hcn1,border_radius = 12)
-                if data1 < 0:
-                    data1 = 0
-                elif data1 >=  data2:
-                        data1 = data2
+                img = object.animation_player.img_lib[object.animation_player.clock.Return - 1].img
+                imgbox = get_spawn_imgbox( object, character_blit_box)
+                img = pygame.transform.smoothscale(img, (imgbox.width, imgbox.height))
+                img_area = (board.left - imgbox.left, board.top - imgbox.top, board.width, board.height)
+                screen.screen.blit(img, board.topleft, img_area)
 
-                hcn3 = pygame.Rect(0,0,hcn2.width * data1 / data2, 11 - 2 * 1)
-                hcn3.topleft = hcn2.topleft
-                pygame.draw.rect(screen.screen, Black, hcn2,border_radius = 12)
-                pygame.draw.rect(screen.screen, color, hcn3, border_top_left_radius = 12, border_bottom_left_radius = 12)
+                def class_display(class_name):
+                    tmp = pygame.font.Font('Fonts\\AznKnucklesTrial-z85pa.otf', int(31 * scale)).render(class_name,True,White) 
+                    screen.screen.blit(tmp, ((board.left + character_box.left) / 2.0 - tmp.get_width() / 2.0, character_box.top))
+
+                def text_display(text, font_size, topleft, color):
+                    tmp = pygame.font.Font('Fonts\\AznKnucklesTrial-z85pa.otf', font_size).render(text,True,color)
+                    screen.screen.blit(tmp, topleft)
+                def bar_display(data1,data2, center, color):
+                    hcn1 = pygame.Rect(0,0,167 * scale,11 * scale)
+                    hcn2 = pygame.Rect(0,0,167 * scale - 2, 11 * scale - 2)
+                    hcn1.center = hcn2.center = center
+                    pygame.draw.rect(screen.screen, Gray, hcn1,border_radius = 12)
+                    if data1 < 0:
+                        data1 = 0
+                    elif data1 >=  data2:
+                            data1 = data2
+
+                    hcn3 = pygame.Rect(0,0,hcn2.width * data1 / data2, 11 - 2 * 1)
+                    hcn3.topleft = hcn2.topleft
+                    pygame.draw.rect(screen.screen, Black, hcn2,border_radius = 12)
+                    pygame.draw.rect(screen.screen, color, hcn3, border_top_left_radius = 12, border_bottom_left_radius = 12)
 
 
-            class_display(object.name)
-            text_display("Bacsic statics :", int(16 * scale), (panel.left + 35 * scale ,panel.top + 72 * scale), White)
+                class_display(object.name)
+                text_display("Bacsic statics :", int(16 * scale), (panel.left + 35 * scale ,panel.top + 72 * scale), White)
 
-            text_display("Health : {} / {}".format(object.health, object.health_max), int(14 * scale), (panel.left + 35 * scale ,panel.top + 93 * scale), White)
-            if object.health >= 50:
-                bar_display(object.health,object.health_max,(panel.left + 117 * scale ,panel.top + 121 * scale), Green)
-            else:
-                bar_display(object.health,object.health_max,(panel.left + 117 * scale ,panel.top + 121 * scale), Red)
+                text_display("Health : {} / {}".format(round(object.health, 2), object.health_max), int(14 * scale), (panel.left + 35 * scale ,panel.top + 93 * scale), White)
+                if object.health >= 50:
+                    bar_display(object.health,object.health_max,(panel.left + 117 * scale ,panel.top + 121 * scale), Green)
+                else:
+                    bar_display(object.health,object.health_max,(panel.left + 117 * scale ,panel.top + 121 * scale), Red)
 
-            text_display("Mana : {} / {}".format(object.mana, object.mana_max), int(14 * scale), (panel.left + 35 * scale ,panel.top + 138 * scale), White)
-            bar_display(object.mana,object.mana_max, (panel.left + 117 * scale ,panel.top + (121 + 45) * scale), Blue)
+                text_display("Mana : {} / {}".format(object.mana, object.mana_max), int(14 * scale), (panel.left + 35 * scale ,panel.top + 138 * scale), White)
+                bar_display(object.mana,object.mana_max, (panel.left + 117 * scale ,panel.top + (121 + 45) * scale), Blue)
 
-            text_display("Damage : {} / 100".format(object.attack_damage), int(14 * scale), (panel.left + 35 * scale ,panel.top + (93 + 45 * 2) * scale), White)
-            bar_display(object.attack_damage,100, (panel.left + 117 * scale ,panel.top + (121 + 45 * 2) * scale), Yellow)
+                text_display("Damage : {} / 100".format(object.attack_damage), int(14 * scale), (panel.left + 35 * scale ,panel.top + (93 + 45 * 2) * scale), White)
+                bar_display(object.attack_damage,100, (panel.left + 117 * scale ,panel.top + (121 + 45 * 2) * scale), Yellow)
 
-            text_display("Attack speed : {} sec per attack".format(round(object.attack_speed, 2)), int(14 * scale), (panel.left + 35 * scale ,panel.top + (93 + 45 * 3) * scale), White)
-            if object.attack_coundowner.counter == None:
-                bar_display(1,1, (panel.left + 117 * scale ,panel.top + (121 + 45 * 3) * scale), Silver)
-            else:
-                bar_display(object.attack_coundowner.counter - self.curr_time,1 / object.attack_speed, (panel.left + 117 * scale ,panel.top + (121 + 45 * 3) * scale), Silver)
+                text_display("Attack speed : {} sec per attack".format(round(1 / object.attack_speed, 2)), int(14 * scale), (panel.left + 35 * scale ,panel.top + (93 + 45 * 3) * scale), White)
+                if object.attack_coundowner.counter == None:
+                    bar_display(1,1, (panel.left + 117 * scale ,panel.top + (121 + 45 * 3) * scale), Silver)
+                else:
+                    bar_display(object.attack_coundowner.counter - self.curr_time,1 / object.attack_speed, (panel.left + 117 * scale ,panel.top + (121 + 45 * 3) * scale), Silver)
 
-            text_display("Level : {}".format(object.level),int(18 * scale), (panel.left + 394 * scale, character_box.top), White)
-            
-            text_display("Status :",   int(18 * scale), (panel.left + 394 * scale ,panel.top + 72 * scale), White)
-            color = White
-            if object.special_status or object.status == 4:
-                text = "Special"
-                color = Red_Orange
-            elif object.status == 1:
-                text = "Attacking"
-                color = Red
-            elif object.status == 2 or object.status == 5 :
-                ispass = False
-                for effect in object.effect_list:
-                    if effect.__class__ == dizzy:
-                        text = "Soul_sucking"
-                        ispass = True
-                        color = Purple
-                        break
-
-                    elif effect.__class__ == soul_sucking:
-                        text = "Stunning"
-                        ispass = True
-                        color = Purple
-                        break
-                if not ispass:
-                    text = "Standing"
-            elif object.status ==  6 or object.status == 5.5:
-                text = "Defending"    
-            elif object.status == 3:
-                text = "Moving"
-            elif object.status == -1:
-                text = "Knock back"
-                color = Purple
-            elif object.status == -2:
-                text = "On Air"
-                color = Purple
-            elif object.status == -3:
-                text = "Falling"
-                color = Purple
-            text_display(text, int(16 * scale), (panel.left + 435 * scale,panel.top + 112 * scale), color) 
-
-            text_display("Effect :",   int(18 * scale), (panel.left + 394 * scale,panel.top + 158 * scale), White)
-            checked_effect_list = []
-            for effect in object.effect_list:
-                if list_find(checked_effect_list, effect.__class__) == -1:
-                    checked_effect_list.append(effect.__class__)
-                    if effect.__class__ == dizzy:
-                        text = "Dizzy"
-                        color = Purple
-                    elif effect.__class__ == soul_sucking:
-                        text = "Soul Sucking"
-                        color = Purple
-                    elif effect.__class__ == knock_back:
-                        text = "Knock Back"               
-                        color = Purple
-                    elif effect.__class__ == flying:
-                        text = "Flying"
-                        color = Purple
-                    elif effect.__class__ == falling:
-                        text = "Falling"
-                        color = Purple
-                    elif effect.__class__ == iron_body:
-                        text = "Iron Body"
-                        color = Yellow
-                    elif effect.__class__ == heal:
-                        text = "Heal"
-                        color = Green
-                    elif effect.__class__ == shield:
-                        text = " shield"
-                        color = Gray
-                    text_display(text,int(16 * scale),(panel.left + 435 *  scale ,panel.top + (177 + 20 * len(checked_effect_list) )* scale), color)
+                text_display("Level : {}".format(object.level),int(18 * scale), (panel.left + 394 * scale, character_box.top), White)
                 
+                text_display("Status :",   int(18 * scale), (panel.left + 394 * scale ,panel.top + 72 * scale), White)
+                color = White
+                if object.special_status or object.status == 4:
+                    text = "Special"
+                    color = Red_Orange
+                elif object.status == 1:
+                    text = "Attacking"
+                    color = Red
+                elif object.status == 2 or object.status == 5 :
+                    ispass = False
+                    for effect in object.effect_list:
+                        if effect.__class__ == dizzy:
+                            text = "Soul sucking"
+                            ispass = True
+                            color = Purple
+                            break
+
+                        elif effect.__class__ == soul_sucking:
+                            text = "Stunning"
+                            ispass = True
+                            color = Purple
+                            break
+                    if not ispass:
+                        text = "Standing"
+                elif object.status ==  6 or object.status == 5.5:
+                    text = "Defending"    
+                elif object.status == 3:
+                    text = "Moving"
+                elif object.status == -1:
+                    text = "Knock back"
+                    color = Purple
+                elif object.status == -2:
+                    text = "On Air"
+                    color = Purple
+                elif object.status == -3:
+                    text = "Falling"
+                    color = Purple
+                text_display(text, int(16 * scale), (panel.left + 435 * scale,panel.top + 112 * scale), color) 
+
+                text_display("Effect :",   int(18 * scale), (panel.left + 394 * scale,panel.top + 158 * scale), White)
+                checked_effect_list = []
+                for effect in object.effect_list:
+                    if list_find(checked_effect_list, effect.__class__) == -1:
+                        checked_effect_list.append(effect.__class__)
+                        if effect.__class__ == dizzy:
+                            text = "Dizzy"
+                            color = Purple
+                        elif effect.__class__ == soul_sucking:
+                            text = "Soul Sucking"
+                            color = Purple
+                        elif effect.__class__ == knock_back:
+                            text = "Knock Back"               
+                            color = Purple
+                        elif effect.__class__ == flying:
+                            text = "Flying"
+                            color = Purple
+                        elif effect.__class__ == falling:
+                            text = "Falling"
+                            color = Purple
+                        elif effect.__class__ == iron_body:
+                            text = "Iron Body"
+                            color = Yellow
+                        elif effect.__class__ == heal:
+                            text = "Heal"
+                            color = Green
+                        elif effect.__class__ == shield:
+                            text = " shield"
+                            color = Gray
+                        text_display(text,int(16 * scale),(panel.left + 435 *  scale ,panel.top + (177 + 20 * len(checked_effect_list) )* scale), color)
+                    
             
 
 

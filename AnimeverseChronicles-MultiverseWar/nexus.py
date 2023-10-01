@@ -3,6 +3,9 @@ from img_analyze import *
 from screen import *
 from object_function import *
 
+
+nexus = analyzed_img("GameplayAssets\\nexus.png", 309 , 15 , 106 , 572)
+
 class Nexusclass():
     def __init__(self, side , gameplay):
         self.gameplay = gameplay
@@ -19,9 +22,9 @@ class Nexusclass():
         self.box = pygame.Rect(0,0,0,0)
         self.imgbox = pygame.Rect(0,0,0,0)
         get_spawn_display(self, rect)
-        self.health_max = 1000000.0
+        self.health_max = 5000.0
         self.health =  self.health_max
-        self.mana_max = 100.0
+        self.mana_max = 500.0
         self.mana = 0
         self.damage_reduce =  0 #0%
         self.effect_list = []

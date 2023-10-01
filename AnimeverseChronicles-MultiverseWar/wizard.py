@@ -8,7 +8,60 @@ from list_function import *
 from animation_player import *
 from screen import *
 from common_effect import *
+from character_properties import *
+
+
+wizard1 = analyzed_img("GameplayAssets\\wizard\\wizard(1).png", 170 , 56 , 68 , 179)
+wizard2 = analyzed_img("GameplayAssets\\wizard\\wizard(2).png", 170 , 56 , 68 , 179)
+wizard3 = analyzed_img("GameplayAssets\\wizard\\wizard(3).png", 170 , 56 , 68 , 179)
+wizard4 = analyzed_img("GameplayAssets\\wizard\\wizard(4).png", 175 , 96 , 53 , 127)
+wizard5 = analyzed_img("GameplayAssets\\wizard\\wizard(5).png", 157 , 98 , 91 , 143)
+wizard6 = analyzed_img("GameplayAssets\\wizard\\wizard(6).png", 137 , 74 , 59 , 161)
+wizard7 = analyzed_img("GameplayAssets\\wizard\\wizard(7).png", 136 , 67 , 56 , 160)
+wizard8 = analyzed_img("GameplayAssets\\wizard\\wizard(8).png", 138 , 67 , 63 , 160)
+wizard9 = analyzed_img("GameplayAssets\\wizard\\wizard(9).png", 136 , 70 , 67 , 158)
+wizard10 = analyzed_img("GameplayAssets\\wizard\\wizard(10).png", 136 , 70 , 67 , 158)
+wizard11 = analyzed_img("GameplayAssets\\wizard\\wizard(11).png", 164 , 79 , 65 , 152)
+wizard12 = analyzed_img("GameplayAssets\\wizard\\wizard(12).png", 164 , 79 , 65 , 152)
+wizard13 = analyzed_img("GameplayAssets\\wizard\\wizard(13).png", 167 , 98 , 86 , 146)
+wizard14 = analyzed_img("GameplayAssets\\wizard\\wizard(14).png", 192 , 96 , 69 , 144)
+wizard15 = analyzed_img("GameplayAssets\\wizard\\wizard(15).png", 192 , 96 , 69 , 144)
+wizard16 = analyzed_img("GameplayAssets\\wizard\\wizard(16).png", 192 , 96 , 69 , 144)
+wizard17 = analyzed_img("GameplayAssets\\wizard\\wizard(17).png", 192 , 96 , 69 , 144)
+wizard18 = analyzed_img("GameplayAssets\\wizard\\wizard(18).png", 163 , 94 , 85 , 159)
+wizard19 = analyzed_img("GameplayAssets\\wizard\\wizard(19).png", 164 , 80 , 94 , 150)
+wizard20 = analyzed_img("GameplayAssets\\wizard\\wizard(20).png", 135 , 71 , 88 , 160)
+wizard21 = analyzed_img("GameplayAssets\\wizard\\wizard(21).png", 183 , 77 , 72 , 162)
+wizard22 = analyzed_img("GameplayAssets\\wizard\\wizard(22).png", 183 , 77 , 72 , 162)
+wizard23 = analyzed_img("GameplayAssets\\wizard\\wizard(23).png", 177 , 65 , 73 , 187)
+wizard24 = analyzed_img("GameplayAssets\\wizard\\wizard(24).png", 177 , 65 , 73 , 187)
+wizard25 = analyzed_img("GameplayAssets\\wizard\\wizard(25).png", 163 , 59 , 70 , 160)
+wizard26 = analyzed_img("GameplayAssets\\wizard\\wizard(26).png", 141 , 64 , 76 , 150)
+wizard27 = analyzed_img("GameplayAssets\\wizard\\wizard(27).png", 132 , 87 , 75 , 155)
+wizard28 = analyzed_img("GameplayAssets\\wizard\\wizard(28).png", 149 , 84 , 73 , 158)
+wizard29 = analyzed_img("GameplayAssets\\wizard\\wizard(29).png", 170 , 56 , 68 , 179)
+wizard30 = analyzed_img("GameplayAssets\\wizard\\wizard(30).png", 149 , 84 , 73 , 158)
+wizard31 = analyzed_img("GameplayAssets\\wizard\\wizard(31).png", 149 , 84 , 73 , 158)
+wizard32 = analyzed_img("GameplayAssets\\wizard\\wizard(32).png", 149 , 84 , 73 , 158)
+
+wizard_to_magic_ball = analyzed_img("GameplayAssets\\wizard\\wizard_to_magicball.png",   332 , 104 , 57 , 39)
+
+
+magic_ball1= analyzed_img("GameplayAssets\\wizard\\magic_ball(1).png", 261 , 42 , 137 , 154)
+magic_ball2 = analyzed_img("GameplayAssets\\wizard\\magic_ball(2).png", 261 , 42 , 137 , 154)
+magic_ball3 = analyzed_img("GameplayAssets\\wizard\\magic_ball(3).png", 261 , 42 , 137 , 154)
+magic_ball4 = analyzed_img("GameplayAssets\\wizard\\magic_ball(4).png", 261 , 42 , 137 , 154)
+magic_ball5 = analyzed_img("GameplayAssets\\wizard\\magic_ball(5).png", 261 , 42 , 137 , 154)
+magic_ball6 = analyzed_img("GameplayAssets\\wizard\\magic_ball(6).png" , 251 , 45 , 143 , 145)
+magic_ball7 = analyzed_img("GameplayAssets\\wizard\\magic_ball(7).png" , 294 , 85 , 105 , 86)
+magic_ball8 = analyzed_img("GameplayAssets\\wizard\\magic_ball(8).png" , 339 , 94 , 62 , 72)
+magic_ball9 = analyzed_img("GameplayAssets\\wizard\\magic_ball(9).png" , 369 , 101 , 40 , 40)
    
+attack_damage = wz_attack_damage
+health = wz_health
+mana_per_att = wz_mana_per_att
+heal_per_skill = wz_heal_per_skill
+level_effect = wz_level_effect
 
 class magic_ball_class():
     def __init__(self,wizard):
@@ -53,7 +106,7 @@ class magic_ball_class():
             if collide_checker(self,enemy_object):
                 enemy_object.get_damage = self.damage
                 enemy_object.get_hit = True
-                self.wizard.mana += 10
+                self.wizard.mana += mana_per_att[self.wizard.level - 1]
                 return True
         return False
 
@@ -85,20 +138,22 @@ class wizardclass():
         self.gameplay = gameplay
         if side == 1 :
             self.side = 1
+            self.level = self.gameplay.character_level1[3]
         elif side == 2:
-            self.side = -1                  
+            self.side = -1          
+            self.level = self.gameplay.character_level2[3]               
 
         self.speed = 5.0 # 5/100 map per second 
-        self.attack_scope = 7 * self.gameplay.box_size[0] # 4/15 map width
+        self.attack_scope = 8 * self.gameplay.box_size[0] # 4/15 map width
         self.attack_scope_orginal = self.attack_scope
-        self.attack_speed = 1/5 # arrow(s) pers second
+        self.attack_speed = 1/2 # arrow(s) pers second
         self.attack_speed_orginal = self.attack_speed
-        self.attack_damage = 0.0
+        self.attack_damage = attack_damage[self.level - 1]
         self.attack_damage_orginal = self.attack_damage
-        self.health_max = 100.0
+        self.health_max = health[self.level - 1]
         self.health = self.health_max
-        self.mana_max =100.0
-        self.mana = 90.0
+        self.mana_max = 100.0
+        self.mana = 85.0
 
         self.magicbullet_list = []
         self.effect_list = []
@@ -140,6 +195,12 @@ class wizardclass():
             magicbullet.resize()
 
     def status_update(self):
+        if not self.level == self.gameplay.character_level(self.side, 3):
+            self.level = self.gameplay.character_level(self.side, 3)
+            self.attack_damage = attack_damage[self.level - 1]
+            self.health_max = health[self.level - 1]
+
+
         self.collide = None 
         self.pre_status = self.status
 
@@ -165,8 +226,8 @@ class wizardclass():
 
     def display(self):
         copy(self.box, self.animation_player.play())
-        pygame.draw.rect(screen.screen,Red,pygame.Rect(self.box.left + self.box.width / 4 ,self.box.top - self.box.height / 10 ,(self.box.width - self.box.width / 2) / self.health_max *self.health,self.box.height / 20))
-        pygame.draw.rect(screen.screen,Blue,pygame.Rect(self.box.left + self.box.width / 4 ,self.box.top - self.box.height / 5 - self.box.height / 30 ,(self.box.width - self.box.width / 2) / self.mana_max *self.mana,self.box.height / 20))
+        # pygame.draw.rect(screen.screen,Red,pygame.Rect(self.box.left + self.box.width / 4 ,self.box.top - self.box.height / 10 ,(self.box.width - self.box.width / 2) / self.health_max *self.health,self.box.height / 20))
+        # pygame.draw.rect(screen.screen,Blue,pygame.Rect(self.box.left + self.box.width / 4 ,self.box.top - self.box.height / 5 - self.box.height / 30 ,(self.box.width - self.box.width / 2) / self.mana_max *self.mana,self.box.height / 20))
 
 
     
@@ -188,7 +249,7 @@ class wizardclass():
     def check_collide(self):
         if self.iscollide_check:
             for object in self.gameplay.side(self.side) + self.gameplay.side4 + self.gameplay.side(- self.side):
-                if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                if abs(object.box.centerx - self.box.centerx) <= self.gameplay.box_size[0] / 3:
                     if same_line_checker(self, object):
                         if not (self == object):
                             if collide_checker(self ,object):
@@ -212,7 +273,7 @@ class wizardclass():
 
     def check_forward(self): #always after check_collide
         if self.mana >= self.mana_max:
-            self.mana = 0
+            self.mana = self.mana % 100
             self.special_status = True
             self.status = 4 
             ispass = True
@@ -229,7 +290,7 @@ class wizardclass():
                 elif self.collide == 1:
                     for object in self.gameplay.side(- self.side) :
                         if abs(object.box.centerx  - self.box.centerx ) <= self.attack_scope + (self.box.width + object.box.width) / 2 :
-                            if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                            if (object.box.centerx - self.box.centerx) * self.side > 0:
                                 if same_line_checker(self, object):
                                     self.status = 1
                                     flag = True
@@ -239,16 +300,16 @@ class wizardclass():
                 else:
                     for object in self.gameplay.side(self.side) + self.gameplay.side4 :
                         if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 2 + (self.box.width + object.box.width) / 2:
-                            if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                            if (object.box.centerx - self.box.centerx) * self.side > 0:
                                 if same_line_checker(self, object):
-                                    if not (self == object):
+                                    if (not (self == object)) and (self.index > object.index):
                                         self.status = 2
                                         flag = True
                                         break
 
                     for object in self.gameplay.side( - self.side) :
                         if abs(object.box.centerx  - self.box.centerx ) <= self.attack_scope + (self.box.width + object.box.width) / 2 :
-                            if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                            if (object.box.centerx - self.box.centerx) * self.side > 0:
                                 if same_line_checker(self, object):
                                     self.status = 1
                                     flag = True
@@ -282,7 +343,7 @@ class wizardclass():
         self.health -= self.get_damage 
         self.get_damage = 0
         if not self.special_status:
-            self.mana += 10
+            self.mana += mana_per_att[self.level - 1]
     
 
     def dying(self):
@@ -327,25 +388,29 @@ class wizardclass():
         self.animation_player = self.special_skill_animation
         if self.special_skill_animation.clock.Return == 3:
             if self.switcher2.operation():
+                self.effected_list = []
                 for object in self.gameplay.side(- self.side) :
-                    if abs(object.box.centerx  - self.box.centerx ) <= self.attack_scope * 2 + (self.box.width + object.box.width) / 2 :
-                        if (object.box.centerx - self.box.centerx) * self.side >= 0:
-                            if same_line_checker(self, object):
-                                add_effect(object, dizzy(object, 5))
-                                add_effect(object, soul_sucking(object))                        
-                                return
-                self.special_skill_animation.status = False
+                    if len(self.effected_list) < level_effect[self.level - 1]:
+                        if abs(object.box.centerx  - self.box.centerx ) <= screen.screen.get_width() + (self.box.width + object.box.width) / 2 :
+                            if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                                if same_line_checker(self, object):
+                                    if not object.__class__ == self.gameplay.nexusclass:
+                                        self.effected_list.append(object)
+                    else:
+                        break
+                for object in self.effected_list:
+                    add_effect(object, dizzy(object, 1))
+                    add_effect(object, soul_sucking(object))                        
+                    
 
         elif self.special_skill_animation.clock.Return == 2 or self.special_skill_animation.clock.Return == 9 or self.special_skill_animation.clock.Return == 11:
             self.switcher2.reset()
 
         elif self.special_skill_animation.clock.Return == 10:
             if self.switcher2.operation():
-                for object in self.gameplay.side(- self.side) :
-                    if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] * 5  + (self.box.width + object.box.width) / 2 :
-                        if (object.box.centerx - self.box.centerx) * self.side >= 0:
-                            if same_line_checker(self, object):
-                                add_effect(object, knock_back(object, 0.5, 20))
+                for object in self.effected_list :
+                    add_effect(object, knock_back(object, 0.5, 20))
+                    
 
         elif self.special_skill_animation.clock.Return == 12:
             if self.switcher2.operation():
@@ -354,7 +419,7 @@ class wizardclass():
                         if (object.box.centerx - self.box.centerx) * self.side >= 0:
                             if same_line_checker(self, object):
                                 if not object == self:
-                                    add_effect(object, heal(object, 10))
+                                    add_effect(object, heal(object, heal_per_skill[self.level - 1]))
 
 
     def special_skill_reset(self):
@@ -388,6 +453,10 @@ class wizardclass():
 
             if self.health <= 0:
                 self.alive = False
+                if self.side == 1:
+                    self.gameplay.gold_income_1 += int(self.gameplay.character_cost[self.__class__][self.level - 1] * 10.0 / 100)
+                else:
+                    self.gameplay.gold_income_2 += int(self.gameplay.character_cost[self.__class__][self.level - 1] * 10.0 / 100)
                 
 
             self.display()

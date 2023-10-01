@@ -27,10 +27,9 @@ import time
 
 WIN = pygame.display.set_mode((1000,1000))
 img_iib = []
-for i in range(1,5):
-    img = pygame.image.load("GameplayAssets\\healling_effect({}).png".format(i))
-    img_iib.append(img)
-
+for i in range(20,23):
+        img = pygame.image.load("GameplayAssets\\naruto\\naruto({}).png".format(i))
+        img_iib.append(img)
 
 
 flag = 0

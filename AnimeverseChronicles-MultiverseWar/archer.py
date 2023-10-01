@@ -7,8 +7,51 @@ from switch import *
 from list_function import *
 from animation_player import *
 from screen import *
+from character_properties import *
 
-   
+
+archer1 = analyzed_img("GameplayAssets\\archer\\archer(1).png", 166 , 285 , 113 , 212)
+archer2 = analyzed_img("GameplayAssets\\archer\\archer(2).png", 166 , 285 , 113 , 212)
+archer3 = analyzed_img("GameplayAssets\\archer\\archer(3).png", 166 , 285 , 113 , 212)
+archer4 = analyzed_img("GameplayAssets\\archer\\archer(4).png", 166 , 285 , 113 , 212)
+archer5 = analyzed_img("GameplayAssets\\archer\\archer(5).png", 166 , 285 , 113 , 212)
+archer6 = analyzed_img("GameplayAssets\\archer\\archer(6).png", 166 , 285 , 113 , 212)
+archer7 = analyzed_img("GameplayAssets\\archer\\archer(7).png", 166 , 285 , 113 , 212)
+archer8 = analyzed_img("GameplayAssets\\archer\\archer(8).png", 166 , 285 , 113 , 212)
+archer9 = analyzed_img("GameplayAssets\\archer\\archer(9).png", 166 , 285 , 113 , 212)
+archer10 = analyzed_img("GameplayAssets\\archer\\archer(10).png", 166 , 285 , 113 , 212)
+archer11 = analyzed_img("GameplayAssets\\archer\\archer(11).png", 194 , 285 , 81 , 206)
+archer12 = analyzed_img("GameplayAssets\\archer\\archer(12).png", 194 , 288 , 82 , 203)
+archer13 = analyzed_img("GameplayAssets\\archer\\archer(13).png", 195 , 294 , 81 , 198)
+archer14 = analyzed_img("GameplayAssets\\archer\\archer(14).png", 195 , 294 , 81 , 198)
+archer15 = analyzed_img("GameplayAssets\\archer\\archer(15).png", 195 , 294 , 81 , 198)
+archer16 = analyzed_img("GameplayAssets\\archer\\archer(16).png", 195 , 284 , 79 , 206)
+archer17 = analyzed_img("GameplayAssets\\archer\\archer(17).png", 195 , 284 , 79 , 206)
+archer18 = analyzed_img("GameplayAssets\\archer\\archer(18).png", 195 , 284 , 79 , 206)
+archer19 = analyzed_img("GameplayAssets\\archer\\archer(19).png", 195 , 284 , 79 , 206)
+archer20 = analyzed_img("GameplayAssets\\archer\\archer(20).png", 206 , 275 , 73 , 216)
+archer21 = analyzed_img("GameplayAssets\\archer\\archer(21).png", 206 , 275 , 73 , 216)
+archer22 = analyzed_img("GameplayAssets\\archer\\archer(22).png", 199 , 294 , 71 , 197)
+archer23 = analyzed_img("GameplayAssets\\archer\\archer(23).png", 199 , 298 , 69 , 192)
+archer24 = analyzed_img("GameplayAssets\\archer\\archer(24).png", 199 , 298 , 69 , 192)
+archer25 = analyzed_img("GameplayAssets\\archer\\archer(25).png", 199 , 298 , 69 , 192)
+archer26 = analyzed_img("GameplayAssets\\archer\\archer(26).png", 199 , 298 , 69 , 192)
+archer27 = analyzed_img("GameplayAssets\\archer\\archer(27).png", 199 , 298 , 69 , 192)
+archer28 = analyzed_img("GameplayAssets\\archer\\archer(28).png", 199 , 298 , 69 , 192)
+archer29 = analyzed_img("GameplayAssets\\archer\\archer(29).png", 199 , 298 , 69 , 192)
+archer30 = analyzed_img("GameplayAssets\\archer\\archer(30).png", 199 , 298 , 69 , 192)
+archer31 = analyzed_img("GameplayAssets\\archer\\archer(31).png", 199 , 298 , 69 , 192)
+archer32 = analyzed_img("GameplayAssets\\archer\\archer(32).png", 199 , 298 , 69 , 192)
+archer33 = analyzed_img("GameplayAssets\\archer\\archer(33).png", 199 , 298 , 69 , 192)
+archer40 = analyzed_img("GameplayAssets\\archer\\archer(40).png", 199 , 298 , 69 , 192)
+
+
+arrow = analyzed_img("GameplayAssets\\archer\\arrow.png", 279 , 332 , 132 , 20)
+special_arrow = analyzed_img("GameplayAssets\\archer\\special_arrow.png", 279 , 332 , 132 , 20)
+
+attack_damage = ac_attack_damage
+attack_speed = ac_attack_speed
+health = ac_health
 
 class arrowclass():
     def __init__(self,archer):
@@ -30,13 +73,15 @@ class arrowclass():
         self.damage = self.archer.attack_damage
         self.special = self.archer.special_status 
 
-        self.x_limit = self.archer.box.centerx + (self.archer.attack_scope * 1.5 + self.archer.box.width / 2) * self.side
         self.damaged_object = []
         if self.piercing :
+            self.x_limit = self.archer.box.centerx + (self.archer.attack_scope + self.gameplay.box_size[0] * 3 + self.archer.box.width / 2) * self.side
             if self.side == 1:
                 self.img = special_arrow
             elif self.side == -1:
                 self.img = reverse(special_arrow)
+        else:
+            self.x_limit = self.archer.box.centerx + (self.archer.attack_scope + self.gameplay.box_size[0] + self.archer.box.width / 2) * self.side
 
     def resize(self):
         a = float(screen.screen.get_width()) / self.gameplay.screen[0]
@@ -102,18 +147,20 @@ class archerclass():
         self.gameplay = gameplay
         if side == 1 :
             self.side = 1
+            self.level = self.gameplay.character_level1[2]
         elif side == 2:
             self.side = -1          
+            self.level = self.gameplay.character_level2[2]
             
         self.skill_lasting_time = 4.0
         self.speed = 5.0 # 5/100 map per second 
         self.attack_scope = 7 * self.gameplay.box_size[0] # 4/15 map width
         self.attack_scope_orginal = self.attack_scope
-        self.attack_speed = 1/2 # arrow(s) pers second
+        self.attack_speed = attack_speed[self.level - 1]
         self.attack_speed_orginal = self.attack_speed
-        self.attack_damage = 10.0
+        self.attack_damage = attack_damage[self.level - 1]
         self.attack_damage_orginal = self.attack_damage
-        self.health_max = 100.0
+        self.health_max = health[self.level - 1]
         self.health = self.health_max
         self.mana_max =100.0
         self.mana = 0.0
@@ -133,7 +180,7 @@ class archerclass():
         self.animation_player = None
         self.moving_animation = animation_player([archer1,archer2,archer3,archer4,archer5,archer6,archer7,archer8,archer9,archer10],self.side, 1, self.imgbox , self.gameplay)
         self.walking_animation = animation_player([archer11,archer12,archer13,archer14,archer15,archer16],self.side, 1, self.imgbox, self.gameplay)
-        self.attacking_animation = one_time_animation_player([archer17,archer18,archer19,archer20,archer21,archer22,archer23,archer24,archer25,archer26,archer27,archer28,archer29,archer30],self.side, 1 , self.imgbox, self.gameplay)
+        self.attacking_animation = one_time_animation_player([archer17,archer19,archer20,archer21,archer22,archer23,archer24,archer25,archer26,archer27,archer30],self.side, 0.5 , self.imgbox, self.gameplay)
         self.standstill_animation = one_time_animation_player([archer11,archer12,archer13,archer14,archer15,archer16],self.side, 1, self.imgbox, self.gameplay)
         self.dying_animation = one_time_animation_player([archer40], self.side, 0.8, self.imgbox, self.gameplay)
         self.knock_back_animation = animation_player([archer31], self.side, 1, self.imgbox, self.gameplay)
@@ -162,6 +209,21 @@ class archerclass():
 
 
     def status_update(self):
+        if not self.level == self.gameplay.character_level(self.side, 2):
+            self.level = self.gameplay.character_level(self.side, 2)
+            self.attack_damage = attack_damage[self.level - 1]
+            self.attack_damage_orginal = self.attack_damage
+            self.health_max = health[self.level - 1]
+            self.attack_speed = attack_speed[self.level - 1]
+            self.attack_speed_orginal = self.attack_speed
+            if self.special_status:
+                if len(self.arrow_list) >= self.flag + 1:
+                    self.attack_speed *= 2
+                    self.attack_coundowner.update_lasting_time(1 / self.attack_speed)
+                else:
+                    self.attack_damage *= 2
+
+
         self.collide = None 
         self.pre_status = self.status
 
@@ -182,8 +244,8 @@ class archerclass():
 
     def display(self):
         copy(self.box, self.animation_player.play())
-        pygame.draw.rect(screen.screen,Red,pygame.Rect(self.box.left + self.box.width / 4 ,self.box.top - self.box.height / 10 ,(self.box.width - self.box.width / 2) / self.health_max *self.health,self.box.height / 20))
-        pygame.draw.rect(screen.screen,Blue,pygame.Rect(self.box.left + self.box.width / 4 ,self.box.top - self.box.height / 5 - self.box.height / 30 ,(self.box.width - self.box.width / 2) / self.mana_max *self.mana,self.box.height / 20))
+        # pygame.draw.rect(screen.screen,Red,pygame.Rect(self.box.left + self.box.width / 4 ,self.box.top - self.box.height / 10 ,(self.box.width - self.box.width / 2) / self.health_max *self.health,self.box.height / 20))
+        # pygame.draw.rect(screen.screen,Blue,pygame.Rect(self.box.left + self.box.width / 4 ,self.box.top - self.box.height / 5 - self.box.height / 30 ,(self.box.width - self.box.width / 2) / self.mana_max *self.mana,self.box.height / 20))
         
 
 
@@ -205,7 +267,7 @@ class archerclass():
     def check_collide(self):
         if self.iscollide_check:
             for object in self.gameplay.side(self.side) + self.gameplay.side4 + self.gameplay.side(- self.side):
-                if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                if abs(object.box.centerx - self.box.centerx) <= self.gameplay.box_size[0] / 3:
                     if same_line_checker(self, object):
                         if not (self == object):
                             if collide_checker(self ,object):
@@ -240,7 +302,7 @@ class archerclass():
                 ispass = False
                 for object in self.gameplay.side(- self.side) :
                     if abs(object.box.centerx  - self.box.centerx ) <= self.attack_scope + (self.box.width + object.box.width) / 2 :
-                        if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                        if (object.box.centerx - self.box.centerx) * self.side > 0:
                             if same_line_checker(self, object):
                                 self.status = 1
                                 flag = True
@@ -253,7 +315,7 @@ class archerclass():
                 ispass = False
                 for object in self.gameplay.side( - self.side) :
                     if abs(object.box.centerx  - self.box.centerx ) <= self.attack_scope + (self.box.width + object.box.width) / 2:
-                        if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                        if (object.box.centerx - self.box.centerx) * self.side > 0:
                             if same_line_checker(self, object):
                                 self.status = 1
                                 flag = True
@@ -262,9 +324,9 @@ class archerclass():
                 if not ispass:
                     for object in self.gameplay.side(self.side) + self.gameplay.side4 :
                         if abs(object.box.centerx  - self.box.centerx ) <= self.gameplay.box_size[0] / 2 + (self.box.width + object.box.width) / 2 :
-                            if (object.box.centerx - self.box.centerx) * self.side >= 0:
+                            if (object.box.centerx - self.box.centerx) * self.side > 0:
                                 if same_line_checker(self, object):
-                                    if not (self == object):
+                                    if (not (self == object)) and (self.index > object.index):
                                         self.status = 2
                                         flag = True
                                         break         
@@ -344,8 +406,25 @@ class archerclass():
         self.animation_player = self.attacking_animation
         if self.attacking_animation.clock.Return == 9:
             if self.switcher1.operation():
-                self.arrow_list.append(arrowclass(self))  
+                if self.level < 3:
+                    self.arrow_list.append(arrowclass(self))  
+                elif self.level >= 3 and self.level < 5:
+                    self.arrow_list.append(arrowclass(self))  
+                    self.imgbox.centery += self.gameplay.box_size[1] / 5
+                    self.arrow_list.append(arrowclass(self))  
+                    self.imgbox.centery -= self.gameplay.box_size[1] / 5
+                elif self.level == 5:
+                    tmp = self.imgbox.centery
+                    self.arrow_list.append(arrowclass(self))  
+                    self.imgbox.centery += self.gameplay.box_size[1] / 5
+                    self.arrow_list.append(arrowclass(self))  
+                    self.imgbox.centery -= 2 * self.gameplay.box_size[1] / 5
+                    self.arrow_list.append(arrowclass(self))  
+                    self.imgbox.centery += self.gameplay.box_size[1] / 5
+                    self.imgbox.centery = tmp
 
+
+                    
         elif self.attacking_animation.clock.Return == 8:
             self.switcher1.reset()
 
@@ -359,19 +438,18 @@ class archerclass():
     def special_skill(self):
         if self.switcher2.operation():
             self.piercing = True
-            self.attack_damage *= 2 
+            if self.level <= 2:
+                self.attack_damage *= 2 
             self.attack_scope = 7 * self.gameplay.box_size[0]
             self.flag = len(self.arrow_list)
 
-        if len(self.arrow_list) == self.flag + 1:
+        if len(self.arrow_list) >= self.flag + 1:
             if self.switcher3.operation():
                 self.piercing = False
                 self.attack_damage = self.attack_damage_orginal
                 self.attack_scope = self.attack_scope_orginal
                 self.attack_speed = self.attack_speed * 2
                 self.attack_coundowner.update_lasting_time(1 / self.attack_speed)
-                if 1 / self.attack_speed <= 1 :
-                    self.attacking_animation.update_looptime( 1 / self.attack_speed )
                 self.skill_countdowner.start()
 
             if self.skill_countdowner.Return == False:
@@ -379,11 +457,11 @@ class archerclass():
 
     def special_skill_reset(self):
         self.special_status = False
+        self.piercing = False
         self.switcher2.reset()
         self.switcher3.reset()
         self.attack_damage = self.attack_damage_orginal
         self.attack_speed = self.attack_speed_orginal
-        self.attacking_animation.update_looptime(1)
         self.attack_coundowner.update_lasting_time(1 / self.attack_speed)
         self.skill_countdowner.reset()
 
@@ -418,6 +496,10 @@ class archerclass():
 
             if self.health <= 0:
                 self.alive = False
+                if self.side == 1:
+                    self.gameplay.gold_income_1 += int(self.gameplay.character_cost[self.__class__][self.level - 1] * 10.0 / 100)
+                else:
+                    self.gameplay.gold_income_2 += int(self.gameplay.character_cost[self.__class__][self.level - 1] * 10.0 / 100)
                 
 
             self.display()
@@ -425,6 +507,7 @@ class archerclass():
 
             for arrows in self.arrow_list:
                 arrows.operation()
+
 
             # pygame.draw.rect(screen.screen,White,self.box,1)
             # pygame.draw.rect(screen.screen,White,self.imgbox,1)
