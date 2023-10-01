@@ -1147,9 +1147,9 @@ class narutoclass():
                 for clone in self.clone_list:
                     clone.alive = False
                 if self.side == 1:
-                    self.gameplay.gold_income_1 += self.gameplay.character_cost[self.__class__] * 10.0 / 100
+                    self.gameplay.gold_income_1 += self.gameplay.character_cost[self.__class__][self.level - 1] * 10.0 / 100
                 else:
-                    self.gameplay.gold_income_2 += self.gameplay.character_cost[self.__class__] * 10.0 / 100
+                    self.gameplay.gold_income_2 += self.gameplay.character_cost[self.__class__][self.level - 1] * 10.0 / 100
 
             
             for shuriken in self.shuriken_list:
