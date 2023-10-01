@@ -497,9 +497,9 @@ class archerclass():
             if self.health <= 0:
                 self.alive = False
                 if self.side == 1:
-                    self.gameplay.gold_income_1 += self.gameplay.character_cost[self.__class__] / 2
+                    self.gameplay.gold_income_1 += self.gameplay.character_cost[self.__class__] * 10.0 / 100
                 else:
-                    self.gameplay.gold_income_2 += self.gameplay.character_cost[self.__class__] / 2
+                    self.gameplay.gold_income_2 += self.gameplay.character_cost[self.__class__] * 10.0 / 100
                 
 
             self.display()
