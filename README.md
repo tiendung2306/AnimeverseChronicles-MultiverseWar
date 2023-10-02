@@ -5,6 +5,12 @@
 
 + 	Tải file AnimeverseChronicles.rar trong bản release mới nhất về máy. Giải nén rồi chạy file main.exe để bắt đầu game.
 
+Lưu ý: Nếu không thể chạy được game, vui lòng tắt window defender trong máy như sau:
+
+	Tìm mục Virus & threat protection trong thanh Search của window.
+	Chọn Manage Settings tại mục Virus & threat protection settings.
+	Tắt công tắc mục Real-time Protection để tắt Windows Security.
+
 
 ## Giới thiệu
 Animeverse Chronicles là game chiến thuật thủ thành. Mỗi người chơi cần triệu hồi những nhân vật mạnh mẽ của mình ra để chiến đấu với đối thủ. Mục đích tối thượng là tiêu diệt nhà chính đối thủ để dành chiến thắng.
@@ -51,7 +57,8 @@ Cấp độ tối đa:
 	Goku: 3
 	Naruto: 2
 
-Mỗi nhân vật khi lên cấp sẽ được tăng sức mạnh(máu/dame/tốc đánh/…)
+Mỗi nhân vật khi lên cấp sẽ được tăng sức mạnh(máu/dame/tốc đánh/…).
+
 Chỉ số các nhân vật từng cấp:
 
 	Swordman: 
